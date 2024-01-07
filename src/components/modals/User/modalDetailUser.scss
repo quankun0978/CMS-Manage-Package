@@ -1,0 +1,54 @@
+.modal__detail__content {
+    background-color: #f5f5f5;
+
+    border-radius: 8px;
+    padding: 12px 12px;
+ 
+    .modal__detail__img {
+        display: flex;
+        flex-direction: column;
+
+        width: 100%;
+        height: 100%;
+        .modal__detail__img__main {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 100px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .modal__detail__more {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            border-radius: 8px;
+            padding: 12px;
+            h3 {
+                font-size: 12px !important;
+                font-weight: bold;
+            }
+
+            .modal__detail__more__info__icon {
+                align-items: center;
+                display: flex;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                padding: 0 0.5rem;
+                border-radius: 8px;
+                text-align: center;
+                background-color: #fff;
+                min-height: 50px;
+            }
+        }
+    }
+    .modal__detail__info {
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 12px;
+        height: 100%;
+    }
+}
