@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Layout, theme } from "antd";
 import "./Home.scss";
-import logo from "../../assets/logo_home.png";
+import logo from "../../assets/img/logo_home.png";
 import Menu from "../navigation/navigation";
 import HeaderDashBoard from "../header/header";
 import { ToastContainer, toast } from "react-toastify";

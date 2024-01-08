@@ -1,24 +1,21 @@
-
-.modal__edit__title{
+.modal__edit__title {
     display: flex;
     align-items: center;
 }
-.ant-modal-wrap{
+.ant-modal-wrap {
     display: flex;
     align-items: center;
     justify-content: center;
-    .ant-modal{
+    .ant-modal {
         top: unset !important;
         padding: 0;
     }
-    
 }
-.btn-close{
+.btn-close {
     background-color: #fff !important;
 }
-.modal__title__icon{
+.modal__title__icon {
     height: 40px;
     display: flex;
     align-items: center;
-  
 }

@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/index.scss";
 import "bootstrap/dist/css/bootstrap.css";
-import "./styles/fontawesome-free-6.4.2-web/css/all.min.css";
+import "./assets/icon/fontawesome-free-6.4.2-web/css/all.min.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";

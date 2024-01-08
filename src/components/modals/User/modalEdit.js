@@ -51,11 +51,8 @@ const ModalEdit = (props) => {
   return (
     <>
       <Modal size="lg" show={isModalOpen} onHide={handleClose}>
-        <Modal.Header
-          closeButton
-          style={{ backgroundColor: "#0066b3", color: "#fff" }}
-        >
-          <Modal.Title>Edit user</Modal.Title>
+        <Modal.Header closeButton style={{}}>
+          <Modal.Title></Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -130,11 +127,7 @@ const ModalEdit = (props) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button
-            variant="primary"
-            style={{ backgroundColor: "#0066b3" }}
-            onClick={handleSave}
-          >
+          <Button variant="primary" onClick={handleSave}>
             Save Changes
           </Button>
         </Modal.Footer>

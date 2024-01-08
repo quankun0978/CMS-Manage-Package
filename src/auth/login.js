@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./login.scss";
-import logo from "../assets/logo_home.png";
+import logo from "../assets/img/logo_home.png";
 import { useForm } from "react-hook-form";
 // import ClipLoader from "react-spinners/ClipLoader";
 import { BeatLoader } from "react-spinners";
 import * as actions from "../redux/store/actions/userActions";
-import image from "../assets/uNGdWHi.png";
+import image from "../assets/img/uNGdWHi.png";
 import { connect } from "react-redux";
 import { ToastContainer } from "react-bootstrap";
 const Login = (props) => {

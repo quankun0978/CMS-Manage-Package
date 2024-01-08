@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { EditOutlined, SelectOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
-import { Table, Button } from "antd";
+import { Table, Button ,Tooltip } from "antd";
 import * as actions from "../../redux/store/actions/userActions";
 import { Select } from "antd";
 import ModalEditPackage from "../modals/Package/ModalEditPackage";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 const columns = [
   {
@@ -136,20 +136,23 @@ const ManagePackage = (props) => {
             gap: "10px",
           }}
         >
-          <Button
-            type="primary"
-            icon={<SelectOutlined />}
-            onClick={() => handleClickDetail(1)}
-            size="default"
-            style={{ backgroundColor: "#0d6efd" }}
-          />
-          <Button
-            type="primary"
-            style={{ backgroundColor: "#ffca2c" }}
-            icon={<EditOutlined />}
-            onClick={handleClickEdit}
-            size="default"
-          />
+          <Tooltip placement="topLeft" title="chi tiết" color="">
+            <Button
+              type="primary"
+              icon={<SelectOutlined />}
+              size="default"
+              onClick={() => handleClickDetail(1)}
+            />
+          </Tooltip>
+          <Tooltip placement="topLeft" title="chỉnh sửa">
+            <Button
+              type="primary"
+              style={{ backgroundColor: "#ffca2c" }}
+              icon={<EditOutlined />}
+              size="default"
+              onClick={() => handleClickEdit()}
+            />
+          </Tooltip>
           <Select
             defaultValue="Enable"
             style={{

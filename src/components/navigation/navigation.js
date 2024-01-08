@@ -1,18 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./navigation.scss";
 import * as menu from "./menuNav";
-import "../../styles/fontawesome-free-6.4.2-web/css/all.min.css";
+import "../../assets/icon/fontawesome-free-6.4.2-web/css/all.min.css";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../../redux/store/actions/userActions";
 import { toast } from "react-toastify";
-import { Button, Menu } from "antd";
-import SubMenu from "./subMenu";
 const MenuRole = (props) => {
-  let { checkLogin, isLogin, loginFail } = props;
   const [isHide, setIsHide] = useState(false);
   const [MenuRole, setMenuRole] = useState([]);
-  const [collapsed, setCollapsed] = useState(false);
+
   const [isHideMenuItem, setIsHideMenuItem] = useState(false);
   let navigate = useNavigate();
   const handleClickTabMenu = (item) => {
@@ -30,7 +27,7 @@ const MenuRole = (props) => {
     if (localStorage.getItem("role") === "admin") setMenuRole(menu.MenuAdmin);
     if (localStorage.getItem("role") === "user-write")
       setMenuRole(menu.MenuUserWrite);
-      if (localStorage.getItem("role") === "user-read")
+    if (localStorage.getItem("role") === "user-read")
       setMenuRole(menu.MenuUserRead);
   }, []);
   useEffect(() => {
@@ -85,14 +82,8 @@ const MenuRole = (props) => {
           null,
           null,
           [
-            getItem(
-              "Lịch sử giao dịch",
-              "/thong-ke/lich-su-giao-dich"
-            ),
-            getItem(
-              "Trạng thái thuê bao",
-              "/thong-ke/trang-thai-thue-bao"
-            ),
+            getItem("Lịch sử giao dịch", "/thong-ke/lich-su-giao-dich"),
+            getItem("Trạng thái thuê bao", "/thong-ke/trang-thai-thue-bao"),
             getItem("Free Text", "/thong-ke/free-text"),
             getItem("Báo cáo chung", "/thong-ke/bao-cao-chung"),
           ],

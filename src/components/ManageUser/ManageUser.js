@@ -1,14 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
-import {
-  EditOutlined,
-  SelectOutlined,
-} from "@ant-design/icons";
+import React, { useEffect, useState, useRef, useMemo } from "react";
+import { EditOutlined, SelectOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { Table, Button, Modal } from "antd";
 import * as actions from "../../redux/store/actions/adminActions";
 import ModalEdit from "../modals/User/modalEdit";
 import "./ManageUser.scss";
-import { Input, Select } from "antd";
+import { Input, Select, Tooltip } from "antd";
 import { useNavigate } from "react-router-dom";
 const { Search } = Input;
 const columns = [
@@ -42,7 +39,6 @@ const columns = [
   },
 ];
 const ManageUser = (props) => {
-  
   const navigate = useNavigate();
   const options = [
     {
@@ -61,6 +57,7 @@ const ManageUser = (props) => {
   const [dataSelect, setDataSelect] = useState("Enable");
   const [dataOrigin, setDataOrigin] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [arrow, setArrow] = useState("Show");
   const handleClickEdit = (id) => {
     showModalEdit(true);
     getDataUserById(id);
@@ -124,19 +121,24 @@ const ManageUser = (props) => {
                 gap: "10px",
               }}
             >
-              <Button
-                type="primary"
-                icon={<SelectOutlined />}
-                size="default"
-                onClick={() => handleClickDetail(item.id)}
-              />
-              <Button
-                type="primary"
-                style={{ backgroundColor: "#ffca2c" }}
-                icon={<EditOutlined />}
-                size="default"
-                onClick={() => handleClickEdit(item.id)}
-              />
+              <Tooltip placement="topLeft" title="chi tiết" color="">
+                <Button
+                  type="primary"
+                  icon={<SelectOutlined />}
+                  size="default"
+                  onClick={() => handleClickDetail(item.id)}
+                />
+              </Tooltip>
+              <Tooltip placement="topLeft" title="chỉnh sửa">
+                <Button
+                  type="primary"
+                  style={{ backgroundColor: "#ffca2c" }}
+                  icon={<EditOutlined />}
+                  size="default"
+                  onClick={() => handleClickEdit(item.id)}
+                />
+              </Tooltip>
+
               <Select
                 defaultValue="Enable"
                 options={options}
@@ -196,7 +198,6 @@ const ManageUser = (props) => {
       />
       <Table
         columns={columns}
-        // rowKey={(record) => record.login.uuid}
         dataSource={data.length > 0 ? data : []}
         pagination={tableParams.pagination}
         onChange={handleTableChange}
@@ -204,7 +205,6 @@ const ManageUser = (props) => {
         style={{ transform: "translateY(15px)" }}
         loading={loading}
       ></Table>
-
       <ModalEdit></ModalEdit>
     </>
   );
