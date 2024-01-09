@@ -1,9 +1,8 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import CreatePackage from "../components/CreatePackage/CreatePackage";
-import ManagePackage from "../components/ManagePackage/ManagePackage";
-import Statistical from "../components/statistical/Statistical";
-import DetailPackage from "../components/modals/Package/ModalDetailPackage";
+import ManagePackage from "../components/Manage/ManagePackage/ManagePackage";
+import Statistical from "../components/statistical/generalReport/Statistical";
+import DetailPackage from "../components/Detail/DetailPackage/ModalDetailPackage";
 import FreeText from "../components/statistical/freeText/FreeText";
 import History from "../components/statistical/history/History";
 import SubcriptionStatus from "../components/statistical/subscriptionStatus/SubcriptionStatus";

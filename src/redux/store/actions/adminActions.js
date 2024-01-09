@@ -16,7 +16,6 @@ export const getAllUser = () => {
   return async (dispath, getstate) => {
     try {
       let data = await getDataAllUser();
-      console.log(data);
       if (data && data.data.length > 0) dispath(getAllUserSuccess(data.data));
       else dispath(getAllUserFail());
     } catch (e) {
@@ -63,7 +62,6 @@ const getUserByIdFail = () => {
 export const editUserById = (data, id) => {
   return async (dispath, getstate) => {
     try {
-      console.log(id);
       // let data = await getDataUserById(id);
       // if (data && Object.keys(data.data).length > 0)
       dispath(editUserByIdrSuccess(data, id));

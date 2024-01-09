@@ -1,12 +1,12 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import ManageUser from "../components/ManageUser/ManageUser";
-import CreateUser from "../components/CreateUser/CreateUser";
-import CreatePackage from "../components/CreatePackage/CreatePackage";
-import ManagePackage from "../components/ManagePackage/ManagePackage";
-import Statistical from "../components/statistical/Statistical";
-import DetailUser from "../components/modals/User/modalDetailUser";
-import DetailPackage from "../components/modals/Package/ModalDetailPackage";
+import ManageUser from "../components/Manage/ManageUser/ManageUser";
+import CreateUser from "../components/Create/CreateUser/CreateUser";
+import CreatePackage from "../components/Create/CreatePackage/CreatePackage";
+import ManagePackage from "../components/Manage/ManagePackage/ManagePackage";
+import Statistical from "../components/statistical/generalReport/Statistical";
+import DetailUser from "../components/Detail/DetailUser/modalDetailUser";
+import DetailPackage from "../components/Detail/DetailPackage/ModalDetailPackage";
 import FreeText from "../components/statistical/freeText/FreeText";
 import History from "../components/statistical/history/History";
 import SubcriptionStatus from "../components/statistical/subscriptionStatus/SubcriptionStatus";
@@ -16,10 +16,7 @@ const Admin = () => {
     <>
       <Routes>
         <Route path="/danh-sach-nguoi-dung" element={<ManageUser />}></Route>
-        <Route
-          path="/tao-moi-nguoi-dung"
-          element={<CreateUser></CreateUser>}
-        />
+        <Route path="/tao-moi-nguoi-dung" element={<CreateUser></CreateUser>} />
         <Route
           path="/tao-moi-goi-cuoc"
           element={<CreatePackage></CreatePackage>}
@@ -36,10 +33,7 @@ const Admin = () => {
           path="/thong-ke/trang-thai-thue-bao"
           element={<SubcriptionStatus></SubcriptionStatus>}
         />
-        <Route
-          path="/thong-ke/free-text"
-          element={<FreeText></FreeText>}
-        />
+        <Route path="/thong-ke/free-text" element={<FreeText></FreeText>} />
         <Route
           path="/thong-ke/san-luong-tung-goi"
           element={<QuantityPackage></QuantityPackage>}

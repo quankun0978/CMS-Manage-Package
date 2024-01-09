@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
-import Login from "../auth/login";
-import Home from "../components/home/Home";
 import { connect } from "react-redux";
+import { Route, Routes, Navigate } from "react-router-dom";
+import Login from "../pages/login/auth/login";
+import Home from "../pages/Home/Home";
 import * as actions from "../redux/store/actions/userActions";
 const RouteLogin = (props) => {
   return (

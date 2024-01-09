@@ -1,11 +1,9 @@
 import React from "react";
 import "./iconCustomize.scss";
-
 const IconCustomize = (props) => {
-  let { size, IconItem, color } = props;
+  let { IconItem, color } = props;
   return (
     <>
-    
       <div className="header__item__child">
         <svg width="100" height="100" className="header__item__icon">
           <circle
@@ -16,10 +14,7 @@ const IconCustomize = (props) => {
             fill="none"
           ></circle>
         </svg>
-        <div className="header__icon">
-          {/* <i className="fa-solid fa-users"></i> */}
-          {IconItem}
-        </div>
+        <div className="header__icon">{IconItem}</div>
       </div>
     </>
   );

@@ -3,7 +3,7 @@ const initUser = {
   isModalEditPackage: false,
   isModalDetailPackage: false,
   isLogin: false,
-  role:""
+  role: "",
 };
 export const userReducer = (state = initUser, actions) => {
   switch (actions.type) {
@@ -18,11 +18,10 @@ export const userReducer = (state = initUser, actions) => {
         isModalDetailPackage: actions.check,
       };
     case actionType.LOGIN_SUCCESS:
-      console.log(actions)
       return {
         ...state,
         isLogin: true,
-        role:actions.role
+        role: actions.role,
       };
     case actionType.LOGIN_FAIL:
       return {

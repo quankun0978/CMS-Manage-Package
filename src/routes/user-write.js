@@ -1,9 +1,9 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import CreatePackage from "../components/CreatePackage/CreatePackage";
-import ManagePackage from "../components/ManagePackage/ManagePackage";
-import Statistical from "../components/statistical/Statistical";
-import DetailPackage from "../components/modals/Package/ModalDetailPackage";
+import CreatePackage from "../components/Create/CreatePackage/CreatePackage";
+import ManagePackage from "../components/Manage/ManagePackage/ManagePackage";
+import Statistical from "../components/statistical/generalReport/Statistical";
+import DetailPackage from "../components/Detail/DetailPackage/ModalDetailPackage";
 import FreeText from "../components/statistical/freeText/FreeText";
 import History from "../components/statistical/history/History";
 import SubcriptionStatus from "../components/statistical/subscriptionStatus/SubcriptionStatus";
@@ -40,10 +40,7 @@ const UserWrite = () => {
           path="/thong-ke/trang-thai-thue-bao"
           element={<SubcriptionStatus></SubcriptionStatus>}
         />
-        <Route
-          path="/thong-ke/free-text"
-          element={<FreeText></FreeText>}
-        />
+        <Route path="/thong-ke/free-text" element={<FreeText></FreeText>} />
         <Route
           path="/thong-ke/san-luong-tung-goi"
           element={<QuantityPackage></QuantityPackage>}

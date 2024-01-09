@@ -20,8 +20,7 @@ export const checkLogin = (data) => {
         } else {
           dispath(loginFail());
         }
-      }
-      else{
+      } else {
         dispath(loginFail());
       }
       if (data.email === "userRead@vnpt.com") {
@@ -55,7 +54,6 @@ export const loginSuccess = (role) => {
   };
 };
 export const loginFail = () => {
-  console.log(1)
   return {
     type: actionType.LOGIN_FAIL,
   };
