@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { connect } from "react-redux";
 import { Table, Input } from "antd";
-import * as actions from "../../../redux/store/actions/adminActions";
 const { Search } = Input;
 const columns = [
   {
@@ -185,7 +183,7 @@ const dataInit = [
   },
 ];
 
-const History = (props) => {
+const History = () => {
   const dataTable = useRef(dataInit);
   const [inputSearch, setInputSearch] = useState("");
   const [data, setData] = useState([]);
@@ -266,22 +264,8 @@ const History = (props) => {
         scroll={{ y: 350 }}
         style={{ transform: "translateY(15px)" }}
         loading={loading}
-      ></Table>
+      />
     </>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    dataAllUser: state.admin.dataAllUser,
-    dataUserById: state.admin.dataUserById,
-  };
-};
-const mapDispathToProps = (dispath) => {
-  return {
-    showModalEdit: (check) => dispath(actions.showModalEditUser(check)),
-    showModalDetail: (check) => dispath(actions.showModalDetailUser(check)),
-    getDataAllUser: () => dispath(actions.getAllUser()),
-    getDataUserById: (id) => dispath(actions.getUserById(id)),
-  };
-};
-export default connect(mapStateToProps, mapDispathToProps)(History);
+export default History;

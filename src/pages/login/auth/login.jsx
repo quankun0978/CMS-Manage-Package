@@ -1,37 +1,22 @@
 import React, { useEffect, useState } from "react";
-import "./login.scss";
-import logo from "../../../assets/img/logo_home.png";
 import { useForm } from "react-hook-form";
 // import ClipLoader from "react-spinners/ClipLoader";
 import { BeatLoader } from "react-spinners";
-import * as actions from "../../../redux/store/actions/userActions";
-import image from "../../../assets/img/uNGdWHi.png";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-bootstrap";
-const Login = (props) => {
-  let { checkLogin, role } = props;
-  // hook
+import image from "../../../assets/img/uNGdWHi.png";
+import logo from "../../../assets/img/logo_home.png";
+import * as actions from "../../../redux/store/actions/userActions";
+import "./login.scss";
+const Login = () => {
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
+  const dispath = useDispatch()
+  // hook
   const [loading, setLoading] = useState(false);
- 
-  const handleSubmitForm = (data) => {
-    if (Object.keys(data).length > 0) {
-      setLoading(true);
-      setTimeout(() => {
-        checkLogin(data);
-      }, 3000);
-    }
-  };
-  //handle
-  const handleKeyDown = (event) => {
-    if (event.keyCode === 13) {
-      handleSubmitForm();
-    }
-  };
   useEffect(() => {
     if (loading) {
       setTimeout(() => {
@@ -39,6 +24,21 @@ const Login = (props) => {
       }, 5000);
     }
   }, [loading]);
+  //handle
+  const handleSubmitForm = (data) => {
+    if (Object.keys(data).length > 0) {
+      setLoading(true);
+      setTimeout(() => {
+        dispath(actions.checkLogin(data))
+      }, 3000);
+    }
+  };
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 13) {
+      handleSubmitForm();
+    }
+  };
+
   return (
     <>
       <div className="wrapper-login">
@@ -59,7 +59,7 @@ const Login = (props) => {
                 <div className="card2 card border-0 px-4 py-xl-5">
                   <div className="row mb-2 px-3">
                     <h3
-                      className="mb-0 p-0 mt-2 w-auto header__info__bold fw-bold"
+                      className="mb-0 p-0 mt-2 w-auto title-bold  title-bold "
                       style={{ fontWeight: 700 }}
                     >
                       Đăng nhập
@@ -130,19 +130,8 @@ const Login = (props) => {
           </div>
         )}
       </div>
-      <ToastContainer></ToastContainer>
+      <ToastContainer />
     </>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    isLogin: state.user.isLogin,
-    role: state.user.role,
-  };
-};
-const mapDispathToProps = (dispath) => {
-  return {
-    checkLogin: (data) => dispath(actions.checkLogin(data)),
-  };
-};
-export default connect(mapStateToProps, mapDispathToProps)(Login);
+export default Login;

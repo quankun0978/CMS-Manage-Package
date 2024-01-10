@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
-import "../DetailUser/modalDetailUser"
+import "./DetailUser.scss";
 import * as actions from "../../../redux/store/actions/adminActions";
 import { path } from "../../../ultils/constants/path";
-const DetailPackage = (props) => {
-  const { dataUserById, getUserById } = props;
-  //hook 
+const DetailUser = () => {
+  let stateRedux = useSelector((state) => {
+    return {
+      isModalOpen: state.admin.isModalDetailUser,
+      dataUserById: state.admin.dataUserById,
+    };
+  });
+  let dispath = useDispatch()
+  let { dataUserById } = stateRedux;
+  // hook
   let { id } = useParams();
-  const navigate = useNavigate();
   const [dataDetail, setDataDetail] = useState({});
   const [check, setCheck] = useState(false);
+  const navigate = useNavigate();
   const [validated, setValidated] = useState(false);
   useEffect(() => {
-    getUserById(id);
+    dispath(actions.getUserById(id))
   }, []);
   useEffect(() => {
     setTimeout(() => {
@@ -25,7 +33,6 @@ const DetailPackage = (props) => {
     }, 1000);
     if (check) setDataDetail(dataUserById);
   }, [dataUserById, check]);
-
   // handle
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -37,7 +44,7 @@ const DetailPackage = (props) => {
   };
   const handleClose = () => {
     setDataDetail({});
-    navigate(path.DANH_SACH_GOI_CUOC);
+    navigate(path.DANH_SACH_NGUOI_DUNG);
   };
   return (
     <>
@@ -52,7 +59,7 @@ const DetailPackage = (props) => {
           <div className="col-3">
             <div className="modal__detail__img ">
               <div className="modal__detail__img__main">
-                <i className="fa-solid fa-sim-card"></i>
+                <i className="fa-solid fa-user"></i>
               </div>
               <div className="modal__detail__more">
                 <div className="modal__detail__more__info mb-3 mt-2 ">
@@ -62,9 +69,9 @@ const DetailPackage = (props) => {
                   </div>
                 </div>
                 <div className="modal__detail__more__info">
-                  <h3 className="mb-2">Số người đăng dã đăng ký</h3>
+                  <h3 className="mb-2">Thời gian đăng nhập gần nhất</h3>
                   <div className="modal__detail__more__info__icon">
-                    <p className="m-0">100M+</p>
+                    <p className="m-0">4 giờ trước</p>
                   </div>
                 </div>
               </div>
@@ -73,6 +80,38 @@ const DetailPackage = (props) => {
           <div className="col-9">
             <div className="modal__detail__info ">
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                <Row className="mb-3">
+                  <Form.Group as={Col} md="6">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control
+                      required
+                      type="text"
+                      defaultValue={
+                        dataDetail && dataDetail.username
+                          ? dataDetail.username
+                          : ""
+                      }
+                      disabled
+                    />
+                  </Form.Group>
+                  <Form.Group as={Col} md="6">
+                    <Form.Label>Email</Form.Label>
+                    <InputGroup hasValidation>
+                      <InputGroup.Text id="inputGroupPrepend">
+                        @
+                      </InputGroup.Text>
+                      <Form.Control
+                        type="text"
+                        aria-describedby="inputGroupPrepend"
+                        required
+                        disabled
+                        defaultValue={
+                          dataDetail && dataDetail.email ? dataDetail.email : ""
+                        }
+                      />
+                    </InputGroup>
+                  </Form.Group>
+                </Row>
                 <Row className="mb-3">
                   <Form.Group as={Col} md="6">
                     <Form.Label>Name</Form.Label>
@@ -86,13 +125,13 @@ const DetailPackage = (props) => {
                     />
                   </Form.Group>
                   <Form.Group as={Col} md="6">
-                    <Form.Label>Type</Form.Label>
+                    <Form.Label>Password</Form.Label>
                     <Form.Control required type="password" disabled />
                   </Form.Group>
                 </Row>
                 <Row className="mb-3">
                   <Form.Group as={Col} md="6">
-                    <Form.Label>Price</Form.Label>
+                    <Form.Label>Phone number</Form.Label>
                     <Form.Control
                       required
                       type="text"
@@ -103,15 +142,11 @@ const DetailPackage = (props) => {
                     />
                   </Form.Group>
                   <Form.Group as={Col} md="6">
-                    <Form.Label>Cycle time</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      defaultValue={
-                        dataDetail && dataDetail.phone ? dataDetail.phone : ""
-                      }
-                      disabled
-                    />
+                    <Form.Label>Role</Form.Label>
+                    <Form.Select disabled aria-label="Default select example">
+                      <option value="1">User-read</option>
+                      <option value="2">User-write</option>
+                    </Form.Select>
                   </Form.Group>
                 </Row>
                 <Row className="mb-3">
@@ -125,7 +160,6 @@ const DetailPackage = (props) => {
                     />
                   </Form.Group>
                 </Row>
-                <Row className="h-110"></Row>
               </Form>
             </div>
           </div>
@@ -134,16 +168,5 @@ const DetailPackage = (props) => {
     </>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    isModalOpen: state.admin.isModalDetailUser,
-    dataUserById: state.admin.dataUserById,
-  };
-};
-const mapDispathToProps = (dispath) => {
-  return {
-    showModal: (check) => dispath(actions.showModalDetailUser(check)),
-    getUserById: (id) => dispath(actions.getUserById(id)),
-  };
-};
-export default connect(mapStateToProps, mapDispathToProps)(DetailPackage);
+
+export default DetailUser;

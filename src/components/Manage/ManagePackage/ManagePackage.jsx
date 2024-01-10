@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { EditOutlined, SelectOutlined } from "@ant-design/icons";
@@ -97,8 +97,7 @@ const columns1 = [
   },
 ];
 const ManagePackage = (props) => {
-  const { showModalEdit, showModalDetail } = props;
-
+  const dispath = useDispatch()
   //hook
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -116,11 +115,11 @@ const ManagePackage = (props) => {
   }, []);
   //handle
   const handleClickEdit = () => {
-    showModalEdit(true);
+    dispath(actions.showModalEditPackage(true));
   };
   const handleClickDetail = (id) => {
     navigate(`${path.CHI_TIET_GOI_CUOC}/${id}`);
-    showModalDetail(true);
+    dispath(actions.showModalDetailPackage(true))
   };
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
@@ -606,17 +605,8 @@ const ManagePackage = (props) => {
           y: 350,
         }}
       />
-      <ModalEditPackage></ModalEditPackage>
+      <ModalEditPackage />
     </>
   );
 };
-const mapStateToProps = (state) => {
-  return {};
-};
-const mapDispathToProps = (dispath) => {
-  return {
-    showModalEdit: (check) => dispath(actions.showModalEditPackage(check)),
-    showModalDetail: (check) => dispath(actions.showModalDetailPackage(check)),
-  };
-};
-export default connect(mapStateToProps, mapDispathToProps)(ManagePackage);
+export default ManagePackage;

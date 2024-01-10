@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Table } from "antd";
+import { path } from "../../../ultils/constants/path";
 const { Column, ColumnGroup } = Table;
 const data = [
   {
@@ -33,7 +34,7 @@ const QuantityPackage = () => {
   const navigate = useNavigate()
   // handle
   const handleClose = () => {
-    navigate("/danh-sach-goi-cuoc");
+    navigate(path.TAO_MOI_GOI_CUOC);
   };
   return <>
     <div className="detail__back  pb-3">

@@ -27,7 +27,7 @@ function CreateUser() {
             </div>
           </div>
           <div className="col-auto p-0">
-            <h4 className="header__info__bold  w-auto">Thêm mới người dùng</h4>
+            <h4 className="title-bold   w-auto">Thêm mới người dùng</h4>
           </div>
         </Row>
         <Row className="mb-2">

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
 import { toast } from "react-toastify";
 import * as menu from "../../menu/menuNav";
-import * as actions from "../../redux/store/actions/userActions";
 import "../../assets/icon/fontawesome-free-6.4.2-web/css/all.min.css";
 import "./navigation.scss";
 const MenuRole = () => {
@@ -30,7 +28,7 @@ const MenuRole = () => {
     }
   }, [MenuRole]);
   // handle
-  
+
   const handleClickTabMenu = (item) => {
     const ListItem = document.querySelectorAll(".menu__item");
     Array.from(ListItem).forEach((i, index) => {
@@ -42,7 +40,7 @@ const MenuRole = () => {
     Array.from(ListItem)[item.id - 1].classList.add("active");
     navigate(item.path);
   };
- 
+
   const handleClickLogout = () => {
     localStorage.removeItem("isLogin");
     toast.success("Logout is success");
@@ -88,15 +86,4 @@ const MenuRole = () => {
     </>
   );
 }
-const mapStateToProps = (state) => {
-  return {
-    isLogin: state.user.isLogin,
-  };
-};
-const mapDispathToProps = (dispath) => {
-  return {
-    checkLogin: (data) => dispath(actions.checkLogin(data)),
-    loginFail: () => dispath(actions.loginFail()),
-  };
-};
-export default connect(mapStateToProps, mapDispathToProps)(MenuRole);
+export default MenuRole;

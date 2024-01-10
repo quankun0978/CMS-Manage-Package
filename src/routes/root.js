@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { Route, Routes, Navigate } from "react-router-dom";
-import Login from "../pages/login/auth/login";
+import Login from "../pages/login/auth/Login";
 import Home from "../pages/Home/Home";
-import * as actions from "../redux/store/actions/userActions";
-const RouteLogin = (props) => {
+import { path } from "../ultils/constants/path";
+const RouteLogin = () => {
   return (
     <>
       <Routes>
-        <Route path="/dang-nhap" element={<Login></Login>}></Route>
-        <Route path="*" element={<Navigate to="/dang-nhap"></Navigate>}></Route>
+        <Route path={path.DANG_NHAP} element={<Login></Login>} />
+        <Route path="*" element={<Navigate to={path.DANG_NHAP}></Navigate>} />
       </Routes>
     </>
   );
 };
-const Root = (props) => {
-  let { isLogin } = props;
+const Root = () => {
+  let stateRedux = useSelector((state) => {
+    return {
+      isLogin: state.user.isLogin,
+    };
+  });
+  let { isLogin } = stateRedux;
+  // hook
   const [view, setView] = useState(null);
   useEffect(() => {
     if (isLogin) {
@@ -28,15 +34,4 @@ const Root = (props) => {
   }, [isLogin]);
   return <>{view}</>;
 };
-const mapStateToProps = (state) => {
-  return {
-    isLogin: state.user.isLogin,
-    role: state.user.role,
-  };
-};
-const mapDispathToProps = (dispath) => {
-  return {
-    checkLogin: (data) => dispath(actions.checkLogin(data)),
-  };
-};
-export default connect(mapStateToProps, mapDispathToProps)(Root);
+export default Root;

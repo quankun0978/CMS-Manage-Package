@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { EditOutlined, SelectOutlined } from "@ant-design/icons";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Table, Button, Modal } from "antd";
 import { Input, Select, Tooltip } from "antd";
-import ModalEdit from "../../Edit/EditUser/modalEdit"
-import "./ManageUser.scss";
+import ModalEdit from "../../Edit/EditUser/ModalEditUser"
 import * as actions from "../../../redux/store/actions/adminActions";
+import { path } from "../../../ultils/constants/path";
+import "./ManageUser.scss";
 const { Search } = Input;
 const columns = [
   {
@@ -49,7 +50,14 @@ const options = [
   },
 ];
 const ManageUser = (props) => {
-  const { showModalEdit, dataAllUser, getDataAllUser, getDataUserById } = props;
+  const dispath = useDispatch()
+  const stateRedux = useSelector((state) => {
+    return {
+      dataAllUser: state.admin.dataAllUser,
+      dataUserById: state.admin.dataUserById,
+    }
+  })
+  const { dataAllUser } = stateRedux
   //hook
 
   const navigate = useNavigate();
@@ -66,7 +74,7 @@ const ManageUser = (props) => {
     },
   });
   useEffect(() => {
-    getDataAllUser();
+    dispath(actions.getAllUser());
   }, []);
   useEffect(() => {
     setLoading(true);
@@ -129,12 +137,12 @@ const ManageUser = (props) => {
 
   //handle
   const handleClickEdit = (id) => {
-    showModalEdit(true);
-    getDataUserById(id);
+    dispath(actions.showModalEditUser(true))
+    dispath(actions.getUserById(id))
   };
   const handleClickDetail = (id) => {
-    navigate(`/danh-sach-nguoi-dung/nguoi-dung/${id}`);
-    getDataUserById(id);
+    navigate(`${path.CHI_TIET_NGUOI_DUNG}/${id}`);
+    dispath(actions.getUserById(id))
   };
   const onSearch = (value, _e, info) => {
 
@@ -202,23 +210,9 @@ const ManageUser = (props) => {
         scroll={{ y: 350 }}
         style={{ transform: "translateY(15px)" }}
         loading={loading}
-      ></Table>
-      <ModalEdit></ModalEdit>
+      />
+      <ModalEdit />
     </>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    dataAllUser: state.admin.dataAllUser,
-    dataUserById: state.admin.dataUserById,
-  };
-};
-const mapDispathToProps = (dispath) => {
-  return {
-    showModalEdit: (check) => dispath(actions.showModalEditUser(check)),
-    showModalDetail: (check) => dispath(actions.showModalDetailUser(check)),
-    getDataAllUser: () => dispath(actions.getAllUser()),
-    getDataUserById: (id) => dispath(actions.getUserById(id)),
-  };
-};
-export default connect(mapStateToProps, mapDispathToProps)(ManageUser);
+export default ManageUser;

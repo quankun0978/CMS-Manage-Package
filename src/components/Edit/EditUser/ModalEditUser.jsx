@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -7,11 +7,18 @@ import Modal from "react-bootstrap/Modal";
 import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
-import "./modalEdit.scss";
 import * as actions from "../../../redux/store/actions/adminActions";
+import "./modalEditUser.scss";
 import "react-toastify/dist/ReactToastify.css";
-const ModalEdit = (props) => {
-  const { isModalOpen, showModal, dataUserById, editDataUser } = props;
+const ModalEdit = () => {
+  const dispath = useDispatch()
+  let stateRedux = useSelector((state) => {
+    return {
+      isModalOpen: state.admin.isModalEditUser,
+      dataUserById: state.admin.dataUserById,
+    };
+  });
+  let { isModalOpen, dataUserById } = stateRedux;
   const Inputs = {
     UserName: useRef(),
     Name: useRef(),
@@ -36,7 +43,7 @@ const ModalEdit = (props) => {
     setValidated(true);
   };
   const handleClose = () => {
-    showModal(false);
+    dispath(actions.showModalEditUser(false))
     setDataUser({});
   };
   const handleSave = () => {
@@ -45,15 +52,15 @@ const ModalEdit = (props) => {
       name: Inputs.Name.current.value,
       phone: Inputs.Phone.current.value,
     };
-    editDataUser(dt, dataUser.id);
+    dispath(actions.editUserById(dt, dt.id))
     toast.success("edit is success");
-    showModal(false);
+    dispath(actions.showModalEditUser(false))
   };
   return (
     <>
       <Modal size="lg" show={isModalOpen} onHide={handleClose}>
         <Modal.Header closeButton style={{}}>
-          <Modal.Title></Modal.Title>
+          <Modal.Title className="title-bold ">Chỉnh sửa thông tin người dùng</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -119,7 +126,7 @@ const ModalEdit = (props) => {
             <Row className="mb-3">
               <Form.Group as={Col} md="12" controlId="">
                 <Form.Label>Description</Form.Label>
-                <Form.Control as="textarea" rows={3} />
+                <Form.Control as="textarea" rows={4} />
               </Form.Group>
             </Row>
           </Form>
@@ -136,16 +143,4 @@ const ModalEdit = (props) => {
     </>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    isModalOpen: state.admin.isModalEditUser,
-    dataUserById: state.admin.dataUserById,
-  };
-};
-const mapDispathToProps = (dispath) => {
-  return {
-    showModal: (check) => dispath(actions.showModalEditUser(check)),
-    editDataUser: (data, id) => dispath(actions.editUserById(data, id)),
-  };
-};
-export default connect(mapStateToProps, mapDispathToProps)(ModalEdit);
+export default ModalEdit;

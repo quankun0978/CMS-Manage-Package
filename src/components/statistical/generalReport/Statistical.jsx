@@ -1,9 +1,7 @@
 
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
 import { Table } from "antd";
 import ModalEditPackage from "../../Edit/EditPackage/ModalEditPackage";
-import * as actions from "../../../redux/store/actions/userActions";
 const columns = [
   {
     title: "Ngày",
@@ -269,19 +267,8 @@ const Statistical = () => {
             style={{ display: "" }}
           ></Table>
         )}
-      ></Table>
-
-      <ModalEditPackage></ModalEditPackage>
+      />
     </>
   );
 };
-const mapStateToProps = (state) => {
-  return {};
-};
-const mapDispathToProps = (dispath) => {
-  return {
-    showModalEdit: (check) => dispath(actions.showModalEditPackage(check)),
-    showModalDetail: (check) => dispath(actions.showModalDetailPackage(check)),
-  };
-};
-export default connect(mapStateToProps, mapDispathToProps)(Statistical);
+export default Statistical;

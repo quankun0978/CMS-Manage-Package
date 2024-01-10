@@ -54,3 +54,45 @@ export const adminReducer = (state = initAdmin, actions) => {
       return state;
   }
 };
+
+// import { createSlice } from "@reduxjs/toolkit";
+// export const adminReducer = createSlice({
+//   name: "admin",
+//   initialState: {
+//     isModalEditUser: false,
+//     isModalDetailUser: false,
+//     dataAllUser: [],
+//     dataUserById: {},
+//   },
+//   reducers: {
+//     ShowModalEditUser: (state, actions) => {
+//       state.isModalEditUser = actions.check;
+//     },
+//     ShowModalDetailUser: (state, actions) => {
+//       state.isModalDetailUser = actions.check;
+//     },
+//     getAllUserSuccess: (state, actions) => {
+//       state.dataAllUser = actions.data;
+//     },
+
+//     getUserByIdSuccess: (state, actions) => {
+//       state.dataUserById = actions.data;
+//     },
+//     editUserByIdSuccess: (state, actions) => {
+//       let dt = [...state.dataAllUser];
+//       let dtUpdate = dt.map((item) => {
+//         if (item.id === actions.id) return actions.data;
+//         else return item;
+//       });
+//       state.dataUserById = actions.data;
+//       state.dataAllUser = dtUpdate;
+//     },
+//   },
+// });
+// // export const {
+// //   ShowModalDetailPackage,
+// //   ShowModalEditPackage,
+// //   LoginFail,
+// //   LoginSuccess,
+// // } = adminReducer.actions;
+// export default adminReducer.reducer;

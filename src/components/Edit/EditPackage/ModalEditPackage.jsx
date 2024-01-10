@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -9,8 +9,14 @@ import Row from "react-bootstrap/Row";
 import "react-toastify/dist/ReactToastify.css";
 import "./ModalEditPackage.scss";
 import * as actions from "../../../redux/store/actions/userActions";
-const ModalEditPackage = (props) => {
-  const { isModalOpen, showModal } = props;
+const ModalEditPackage = () => {
+  let stateRedux = useSelector((state) => {
+    return {
+      isModalOpen: state.user.isModalEditPackage,
+    };
+  });
+  let dispath = useDispatch()
+  let { isModalOpen } = stateRedux;
   //hook
   const [validated, setValidated] = useState(false);
   //handle
@@ -23,16 +29,18 @@ const ModalEditPackage = (props) => {
     setValidated(true);
   };
   const handleClose = () => {
-    showModal(false);
+    dispath(actions.showModalEditPackage(false));
   };
   const handleSave = () => {
     toast.success("edit is success");
-    showModal(false);
+    dispath(actions.showModalEditPackage(false));
   };
   return (
     <>
       <Modal size="lg" show={isModalOpen} onHide={handleClose}>
-        <Modal.Header closeButton></Modal.Header>
+        <Modal.Header closeButton>
+          <Modal.Title className="title-bold">Chỉnh sửa thông tin gói cước</Modal.Title>
+        </Modal.Header>
         <Modal.Body>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row className="mb-3">
@@ -61,7 +69,7 @@ const ModalEditPackage = (props) => {
             <Row className="mb-3">
               <Form.Group as={Col} md="12" controlId="">
                 <Form.Label>Description</Form.Label>
-                <Form.Control as="textarea" rows={3} />
+                <Form.Control as="textarea" rows={4} />
               </Form.Group>
             </Row>
           </Form>
@@ -78,14 +86,4 @@ const ModalEditPackage = (props) => {
     </>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    isModalOpen: state.user.isModalEditPackage,
-  };
-};
-const mapDispathToProps = (dispath) => {
-  return {
-    showModal: (check) => dispath(actions.showModalEditPackage(check)),
-  };
-};
-export default connect(mapStateToProps, mapDispathToProps)(ModalEditPackage);
+export default ModalEditPackage;
