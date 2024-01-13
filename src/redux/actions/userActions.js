@@ -14,7 +14,7 @@ export const showModalDetailPackage = (check) => {
 export const checkLogin = (data) => {
   return (dispath, getstate) => {
     try {
-      if (data.email === 'admin@vnpt.com') {
+      if (data.email === 'admin@vnpt.vn') {
         if (data.password === '123456') {
           dispath(loginSuccess('admin'));
         } else {
@@ -23,14 +23,14 @@ export const checkLogin = (data) => {
       } else {
         dispath(loginFail());
       }
-      if (data.email === 'userRead@vnpt.com') {
+      if (data.email === 'userRead@vnpt.vn') {
         if (data.password === '123456') {
           dispath(loginSuccess('user-read'));
         } else {
           dispath(loginFail());
         }
       }
-      if (data.email === 'userWrite@vnpt.com') {
+      if (data.email === 'userWrite@vnpt.vn') {
         if (data.password === '123456') {
           dispath(loginSuccess('user-write'));
         } else {
