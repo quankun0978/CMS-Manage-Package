@@ -3,7 +3,7 @@ const initUser = {
   isModalEditPackage: false,
   isModalDetailPackage: false,
   isLogin: false,
-  role: "",
+  role: '',
 };
 export const userReducer = (state = initUser, actions) => {
   switch (actions.type) {
@@ -32,6 +32,7 @@ export const userReducer = (state = initUser, actions) => {
       return state;
   }
 };
+
 // import { createSlice } from "@reduxjs/toolkit";
 // export const userReducer = createSlice({
 //   name: "user",

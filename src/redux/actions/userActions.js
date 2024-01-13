@@ -1,4 +1,4 @@
-import actionType from "./actionstype";
+import actionType from './actionstype';
 export const showModalEditPackage = (check) => {
   return {
     type: actionType.SHOW_MODAL_EDIT_PACKAGE,
@@ -14,31 +14,31 @@ export const showModalDetailPackage = (check) => {
 export const checkLogin = (data) => {
   return (dispath, getstate) => {
     try {
-      if (data.email === "admin@vnpt.com") {
-        if (data.password === "123456") {
-          dispath(loginSuccess("admin"));
+      if (data.email === 'admin@vnpt.com') {
+        if (data.password === '123456') {
+          dispath(loginSuccess('admin'));
         } else {
           dispath(loginFail());
         }
       } else {
         dispath(loginFail());
       }
-      if (data.email === "userRead@vnpt.com") {
-        if (data.password === "123456") {
-          dispath(loginSuccess("user-read"));
+      if (data.email === 'userRead@vnpt.com') {
+        if (data.password === '123456') {
+          dispath(loginSuccess('user-read'));
         } else {
           dispath(loginFail());
         }
       }
-      if (data.email === "userWrite@vnpt.com") {
-        if (data.password === "123456") {
-          dispath(loginSuccess("user-write"));
+      if (data.email === 'userWrite@vnpt.com') {
+        if (data.password === '123456') {
+          dispath(loginSuccess('user-write'));
         } else {
           dispath(loginFail());
         }
       }
-      if (data.email === "") {
-        if (data.password === "") {
+      if (data.email === '') {
+        if (data.password === '') {
           dispath(loginFail());
         }
       }

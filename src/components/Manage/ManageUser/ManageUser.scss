@@ -1,21 +1,17 @@
-// .ant-table{
-//     overflow-y: scroll !important;
-// }
-
 .ant-table-wrapper {
-    position: relative;
+  position: relative;
 }
 
 .ant-table-body::-webkit-scrollbar {
-    width: 6px;
-    background-color: #f5f5f5;
+  width: 6px;
+  background-color: #f5f5f5;
 }
 
 .ant-table-body::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
 }
 
 .ant-table-body::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
 }

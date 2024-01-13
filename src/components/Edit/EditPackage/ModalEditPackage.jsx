@@ -1,87 +1,99 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Modal from "react-bootstrap/Modal";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import "react-toastify/dist/ReactToastify.css";
-import "./ModalEditPackage.scss";
-import * as actions from "../../../redux/store/actions/userActions";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { Col, Form, Input, Row, Select, Button, Modal } from 'antd';
+import * as actions from '../../../redux/actions/userActions';
+import 'react-toastify/dist/ReactToastify.css';
 const ModalEditPackage = () => {
-  let stateRedux = useSelector((state) => {
+  let dispath = useDispatch();
+  const [form] = Form.useForm();
+  let { isModalOpen } = useSelector((state) => {
     return {
       isModalOpen: state.user.isModalEditPackage,
     };
   });
-  let dispath = useDispatch()
-  let { isModalOpen } = stateRedux;
+
   //hook
-  const [validated, setValidated] = useState(false);
+  useEffect(() => {
+    form.resetFields();
+    setTimeout(() => {
+      form.setFieldsValue({
+        name: 'D7',
+        price: '7000',
+        cycle: '1 ngày',
+        type: '0',
+        description: 'Xin chào các bạn',
+      });
+    }, 1000);
+  }, [form]);
   //handle
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    setValidated(true);
-  };
+
   const handleClose = () => {
     dispath(actions.showModalEditPackage(false));
   };
   const handleSave = () => {
-    toast.success("edit is success");
+    // dispath(actions.editUserById(form.getFieldValue(), form.getFieldValue().id));
+    toast.success('edit is success');
     dispath(actions.showModalEditPackage(false));
   };
   return (
     <>
-      <Modal size="lg" show={isModalOpen} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title className="title-bold">Chỉnh sửa thông tin gói cước</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="">
-                <Form.Label>Name</Form.Label>
-                <Form.Control required type="text" defaultValue="D7" />
-              </Form.Group>
-              <Form.Group as={Col} md="6" controlId="">
-                <Form.Label>Type</Form.Label>
-                <Form.Select aria-label="Default select example">
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                </Form.Select>
-              </Form.Group>
+      <Modal
+        open={isModalOpen}
+        onCancel={handleClose}
+        width={1000}
+        title="Cập nhật thông tin gói cước"
+        footer={() => {
+          return (
+            <>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleSave}>
+                Save Changes
+              </Button>
+            </>
+          );
+        }}>
+        <div style={{ marginTop: '15px' }}>
+          <Form name="register" scrollToFirstError layout="vertical" form={form}>
+            <Row justify="space-between">
+              <Col md={12}>
+                <Form.Item label="Name" name="name" style={{ marginRight: '10px' }}>
+                  <Input size="large" />
+                </Form.Item>
+              </Col>
+              <Col md={12}>
+                <Form.Item label="Price" name="price" style={{ marginLeft: '10px' }}>
+                  <Input size="large" />
+                </Form.Item>
+              </Col>
             </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="">
-                <Form.Label>Price</Form.Label>
-                <Form.Control required type="text" defaultValue="7000" />
-              </Form.Group>
-              <Form.Group as={Col} md="6" controlId="">
-                <Form.Label>Cycle time</Form.Label>
-                <Form.Control required defaultValue="1 ngày" />
-              </Form.Group>
+
+            <Row justify="space-between">
+              <Col md={12}>
+                <Form.Item name="cycle" label="Cycle time" style={{ marginRight: '10px' }}>
+                  <Input size="large" />
+                </Form.Item>
+              </Col>
+              <Col md={12}>
+                <Form.Item style={{ marginLeft: '10px' }} label="Type" name="type">
+                  <Select size="large" disabled allowClear>
+                    <Select.Option value="0">1</Select.Option>
+                    <Select.Option value="1">0</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
             </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="12" controlId="">
-                <Form.Label>Description</Form.Label>
-                <Form.Control as="textarea" rows={4} />
-              </Form.Group>
+            <Row justify="space-between">
+              <Col md={24}>
+                <Form.Item name="description" label="Description">
+                  <Input.TextArea rows={7} />
+                </Form.Item>
+              </Col>
             </Row>
           </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSave}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
+        </div>
       </Modal>
     </>
   );

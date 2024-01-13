@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Route, Routes, Navigate } from "react-router-dom";
-import Login from "../pages/login/auth/Login";
-import Home from "../pages/Home/Home";
-import { path } from "../ultils/constants/path";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import Login from 'pages/login/auth/Login';
+import Home from 'pages/Home/Home';
+import { path } from 'constants/path';
 const RouteLogin = () => {
   return (
     <>
@@ -25,9 +25,9 @@ const Root = () => {
   const [view, setView] = useState(null);
   useEffect(() => {
     if (isLogin) {
-      localStorage.setItem("isLogin", isLogin);
+      localStorage.setItem('isLogin', isLogin);
     }
-    if (!localStorage.getItem("isLogin")) setView(<RouteLogin></RouteLogin>);
+    if (!localStorage.getItem('isLogin')) setView(<RouteLogin></RouteLogin>);
     else {
       setView(<Home></Home>);
     }

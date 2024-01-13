@@ -1,70 +1,70 @@
-import React, { useEffect, useState, useRef } from "react";
-import { EditOutlined, SelectOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Table, Button, Modal } from "antd";
-import { Input, Select, Tooltip } from "antd";
-import ModalEdit from "../../Edit/EditUser/ModalEditUser"
-import * as actions from "../../../redux/store/actions/adminActions";
-import { path } from "../../../ultils/constants/path";
-import "./ManageUser.scss";
+import React, { useEffect, useState, useRef } from 'react';
+import { EditOutlined, SelectOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Table, Button, Modal } from 'antd';
+import { Input, Select, Tooltip } from 'antd';
+import ModalEdit from 'components/Edit/EditUser/ModalEditUser';
+import { path } from 'constants/path';
+import * as actions from '../../../redux/actions/adminActions';
+import './ManageUser.scss';
 const { Search } = Input;
 const columns = [
   {
-    title: "STT",
-    dataIndex: "id",
+    title: 'STT',
+    dataIndex: 'id',
 
     render: (id) => `${id}`,
-    width: "10%",
+    width: '10%',
   },
   {
-    title: "Name",
-    dataIndex: "name",
+    title: 'Name',
+    dataIndex: 'name',
     render: (name) => `${name}`,
-    width: "20%",
+    width: '20%',
     sorter: (a, b) => a.name.localeCompare(b.name),
   },
   {
-    title: "Phone number",
-    dataIndex: "phone",
+    title: 'Phone number',
+    dataIndex: 'phone',
 
-    width: "20%",
+    width: '20%',
   },
   {
-    title: "Email",
-    dataIndex: "email",
+    title: 'Email',
+    dataIndex: 'email',
   },
   {
-    title: "Operation",
-    dataIndex: "operation",
+    title: 'Operation',
+    dataIndex: 'operation',
   },
 ];
 const options = [
   {
     value: 0,
-    label: "Disable",
+    label: 'Disable',
   },
   {
     value: 1,
-    label: "Enable",
+    label: 'Enable',
   },
 ];
-const ManageUser = (props) => {
-  const dispath = useDispatch()
-  const stateRedux = useSelector((state) => {
+const ManageUser = () => {
+  const dispath = useDispatch();
+  const navigate = useNavigate();
+  const dataTable = useRef();
+  const { dataAllUser } = useSelector((state) => {
     return {
       dataAllUser: state.admin.dataAllUser,
       dataUserById: state.admin.dataUserById,
-    }
-  })
-  const { dataAllUser } = stateRedux
+    };
+  });
+
   //hook
 
-  const navigate = useNavigate();
-  const dataTable = useRef();
-  const [inputSearch, setInputSearch] = useState("");
+  const [inputSearch, setInputSearch] = useState('');
   const [data, setData] = useState([]);
-  const [dataSelect, setDataSelect] = useState("Enable");
+  const [dataSelect, setDataSelect] = useState('Enable');
   const [dataOrigin, setDataOrigin] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tableParams, setTableParams] = useState({
@@ -88,26 +88,14 @@ const ManageUser = (props) => {
             <div
               key={item.id}
               style={{
-                display: "flex",
-                gap: "10px",
-              }}
-            >
+                display: 'flex',
+                gap: '10px',
+              }}>
               <Tooltip placement="topLeft" title="chi tiết" color="">
-                <Button
-                  type="primary"
-                  icon={<SelectOutlined />}
-                  size="default"
-                  onClick={() => handleClickDetail(item.id)}
-                />
+                <Button type="primary" icon={<SelectOutlined />} size="default" onClick={() => handleClickDetail(item.id)} />
               </Tooltip>
               <Tooltip placement="topLeft" title="chỉnh sửa">
-                <Button
-                  type="primary"
-                  style={{ backgroundColor: "#ffca2c" }}
-                  icon={<EditOutlined />}
-                  size="default"
-                  onClick={() => handleClickEdit(item.id)}
-                />
+                <Button type="primary" style={{ backgroundColor: '#ffca2c' }} icon={<EditOutlined />} size="default" onClick={() => handleClickEdit(item.id)} />
               </Tooltip>
 
               <Select
@@ -137,15 +125,14 @@ const ManageUser = (props) => {
 
   //handle
   const handleClickEdit = (id) => {
-    dispath(actions.showModalEditUser(true))
-    dispath(actions.getUserById(id))
+    dispath(actions.showModalEditUser(true));
+    dispath(actions.getUserById(id));
   };
   const handleClickDetail = (id) => {
     navigate(`${path.CHI_TIET_NGUOI_DUNG}/${id}`);
-    dispath(actions.getUserById(id))
+    dispath(actions.getUserById(id));
   };
   const onSearch = (value, _e, info) => {
-
     let dataCp = [...dataTable.current];
     let dataFilter = dataCp.filter((item) => {
       return item.name.includes(value);
@@ -160,9 +147,9 @@ const ManageUser = (props) => {
     });
 
     Modal.confirm({
-      onOk: () => { },
-      title: "Do you want to disable this user?",
-      content: "Bla bla ...",
+      onOk: () => {},
+      title: 'Do you want to disable this user?',
+      content: 'Bla bla ...',
       footer: (_, { OkBtn, CancelBtn }) => (
         <>
           <CancelBtn />
@@ -202,15 +189,7 @@ const ManageUser = (props) => {
           width: 300,
         }}
       />
-      <Table
-        columns={columns}
-        dataSource={data.length > 0 ? data : []}
-        pagination={tableParams.pagination}
-        onChange={handleTableChange}
-        scroll={{ y: 350 }}
-        style={{ transform: "translateY(15px)" }}
-        loading={loading}
-      />
+      <Table columns={columns} dataSource={data.length > 0 ? data : []} pagination={tableParams.pagination} onChange={handleTableChange} scroll={{ y: 350 }} style={{ transform: 'translateY(15px)' }} loading={loading} />
       <ModalEdit />
     </>
   );

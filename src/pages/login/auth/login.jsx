@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-// import ClipLoader from "react-spinners/ClipLoader";
-import { BeatLoader } from "react-spinners";
-import { useDispatch } from "react-redux";
-import { ToastContainer } from "react-bootstrap";
-import image from "../../../assets/img/uNGdWHi.png";
-import logo from "../../../assets/img/logo_home.png";
-import * as actions from "../../../redux/store/actions/userActions";
-import "./login.scss";
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { BeatLoader } from 'react-spinners';
+import { useDispatch } from 'react-redux';
+import { ToastContainer } from 'react-bootstrap';
+import image from 'assets/img/uNGdWHi.png';
+import logo from 'assets/img/logo_home.png';
+import * as actions from '../../../redux/actions/userActions';
+import './login.scss';
 const Login = () => {
+  const dispath = useDispatch();
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
-  const dispath = useDispatch()
+
   // hook
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -29,7 +29,7 @@ const Login = () => {
     if (Object.keys(data).length > 0) {
       setLoading(true);
       setTimeout(() => {
-        dispath(actions.checkLogin(data))
+        dispath(actions.checkLogin(data));
       }, 3000);
     }
   };
@@ -58,10 +58,7 @@ const Login = () => {
               <div className="col-lg-6">
                 <div className="card2 card border-0 px-4 py-xl-5">
                   <div className="row mb-2 px-3">
-                    <h3
-                      className="mb-0 p-0 mt-2 w-auto title-bold  title-bold "
-                      style={{ fontWeight: 700 }}
-                    >
+                    <h3 className="mb-0 p-0 mt-2 w-auto title-bold  title-bold " style={{ fontWeight: 700 }}>
                       Đăng nhập
                     </h3>
                   </div>
@@ -71,42 +68,23 @@ const Login = () => {
                       <label className="mb-1 w-auto p-0 ">
                         <h6 className="p-0  ">Email Address</h6>
                       </label>
-                      <input
-                        placeholder="Enter email in the format @vnpt.vn"
-                        {...register("email", { required: true })}
-                        aria-invalid={errors.email ? "true" : "false"}
-                      />
-                      {errors.email && errors.email.type === "required" && (
-                        <p className="message-error">Email is required</p>
-                      )}
+                      <input placeholder="Enter email in the format @vnpt.vn" {...register('email', { required: true })} aria-invalid={errors.email ? 'true' : 'false'} />
+                      {errors.email && errors.email.type === 'required' && <p className="message-error">Email is required</p>}
                     </div>
                     <div className="row px-3 mt-3">
                       <label className="mb-1 w-auto p-0">
                         <h6 className="p-0 ">Password</h6>
                       </label>
-                      <input
-                        type="password"
-                        placeholder="Enter the password"
-                        {...register("password", { required: true })}
-                        aria-invalid={errors.password ? "true" : "false"}
-                      />
-                      {errors.password &&
-                        errors.password.type === "required" && (
-                          <p className="message-error">Password is required</p>
-                        )}
+                      <input type="password" placeholder="Enter the password" {...register('password', { required: true })} aria-invalid={errors.password ? 'true' : 'false'} />
+                      {errors.password && errors.password.type === 'required' && <p className="message-error">Password is required</p>}
                     </div>
 
                     <div
                       className="row mb-3 px-3"
                       style={{
-                        marginTop: "24px",
-                      }}
-                    >
-                      <button
-                        onKeyDown={(e) => handleKeyDown(e)}
-                        type="submit"
-                        className="btn btn-blue text-center"
-                      >
+                        marginTop: '24px',
+                      }}>
+                      <button onKeyDown={(e) => handleKeyDown(e)} type="submit" className="btn btn-blue text-center">
                         Đăng nhập
                       </button>
                     </div>
@@ -116,10 +94,7 @@ const Login = () => {
             </div>
             <div className="bg-blue py-4">
               <div className="row px-5">
-                <small className="ml-4 ml-sm-5 mb-2">
-                  VNPT Vinaphone &copy; 2023| Tổng đài di động: 18001091 | Tổng
-                  đài Internet/MyTV: 18001166
-                </small>
+                <small className="ml-4 ml-sm-5 mb-2">VNPT Vinaphone &copy; 2023| Tổng đài di động: 18001091 | Tổng đài Internet/MyTV: 18001166</small>
               </div>
             </div>
           </div>
@@ -130,7 +105,7 @@ const Login = () => {
           </div>
         )}
       </div>
-      <ToastContainer />
+      <ToastContainer></ToastContainer>
     </>
   );
 };

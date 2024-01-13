@@ -1,6 +1,5 @@
-
-import Root from "./routes/root";
-import "./styles/App.scss";
+import Root from 'routes/root';
+import 'styles/App.scss';
 function App() {
   return (
     <div className="App">

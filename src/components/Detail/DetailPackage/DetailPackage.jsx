@@ -1,46 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import "../DetailUser/DetailUser"
-import * as actions from "../../../redux/store/actions/adminActions";
-import { path } from "../../../ultils/constants/path";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Col, Form, Input, Row, Select } from 'antd';
+import * as actions from '../../../redux/actions/adminActions';
+import { path } from 'constants/path';
+import 'components/Detail/DetailUser/DetailUser.scss';
 const DetailPackage = () => {
-  let stateRedux = useSelector((state) => {
-    return {
-      dataUserById: state.admin.dataUserById,
-    };
-  });
-  let dispath = useDispatch()
-  let { dataUserById } = stateRedux;
-  //hook 
+  const [form] = Form.useForm();
   let { id } = useParams();
+  let dispath = useDispatch();
   const navigate = useNavigate();
+  //hook
   const [dataDetail, setDataDetail] = useState({});
   const [check, setCheck] = useState(false);
-  const [validated, setValidated] = useState(false);
+
   useEffect(() => {
-    dispath(actions.getUserById(id))
+    dispath(actions.getUserById(id));
   }, []);
   useEffect(() => {
     setTimeout(() => {
       setCheck(true);
     }, 1000);
-    if (check) setDataDetail(dataUserById);
-  }, [dataUserById, check]);
+    if (check)
+      form.setFieldsValue({
+        name: 'D7',
+        price: '7000',
+        cycle: '1 ngày',
+        type: '0',
+        description: 'Xin chào các bạn',
+      });
+  }, [check]);
 
   // handle
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    setValidated(true);
-  };
+
   const handleClose = () => {
     setDataDetail({});
     navigate(path.DANH_SACH_GOI_CUOC);
@@ -48,94 +41,76 @@ const DetailPackage = () => {
   return (
     <>
       <div className="modal__detail__content h-100 ">
-        <div className="detail__back  pb-3">
+        <div style={{ paddingBottom: '1.5rem' }} className="detail__back  ">
           <p onClick={handleClose}>
-            <i class="fa-solid fa-angle-left pe-1"></i>
+            <i class="fa-solid fa-angle-left " style={{ paddingRight: '1rem' }}></i>
             Quay lại
           </p>
         </div>
-        <div className="row justify-content-between ">
-          <div className="col-3">
+        <Row justify="space-between">
+          <Col md={6}>
             <div className="modal__detail__img ">
               <div className="modal__detail__img__main">
                 <i className="fa-solid fa-sim-card"></i>
               </div>
               <div className="modal__detail__more">
-                <div className="modal__detail__more__info mb-3 mt-2 ">
-                  <h3 className="mb-2">Trạng thái</h3>
+                <div className="modal__detail__more__info " style={{ marginBottom: '1.5rem', marginTop: '1rem' }}>
+                  <h3 style={{ marginBottom: '1rem' }}>Trạng thái</h3>
                   <div className="modal__detail__more__info__icon">
-                    <p className="m-0">Enable</p>
+                    <p style={{ margin: '0' }}>Enable</p>
                   </div>
                 </div>
                 <div className="modal__detail__more__info">
                   <h3 className="mb-2">Số người đăng dã đăng ký</h3>
                   <div className="modal__detail__more__info__icon">
-                    <p className="m-0">100M+</p>
+                    <p style={{ margin: '0' }}>100M+</p>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="col-9">
-            <div className="modal__detail__info ">
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="6">
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      defaultValue={
-                        dataDetail && dataDetail.name ? dataDetail.name : ""
-                      }
-                      disabled
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} md="6">
-                    <Form.Label>Type</Form.Label>
-                    <Form.Control required type="password" disabled />
-                  </Form.Group>
+          </Col>
+          <Col md={18}>
+            <div className="modal__detail__info " style={{ marginLeft: '20px' }}>
+              <Form name="register" scrollToFirstError layout="vertical" form={form}>
+                <Row justify="space-between">
+                  <Col md={12}>
+                    <Form.Item label="Name" name="name" style={{ marginRight: '10px' }}>
+                      <Input disabled size="large" />
+                    </Form.Item>
+                  </Col>
+                  <Col md={12}>
+                    <Form.Item label="Price" name="price" style={{ marginLeft: '10px' }}>
+                      <Input disabled size="large" />
+                    </Form.Item>
+                  </Col>
                 </Row>
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="6">
-                    <Form.Label>Price</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      defaultValue={
-                        dataDetail && dataDetail.phone ? dataDetail.phone : ""
-                      }
-                      disabled
-                    />
-                  </Form.Group>
-                  <Form.Group as={Col} md="6">
-                    <Form.Label>Cycle time</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      defaultValue={
-                        dataDetail && dataDetail.phone ? dataDetail.phone : ""
-                      }
-                      disabled
-                    />
-                  </Form.Group>
+
+                <Row justify="space-between">
+                  <Col md={12}>
+                    <Form.Item name="cycle" label="Cycle time" style={{ marginRight: '10px' }}>
+                      <Input disabled size="large" />
+                    </Form.Item>
+                  </Col>
+                  <Col md={12}>
+                    <Form.Item style={{ marginLeft: '10px' }} label="Type" name="type">
+                      <Select size="large" disabled allowClear>
+                        <Select.Option value="0">1</Select.Option>
+                        <Select.Option value="1">0</Select.Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
                 </Row>
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="12">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control
-                      disabled
-                      as="textarea"
-                      placeholder="Xin chào các bạn"
-                      rows={4}
-                    />
-                  </Form.Group>
+                <Row justify="space-between">
+                  <Col md={24}>
+                    <Form.Item name="description" label="Description">
+                      <Input.TextArea disabled rows={7} />
+                    </Form.Item>
+                  </Col>
                 </Row>
-                <Row className="h-110"></Row>
               </Form>
             </div>
-          </div>
-        </div>
+          </Col>
+        </Row>
       </div>
     </>
   );

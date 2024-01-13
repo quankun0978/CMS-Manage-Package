@@ -1,39 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { Table, Input } from "antd";
+import React, { useEffect, useState } from 'react';
+import { Table, Input } from 'antd';
 const { Search } = Input;
 const columns = [
   {
-    title: "STT",
-    dataIndex: "index",
+    title: 'STT',
+    dataIndex: 'index',
     render: (index) => `${index}`,
-    width: "5%",
+    width: '5%',
   },
   {
-    title: "Số thuê bao ",
-    dataIndex: "phone",
+    title: 'Số thuê bao ',
+    dataIndex: 'phone',
     render: (name) => `${name}`,
-    width: "10%",
+    width: '10%',
   },
   {
-    title: "Thời gian",
-    dataIndex: "time",
-    key: "time",
+    title: 'Thời gian',
+    dataIndex: 'time',
+    key: 'time',
 
-    width: "15%",
+    width: '15%',
   },
   {
-    title: "Đăng ký/hủy ",
-    dataIndex: "register",
-    key: "register",
+    title: 'Đăng ký/hủy ',
+    dataIndex: 'register',
+    key: 'register',
     filters: [
       {
-        text: "Đăng ký",
-        value: "Đăng ký",
+        text: 'Đăng ký',
+        value: 'Đăng ký',
       },
 
       {
-        text: "Hủy đăng ký",
-        value: "Hủy đăng ký",
+        text: 'Hủy đăng ký',
+        value: 'Hủy đăng ký',
       },
     ],
 
@@ -41,153 +41,153 @@ const columns = [
   },
 
   {
-    title: "Gói cước",
-    dataIndex: "name",
+    title: 'Gói cước',
+    dataIndex: 'name',
   },
   {
-    title: "Dịch vụ",
-    dataIndex: "service",
+    title: 'Dịch vụ',
+    dataIndex: 'service',
   },
   {
-    title: "Chu kỳ",
-    dataIndex: "cycle",
+    title: 'Chu kỳ',
+    dataIndex: 'cycle',
     filters: [
       {
-        text: "Ngày",
-        value: "ngày",
+        text: 'Ngày',
+        value: 'ngày',
       },
 
       {
-        text: "Tháng",
-        value: "tháng",
+        text: 'Tháng',
+        value: 'tháng',
       },
       {
-        text: "Năm",
-        value: "năm",
+        text: 'Năm',
+        value: 'năm',
       },
     ],
 
     onFilter: (value, record) => record.cycle.includes(value),
   },
   {
-    title: "Trạng thái",
-    dataIndex: "status",
+    title: 'Trạng thái',
+    dataIndex: 'status',
   },
   {
-    title: "Hiệu lực",
-    dataIndex: "effect",
+    title: 'Hiệu lực',
+    dataIndex: 'effect',
   },
   {
-    title: "Kênh",
-    dataIndex: "channel",
+    title: 'Kênh',
+    dataIndex: 'channel',
   },
 ];
 const dataInit = [
   {
     id: 1,
     index: 1,
-    name: "FB1",
-    price: "3000",
-    time: "26/06/2017 11:19:16",
-    phone: "0923131313",
-    register: "Đăng ký",
-    service: "data",
-    cycle: "1 ngày",
-    status: "Thành công",
-    effect: "30/01/2022",
-    channel: "Facebook",
+    name: 'FB1',
+    price: '3000',
+    time: '26/06/2017 11:19:16',
+    phone: '0923131313',
+    register: 'Đăng ký',
+    service: 'data',
+    cycle: '1 ngày',
+    status: 'Thành công',
+    effect: '30/01/2022',
+    channel: 'Facebook',
   },
   {
     id: 2,
     index: 2,
-    name: "FB7",
-    price: "10000",
-    time: "26/06/2017 11:19:16",
-    phone: "0923131313",
-    register: "Đăng ký",
-    service: "data",
-    cycle: "1 ngày",
-    status: "Thành công",
-    effect: "30/01/2022",
-    channel: "Facebook",
+    name: 'FB7',
+    price: '10000',
+    time: '26/06/2017 11:19:16',
+    phone: '0923131313',
+    register: 'Đăng ký',
+    service: 'data',
+    cycle: '1 ngày',
+    status: 'Thành công',
+    effect: '30/01/2022',
+    channel: 'Facebook',
   },
   {
     id: 3,
     index: 3,
-    name: "FB30N",
-    price: "30000",
-    time: "26/06/2017 11:19:16",
-    phone: "0943087282",
-    register: "Đăng ký",
-    service: "data",
-    cycle: "1 ngày",
-    status: "Thành công",
-    effect: "30/01/2022",
-    channel: "Facebook",
+    name: 'FB30N',
+    price: '30000',
+    time: '26/06/2017 11:19:16',
+    phone: '0943087282',
+    register: 'Đăng ký',
+    service: 'data',
+    cycle: '1 ngày',
+    status: 'Thành công',
+    effect: '30/01/2022',
+    channel: 'Facebook',
   },
   {
     id: 4,
     index: 4,
-    name: "META45",
-    price: "45000",
-    time: "26/06/2017 11:19:16",
-    phone: "0923131313",
-    register: "Đăng ký",
-    service: "data",
-    cycle: "1 ngày",
-    status: "Thành công",
-    effect: "30/01/2022",
-    channel: "Facebook",
+    name: 'META45',
+    price: '45000',
+    time: '26/06/2017 11:19:16',
+    phone: '0923131313',
+    register: 'Đăng ký',
+    service: 'data',
+    cycle: '1 ngày',
+    status: 'Thành công',
+    effect: '30/01/2022',
+    channel: 'Facebook',
   },
   {
     id: 5,
     index: 5,
-    name: "BIG90",
-    price: "90000",
-    time: "26/06/2017 11:19:16",
-    phone: "0923131313",
-    register: "Đăng ký",
-    service: "data",
-    cycle: "1 ngày",
-    status: "Thành công",
-    effect: "30/01/2022",
-    channel: "Facebook",
+    name: 'BIG90',
+    price: '90000',
+    time: '26/06/2017 11:19:16',
+    phone: '0923131313',
+    register: 'Đăng ký',
+    service: 'data',
+    cycle: '1 ngày',
+    status: 'Thành công',
+    effect: '30/01/2022',
+    channel: 'Facebook',
   },
   {
     id: 6,
     index: 6,
-    name: "BIG120",
-    price: "120000",
-    time: "26/06/2017 11:19:16",
-    phone: "0923131313",
-    register: "Đăng ký",
-    service: "data",
-    cycle: "1 ngày",
-    status: "Thành công",
-    effect: "30/01/2022",
-    channel: "Facebook",
+    name: 'BIG120',
+    price: '120000',
+    time: '26/06/2017 11:19:16',
+    phone: '0923131313',
+    register: 'Đăng ký',
+    service: 'data',
+    cycle: '1 ngày',
+    status: 'Thành công',
+    effect: '30/01/2022',
+    channel: 'Facebook',
   },
   {
     id: 7,
     index: 7,
-    name: "D7",
-    price: "7000",
-    time: "26/06/2017 11:19:16",
-    phone: "0923131313",
-    register: "Đăng ký",
-    service: "data",
-    cycle: "1 ngày",
-    status: "Thành công",
-    effect: "30/01/2022",
-    channel: "Facebook",
+    name: 'D7',
+    price: '7000',
+    time: '26/06/2017 11:19:16',
+    phone: '0923131313',
+    register: 'Đăng ký',
+    service: 'data',
+    cycle: '1 ngày',
+    status: 'Thành công',
+    effect: '30/01/2022',
+    channel: 'Facebook',
   },
 ];
 
 const SubcriptionStatus = () => {
   //hook
-  const [inputSearch, setInputSearch] = useState("");
+  const [inputSearch, setInputSearch] = useState('');
   const [data, setData] = useState([]);
-  const [dataSelect, setDataSelect] = useState("Enable");
+  const [dataSelect, setDataSelect] = useState('Enable');
   const [dataOrigin, setDataOrigin] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tableParams, setTableParams] = useState({
@@ -196,8 +196,7 @@ const SubcriptionStatus = () => {
       pageSize: 10,
     },
   });
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
   useEffect(() => {
     setLoading(true);
     if (dataInit.length > 0) {
@@ -228,7 +227,6 @@ const SubcriptionStatus = () => {
     if (dataFilter.length === 0) setData([]);
     if (!value) setData(dataOrigin);
   };
-
 
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
@@ -263,15 +261,7 @@ const SubcriptionStatus = () => {
         }}
         onChange={(e) => handleChangeInput(e)}
       />
-      <Table
-        columns={columns}
-        dataSource={data}
-        pagination={tableParams.pagination}
-        onChange={handleTableChange}
-        scroll={{ y: 330 }}
-        style={{ transform: "translateY(15px)" }}
-        loading={loading}
-      />
+      <Table columns={columns} dataSource={data} pagination={tableParams.pagination} onChange={handleTableChange} scroll={{ y: 330 }} style={{ transform: 'translateY(15px)' }} loading={loading} />
     </>
   );
 };

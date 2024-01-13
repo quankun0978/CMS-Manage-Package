@@ -1,5 +1,5 @@
-import actionType from "./actionstype";
-import { getDataAllUser, getDataUserById } from "../../../api/Api";
+import actionType from './actionstype';
+import { getDataAllUser, getDataUserById } from 'api/Api';
 export const showModalEditUser = (check) => {
   return {
     type: actionType.SHOW_MODAL_EDIT_USER,
@@ -39,8 +39,7 @@ export const getUserById = (id) => {
   return async (dispath, getstate) => {
     try {
       let data = await getDataUserById(id);
-      if (data && Object.keys(data.data).length > 0)
-        dispath(getUserByIdrSuccess(data.data));
+      if (data && Object.keys(data.data).length > 0) dispath(getUserByIdrSuccess(data.data));
       else dispath(getUserByIdFail());
     } catch (e) {
       dispath(getUserByIdFail());

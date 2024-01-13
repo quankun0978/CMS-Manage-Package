@@ -1,144 +1,108 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Modal from "react-bootstrap/Modal";
-import Col from "react-bootstrap/Col";
-import InputGroup from "react-bootstrap/InputGroup";
-import Row from "react-bootstrap/Row";
-import * as actions from "../../../redux/store/actions/adminActions";
-import "./modalEditUser.scss";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { Col, Form, Input, Row, Select, Button, Modal } from 'antd';
+import * as actions from '../../../redux/actions/adminActions';
+import 'react-toastify/dist/ReactToastify.css';
+import './modalEditUser.scss';
 const ModalEdit = () => {
-  const dispath = useDispatch()
-  let stateRedux = useSelector((state) => {
+  const dispath = useDispatch();
+  const [form] = Form.useForm();
+  let { isModalOpen, dataUserById } = useSelector((state) => {
     return {
       isModalOpen: state.admin.isModalEditUser,
       dataUserById: state.admin.dataUserById,
     };
   });
-  let { isModalOpen, dataUserById } = stateRedux;
-  const Inputs = {
-    UserName: useRef(),
-    Name: useRef(),
-    Phone: useRef(),
-  };
+
   //hook
-  const [validated, setValidated] = useState(false);
-  const [dataUser, setDataUser] = useState({});
+
   useEffect(() => {
-    setDataUser(dataUserById);
-  }, []);
-  useEffect(() => {
-    setDataUser(dataUserById);
-  }, [dataUserById]);
+    form.resetFields();
+    setTimeout(() => {
+      form.setFieldsValue({ ...dataUserById, description: 'Xin chào các bạn ', role: 'User-read' });
+    }, 1000);
+  }, [dataUserById, form]);
   //handle
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    setValidated(true);
-  };
   const handleClose = () => {
-    dispath(actions.showModalEditUser(false))
-    setDataUser({});
+    dispath(actions.showModalEditUser(false));
   };
   const handleSave = () => {
-    let dt = {
-      ...dataUser,
-      name: Inputs.Name.current.value,
-      phone: Inputs.Phone.current.value,
-    };
-    dispath(actions.editUserById(dt, dt.id))
-    toast.success("edit is success");
-    dispath(actions.showModalEditUser(false))
+    dispath(actions.editUserById(form.getFieldValue(), form.getFieldValue().id));
+    toast.success('edit is success');
+    dispath(actions.showModalEditUser(false));
   };
   return (
     <>
-      <Modal size="lg" show={isModalOpen} onHide={handleClose}>
-        <Modal.Header closeButton style={{}}>
-          <Modal.Title className="title-bold ">Chỉnh sửa thông tin người dùng</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="">
-                <Form.Label>Username</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  defaultValue={
-                    dataUser && dataUser.username && dataUser.username
-                  }
-                  disabled
-                />
-              </Form.Group>
-              <Form.Group as={Col} md="6" controlId="validationCustomUsername">
-                <Form.Label>Email</Form.Label>
-                <InputGroup hasValidation>
-                  <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-                  <Form.Control
-                    type="text"
-                    aria-describedby="inputGroupPrepend"
-                    required
-                    disabled
-                    defaultValue={dataUser && dataUser.email && dataUser.email}
-                  />
-                </InputGroup>
-              </Form.Group>
+      <Modal
+        open={isModalOpen}
+        onCancel={handleClose}
+        width={1000}
+        title="Cập nhật thông tin người dùng"
+        footer={() => {
+          return (
+            <>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleSave}>
+                Save Changes
+              </Button>
+            </>
+          );
+        }}>
+        <div style={{ marginTop: '15px' }}>
+          <Form name="register" scrollToFirstError layout="vertical" form={form}>
+            <Row justify="space-between">
+              <Col md={12}>
+                <Form.Item label="Username" name="username" style={{ marginRight: '10px' }}>
+                  <Input disabled size="large" />
+                </Form.Item>
+              </Col>
+              <Col md={12}>
+                <Form.Item label="Email" name="email" style={{ marginLeft: '10px' }}>
+                  <Input disabled size="large" />
+                </Form.Item>
+              </Col>
             </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  ref={Inputs.Name}
-                  defaultValue={dataUser && dataUser.name && dataUser.name}
-                />
-              </Form.Group>
-              <Form.Group as={Col} md="6" controlId="">
-                <Form.Label>Password</Form.Label>
-                <Form.Control required type="password" disabled />
-              </Form.Group>
+
+            <Row justify="space-between">
+              <Col md={12}>
+                <Form.Item label="Name" name="name" style={{ marginRight: '10px' }}>
+                  <Input size="large" />
+                </Form.Item>
+              </Col>
+              <Col md={12}>
+                <Form.Item label="Password" name="password" style={{ marginLeft: '10px' }}>
+                  <Input disabled size="large" />
+                </Form.Item>
+              </Col>
             </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="">
-                <Form.Label>Phone number</Form.Label>
-                <Form.Control
-                  required
-                  ref={Inputs.Phone}
-                  type="text"
-                  defaultValue={dataUser && dataUser.phone && dataUser.phone}
-                />
-              </Form.Group>
-              <Form.Group as={Col} md="6" controlId="">
-                <Form.Label>Role</Form.Label>
-                <Form.Select aria-label="Default select example">
-                  <option value="1">User-read</option>
-                  <option value="2">User-write</option>
-                </Form.Select>
-              </Form.Group>
+
+            <Row justify="space-between">
+              <Col md={12}>
+                <Form.Item name="phone" label="Phone Number" style={{ marginRight: '10px' }}>
+                  <Input size="large" />
+                </Form.Item>
+              </Col>
+              <Col md={12}>
+                <Form.Item style={{ marginLeft: '10px' }} label="Role" name="role">
+                  <Select size="large" allowClear>
+                    <Select.Option value="1">User-read</Select.Option>
+                    <Select.Option value="2">User-write</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
             </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="12" controlId="">
-                <Form.Label>Description</Form.Label>
-                <Form.Control as="textarea" rows={4} />
-              </Form.Group>
+            <Row justify="space-between">
+              <Col md={24}>
+                <Form.Item name="description" label="Description">
+                  <Input.TextArea rows={4} />
+                </Form.Item>
+              </Col>
             </Row>
           </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSave}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
+        </div>
       </Modal>
     </>
   );
