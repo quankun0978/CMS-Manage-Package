@@ -6,11 +6,16 @@ export const validateEmail = (_, value) => {
   return Promise.reject('Địa chỉ email không hợp lệ');
 };
 
-export const validatePassword = (_, value) => {
-  if (!value || value.length >= 8) {
+export const validatePassword = (_, value, result) => {
+  if (!value) {
     return Promise.resolve();
   }
-  return Promise.reject('Mật khẩu phải có ít nhất 8 ký tự');
+  if (result && Object.keys(result).length > 0) {
+    if (result.result === 'SUCCESS') {
+      return Promise.resolve();
+    }
+  }
+  return Promise.reject('Mật khẩu không chính xác');
 };
 
 export const validatePhone = (_, value) => {
@@ -19,4 +24,16 @@ export const validatePhone = (_, value) => {
     return Promise.resolve();
   }
   return Promise.reject('Số điện thoại không hợp lệ');
+};
+export const validateAccount = (value) => {
+  if (!value) {
+    return Promise.resolve();
+  }
+  return Promise.reject('Tài khoản hoặc mật khẩu không chính xác');
+};
+export const validatePrice = (_, value) => {
+  if (!value || value.length <= 10) {
+    return Promise.resolve();
+  }
+  return Promise.reject('Giá tiền đã bị vượt quá');
 };

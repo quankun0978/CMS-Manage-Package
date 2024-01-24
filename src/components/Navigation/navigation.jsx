@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
 import { Button } from 'antd';
-import { MenuAdmin, MenuUserRead, MenuUserWrite } from 'menu/menuNav';
+import { menu } from 'store/actions/appActions';
 import 'assets/icon/fontawesome-free-6.4.2-web/css/all.min.css';
-import './navigation.scss';
+import 'styles/navigation.scss';
 const MenuRole = () => {
   let navigate = useNavigate();
+  let token = Cookies.get('token');
   // hook
   const [MenuRole, setMenuRole] = useState([]);
   useEffect(() => {
-    if (localStorage.getItem('role') === 'admin') setMenuRole(MenuAdmin);
-    if (localStorage.getItem('role') === 'user-write') setMenuRole(MenuUserWrite);
-    if (localStorage.getItem('role') === 'user-read') setMenuRole(MenuUserRead);
+    if (token) {
+      setMenuRole(menu(token));
+    }
   }, []);
   useEffect(() => {
-    const ListItem = document.querySelectorAll('.menu__item');
+    const ListItem = document.querySelectorAll('.menu-item');
     if (Array.from(ListItem).length > 0) {
       const index = MenuRole.findIndex((item) => window.location.pathname.includes(item.path));
       if (index > 0) {
@@ -26,7 +28,7 @@ const MenuRole = () => {
   // handle
 
   const handleClickTabMenu = (item) => {
-    const ListItem = document.querySelectorAll('.menu__item');
+    const ListItem = document.querySelectorAll('.menu-item');
     Array.from(ListItem).forEach((i, index) => {
       if (i.className.includes('active')) {
         i.classList.remove('active');
@@ -38,8 +40,8 @@ const MenuRole = () => {
   };
 
   const handleClickLogout = () => {
-    localStorage.removeItem('isLogin');
-    toast.success('Logout is success');
+    Cookies.remove('token');
+    toast.success('Đăng xuất thành công');
     setTimeout(() => {
       window.location.reload();
     }, 1500);
@@ -48,25 +50,25 @@ const MenuRole = () => {
     <>
       <div className="menu">
         <div className="container">
-          <div className="menu__main">
-            <ul className="menu__list">
+          <div className="menu-main">
+            <ul className="menu-list">
               {MenuRole.length > 0 &&
                 MenuRole.map((item, index) => {
                   return (
                     <div key={item.id}>
-                      <li onClick={() => handleClickTabMenu(item)} className={`menu__item `}>
-                        <div className={`menu__icon `}>
+                      <li onClick={() => handleClickTabMenu(item)} className={`menu-item `}>
+                        <div className={`menu-icon `}>
                           <i className={item.icon}></i>
                         </div>
-                        <span className="menu__info">{item.title}</span>
+                        <span className="menu-info">{item.title}</span>
                       </li>
                     </div>
                   );
                 })}
             </ul>
           </div>
-          <div className="menu__logout">
-            <Button size="large" onClick={handleClickLogout} className={` menu__logout`}>
+          <div className="menu-logout">
+            <Button size="large" onClick={handleClickLogout} className={` menu-logout`}>
               <i className="fa-solid fa-arrow-right-from-bracket"></i>
               <span>Đăng xuất</span>
             </Button>

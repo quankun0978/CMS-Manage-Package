@@ -1,0 +1,27 @@
+.header-item-child {
+  position: relative;
+  padding: 0;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  .header-item-icon {
+    circle {
+      stroke-dashoffset: -30;
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+      transform: translate(15px, 5px);
+    }
+  }
+  .header-icon {
+    position: absolute;
+    top: -5px;
+    left: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    font-size: 1.5rem;
+  }
+}

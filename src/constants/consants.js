@@ -1,0 +1,28 @@
+
+
+export const path = {
+  QUAN_LY_NGUOI_DUNG: '/quan-ly-nguoi-dung',
+  QUAN_LY_GOI_CUOC: '/quan-ly-goi-cuoc',
+  LICH_SU_GIAO_DICH: '/thong-ke/lich-su-giao-dich',
+  TRANG_THAI_THUE_BAO: '/thong-ke/trang-thai-thue-bao',
+  CHI_TIET_GOI_CUOC: '/danh-sach-goi-cuoc/goi-cuoc',
+  THONG_TIN_TAI_KHOAN: '/thong-tin-tai-khoan',
+  DANG_NHAP: '/dang-nhap',
+  FREE_TEXT: '/thong-ke/free-text',
+  SAN_LUONG_TUNG_GOI: '/thong-ke/san-luong-tung-goi',
+  BAO_CAO_CHUNG: '/thong-ke/bao-cao-chung',
+};
+export const status = {
+  INACTIVE: 'INACTIVE',
+  ACTIVE: 'ACTIVE',
+};
+
+export const provider = {
+  IT: 'IT',
+  MBG: 'MBG',
+};
+export const role = {
+  ADMIN: 'ADMIN',
+  WRITE: 'WRITE',
+  READ:'READ'
+};

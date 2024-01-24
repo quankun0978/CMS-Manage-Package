@@ -1,10 +1,16 @@
 import axios from 'axios';
 const instance = axios.create({
-  baseURL: process.env.URL_BACKEND,
+  baseURL: process.env.REACT_APP_URL_BACKEND,
+  // withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+    'Control-Allow-Origin': '*',
+  },
   // timeout: 1000,
   // headers: {'X-Custom-Header': 'foobar'}
 });
-instance.defaults.withCredentials = true;
+// instance.defaults.withCredentials = true;
+instance.defaults.headers['Content-Type'] = 'application/json';
 axios.interceptors.request.use(
   function (config) {
     // Do something before request is sent
