@@ -1,23 +1,29 @@
 import React, { memo, useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
+
+import Cookies from 'js-cookie';
 import { Button, Col, Form, Input, Row } from 'antd';
+
 import * as actions from 'store/actions/userActions';
+import * as constants from 'constants/consants';
 import 'styles/info.scss';
+
 const DetailUser = () => {
   const [form] = Form.useForm();
   let dispath = useDispatch();
-
   let dataDecode = useSelector((state) => state.user.dataDecode);
   let resultChangepassword = useSelector((state) => state.user.resultChangepassword);
-  let token = Cookies.get('token');
+  const token = Cookies.get('token');
+
   // hook
   const [error, setError] = useState('');
   const [isShowToast, setIsShowToast] = useState(false);
+
   useEffect(() => {
     dispath(actions.getDataDecode());
   }, []);
+
   useEffect(() => {
     if (Object.keys(dataDecode).length > 0) {
       let data = {
@@ -30,15 +36,16 @@ const DetailUser = () => {
 
   useEffect(() => {
     if (isShowToast) {
-      if (resultChangepassword && resultChangepassword.result === 'SUCCESS') {
+      if (resultChangepassword && resultChangepassword.result === constants.STATUS.SUCCESS) {
         setError('');
         toast.success('Đổi mật khẩu thành công');
       }
-      if ((resultChangepassword && Object.keys(resultChangepassword).length > 0 && resultChangepassword.result === 'FAIL') || resultChangepassword.error) {
+      if ((resultChangepassword && Object.keys(resultChangepassword).length > 0 && resultChangepassword.result === constants.STATUS.FAIL) || resultChangepassword.error) {
         setError('Mật khẩu không chính xác');
       }
     }
   }, [dispath, form, isShowToast, resultChangepassword, token]);
+
   //handle
   const onFinish = (values) => {
     dispath(actions.handleChangePassword(values, token));
@@ -55,7 +62,7 @@ const DetailUser = () => {
               <Form onFinish={onFinish} name="register" scrollToFirstError layout="vertical" form={form}>
                 <Row>
                   <Col md={24}>
-                    <div className="">
+                    <div>
                       <Row justify="space-between">
                         <Col md={12}>
                           <Form.Item style={{ marginRight: '10px' }} label="Tên đăng nhập" name="username">

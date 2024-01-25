@@ -1,11 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
+
 import Cookies from 'js-cookie';
 import { Button, Col, Form, Input, Row, Select, Modal } from 'antd';
+
 import { validateEmail } from 'ultils/validate';
 import * as actions from 'store/actions/adminActions';
-function ModalCreateUser() {
+import * as constants from 'constants/consants';
+
+const ModalCreateUser = () => {
   const dispath = useDispatch();
   const token = Cookies.get('token');
   const [form] = Form.useForm();
@@ -16,11 +20,11 @@ function ModalCreateUser() {
   //hook
   useEffect(() => {
     if (isShowToast) {
-      if (resultCreate.error || resultCreate.result === 'FAIL') {
+      if (resultCreate.error || resultCreate.result === constants.STATUS.FAIL) {
         toast.error('Thêm mới không  thành công');
         setIsShowToast(false);
       }
-      if (resultCreate.result === 'SUCCESS') {
+      if (resultCreate.result === constants.STATUS.SUCCESS) {
         toast.success('Thêm mới  thành công');
         dispath(actions.showModalCreateUser(false));
         form.resetFields();
@@ -29,6 +33,7 @@ function ModalCreateUser() {
       }
     }
   }, [dispath, form, isShowToast, resultCreate.error, resultCreate.result, token]);
+
   // handle
   const onFinish = (values) => {};
   const handleCreate = useCallback(() => {
@@ -40,6 +45,7 @@ function ModalCreateUser() {
     dispath(actions.showModalCreateUser(false));
     form.resetFields();
   };
+
   return (
     <>
       <Modal
@@ -63,7 +69,7 @@ function ModalCreateUser() {
           <Form
             initialValues={{
               username: '',
-              role: 'ADMIN',
+              role: constants.ROLE.ADMIN,
             }}
             form={form}
             name="register"
@@ -92,9 +98,9 @@ function ModalCreateUser() {
               <Col md={24}>
                 <Form.Item name="role" label="Quyền">
                   <Select size="large">
-                    <Select.Option value="ADMIN">ADMIN</Select.Option>
-                    <Select.Option value="WRITE">WRITE</Select.Option>
-                    <Select.Option value="READ">READ</Select.Option>
+                    <Select.Option value={constants.ROLE.ADMIN}>{constants.ROLE.ADMIN}</Select.Option>
+                    <Select.Option value={constants.ROLE.WRITE}>{constants.ROLE.WRITE}</Select.Option>
+                    <Select.Option value={constants.ROLE.READ}>{constants.ROLE.READ}</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -106,5 +112,5 @@ function ModalCreateUser() {
       <ToastContainer></ToastContainer>
     </>
   );
-}
+};
 export default ModalCreateUser;

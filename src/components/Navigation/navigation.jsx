@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+
 import Cookies from 'js-cookie';
 import { Button } from 'antd';
+
 import { menu } from 'store/actions/appActions';
 import 'assets/icon/fontawesome-free-6.4.2-web/css/all.min.css';
 import 'styles/navigation.scss';
+
 const MenuRole = () => {
-  let navigate = useNavigate();
-  let token = Cookies.get('token');
+  const navigate = useNavigate();
+  const token = Cookies.get('token');
+
   // hook
   const [MenuRole, setMenuRole] = useState([]);
+
   useEffect(() => {
     if (token) {
       setMenuRole(menu(token));
     }
   }, []);
+
   useEffect(() => {
     const ListItem = document.querySelectorAll('.menu-item');
     if (Array.from(ListItem).length > 0) {
@@ -25,6 +31,7 @@ const MenuRole = () => {
       } else Array.from(ListItem)[0].classList.add('active');
     }
   }, [MenuRole]);
+
   // handle
 
   const handleClickTabMenu = (item) => {
@@ -46,6 +53,7 @@ const MenuRole = () => {
       window.location.reload();
     }, 1500);
   };
+
   return (
     <>
       <div className="menu">
@@ -53,7 +61,7 @@ const MenuRole = () => {
           <div className="menu-main">
             <ul className="menu-list">
               {MenuRole.length > 0 &&
-                MenuRole.map((item, index) => {
+                MenuRole.map((item) => {
                   return (
                     <div key={item.id}>
                       <li onClick={() => handleClickTabMenu(item)} className={`menu-item `}>
@@ -78,4 +86,5 @@ const MenuRole = () => {
     </>
   );
 };
+
 export default MenuRole;

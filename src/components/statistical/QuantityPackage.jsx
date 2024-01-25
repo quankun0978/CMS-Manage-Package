@@ -1,7 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Table } from 'antd';
-import { path } from 'constants/consants';
 const { Column, ColumnGroup } = Table;
 const data = [
   {
@@ -31,15 +29,12 @@ const data = [
 ];
 const QuantityPackage = () => {
   // hook
-  const navigate = useNavigate();
   // handle
-  const handleClose = () => {
-    navigate(path.QUAN_LY_GOI_CUOC);
-  };
+
   return (
     <>
       <div className="detail__back  pb-3">
-        <p onClick={handleClose}>
+        <p>
           <i class="fa-solid fa-angle-left pe-1"></i>
           Quay lại
         </p>

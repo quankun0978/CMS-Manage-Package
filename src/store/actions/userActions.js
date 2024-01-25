@@ -1,33 +1,40 @@
 import md5 from 'md5';
+
 import { changePasswordUser, checkLogin } from 'api/apiUser';
 import { createNewPackage, deletePackageByCode, disablePackage, enablePackage, getListPackage, updatePackage } from 'api/apiPackage';
+
 import actionType from './actionstype';
 import * as convert from 'ultils/convert';
-import { status } from 'constants/consants';
+import * as constants from 'constants/consants';
+
 export const showModalEditPackage = (check) => {
   return {
     type: actionType.SHOW_MODAL_EDIT_PACKAGE,
     check: check,
   };
 };
+
 export const showModalCreatePackage = (check) => {
   return {
     type: actionType.SHOW_MODAL_CREATE_PACKAGE,
     check: check,
   };
 };
+
 export const showModalDetailPackage = (check) => {
   return {
     type: actionType.SHOW_MODAL_DETAIL_PACKAGE,
     check: check,
   };
 };
+
 export const showModalDeletePackage = (check) => {
   return {
     type: actionType.SHOW_MODAL_DELETE_PACKAGE,
     check: check,
   };
 };
+
 export const showModalChangeStatus = (check) => {
   return {
     type: actionType.SHOW_MODAL_CHANGE_STATUS,
@@ -46,12 +53,14 @@ export const checkLoginUser = (data) => {
     }
   };
 };
+
 export const loginSuccess = (token) => {
   return {
     type: actionType.LOGIN_SUCCESS,
     token,
   };
 };
+
 export const loginFail = () => {
   return {
     type: actionType.LOGIN_FAIL,
@@ -76,39 +85,46 @@ export const getDataListPackage = (token) => {
     }
   };
 };
+
 const getListPackageSuccess = (data) => {
   return {
     type: actionType.GET_LIST_PACKAGE_SUCCESS,
     data,
   };
 };
+
 const getListPackageFail = () => {
   return {
     type: actionType.GET_LIST_PACKGAGE_FAIL,
   };
 };
+
 export const getPackageByPackageCode = (packagecode) => {
   return {
     type: actionType.GET_PACKAGE_BY_PACKAGECODE,
     packagecode,
   };
 };
+
 export const getDataDecode = () => {
   return {
     type: actionType.GET_DATA_DECODE,
   };
 };
+
 export const getTotalPackage = () => {
   return {
     type: actionType.GET_TOTAL_PACKAGE,
   };
 };
+
 export const getActionUser = (action) => {
   return {
     type: actionType.GET_ACTION_USER,
     action,
   };
 };
+
 export const createPackage = (data, token) => {
   return async (dispath, getstate) => {
     try {
@@ -116,16 +132,18 @@ export const createPackage = (data, token) => {
       if (res && res.data && Object.keys(res.data).length > 0) dispath(createPackageSuccess(res.data));
       else dispath(createPackageFail(res.data));
     } catch (e) {
-      dispath(createPackageFail({ result: 'FAIL' }));
+      dispath(createPackageFail({ result: constants.STATUS.FAIL }));
     }
   };
 };
+
 const createPackageSuccess = (result) => {
   return {
     type: actionType.CREATE_PACKAGE_SUCCESS,
     result,
   };
 };
+
 const createPackageFail = (result) => {
   return {
     type: actionType.CREATE_PACKAGE_FAIL,
@@ -140,22 +158,25 @@ export const handleUpdatePackage = (data, token) => {
       if (res && res.data && Object.keys(res.data).length > 0) dispath(updatePackageSuccess(res.data));
       else dispath(updatePackageFail(res.data));
     } catch (e) {
-      dispath(updatePackageFail({ result: 'FAIL' }));
+      dispath(updatePackageFail({ result: constants.STATUS.FAIL }));
     }
   };
 };
+
 const updatePackageSuccess = (result) => {
   return {
     type: actionType.UPDATE_PACKAGE_SUCCESS,
     result,
   };
 };
+
 const updatePackageFail = (result) => {
   return {
     type: actionType.UPDATE_PACKAGE_FAIL,
     result,
   };
 };
+
 export const handleDeletePackage = (packagecode, token) => {
   return async (dispath, getstate) => {
     try {
@@ -164,7 +185,7 @@ export const handleDeletePackage = (packagecode, token) => {
       if (res && res.data && Object.keys(res.data).length > 0) dispath(deletePackageSuccess(res.data));
       dispath(deletePackageFail(res.data));
     } catch (e) {
-      dispath(deletePackageFail({ result: 'FAIL' }));
+      dispath(deletePackageFail({ result: constants.STATUS.FAIL }));
     }
   };
 };
@@ -175,6 +196,7 @@ const deletePackageSuccess = (results) => {
     results,
   };
 };
+
 const deletePackageFail = (results) => {
   return {
     type: actionType.DELETE_PACKAGE_BY_CODE_FAIL,
@@ -190,7 +212,7 @@ export const handleEnablePackage = (packagecode, token) => {
       if (res && res.data && Object.keys(res.data).length > 0) dispath(enablePackageSuccess(res.data));
       dispath(enablePackageFail(res.data));
     } catch (e) {
-      dispath(enablePackageFail({ result: 'FAIL' }));
+      dispath(enablePackageFail({ result: constants.STATUS.FAIL }));
     }
   };
 };
@@ -201,6 +223,7 @@ const enablePackageSuccess = (results) => {
     results,
   };
 };
+
 const enablePackageFail = (results) => {
   return {
     type: actionType.ENABLE_PACKAGE_FAIL,
@@ -216,7 +239,7 @@ export const handleDisablePackage = (packagecode, token) => {
       if (res && res.data && Object.keys(res.data).length > 0) dispath(disablePackageSuccess(res.data));
       dispath(disablePackageFail(res.data));
     } catch (e) {
-      dispath(disablePackageFail({ result: 'FAIL' }));
+      dispath(disablePackageFail({ result: constants.STATUS.FAIL }));
     }
   };
 };
@@ -238,10 +261,10 @@ export const handleChangeStatusPackage = (packagecode, token, statusPackage) => 
   return async (dispath, getstate) => {
     try {
       let res;
-      if (statusPackage === status.ACTIVE) {
+      if (statusPackage === constants.STATUS.ACTIVE) {
         res = await enablePackage({ package_code: packagecode }, token);
       }
-      if (statusPackage === status.INACTIVE) {
+      if (statusPackage === constants.STATUS.INACTIVE) {
         res = await disablePackage({ package_code: packagecode }, token);
       }
 
@@ -251,7 +274,7 @@ export const handleChangeStatusPackage = (packagecode, token, statusPackage) => 
         dispath(changeStatusPackageFail(res.data));
       }
     } catch (e) {
-      dispath(changeStatusPackageFail({ result: 'FAIL' }));
+      dispath(changeStatusPackageFail({ result: constants.STATUS.FAIL }));
     }
   };
 };
@@ -283,7 +306,7 @@ export const handleChangePassword = (data, token) => {
       if (res && res.data && Object.keys(res.data).length > 0) dispath(changePasswordSuccess(res.data));
       dispath(changePaswordFail(res.data));
     } catch (e) {
-      dispath(changePaswordFail({ result: 'FAIL' }));
+      dispath(changePaswordFail({ result: constants.STATUS.FAIL }));
     }
   };
 };
@@ -294,6 +317,7 @@ const changePasswordSuccess = (results) => {
     results,
   };
 };
+
 const changePaswordFail = (results) => {
   return {
     type: actionType.CHANGE_PASSWORD_FAIL,
@@ -301,9 +325,3 @@ const changePaswordFail = (results) => {
   };
 };
 
-// const getErrorLogin = (results) => {
-//   return {
-//     type: actionType.CHANGE_PASSWORD_FAIL,
-//     results,
-//   };
-// };

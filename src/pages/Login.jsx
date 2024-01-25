@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BeatLoader } from 'react-spinners';
+
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import { Button, Form, Input, Col, Row } from 'antd';
-import image from 'assets/img/uNGdWHi.png';
+
+import image from 'assets/img/background_login.png';
 import logo from 'assets/img/logo_home.png';
 import * as actions from 'store/actions/userActions';
 import 'styles/login.scss';
+
 const Login = () => {
   const dispath = useDispatch();
   let isLogin = useSelector((state) => state.user.isLogin);
   const [form] = Form.useForm();
   const token = useSelector((state) => state.user.token);
+
   // hook
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
   const [isShowToast, setIsShowToast] = useState(false);
+
   useEffect(() => {
     if (isShowToast) {
       if (token && token.access_token) {
@@ -31,6 +36,7 @@ const Login = () => {
       }
     }
   }, [isShowToast, token]);
+
   useEffect(() => {
     if (loading) {
       setTimeout(() => {
@@ -138,4 +144,5 @@ const Login = () => {
     </>
   );
 };
+
 export default Login;

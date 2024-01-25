@@ -1,28 +1,30 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import Cookies from 'js-cookie';
 import { Table, Button, Row, Input, Tooltip } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+
 import ModalEdit from 'components/Edit/ModalEditUser';
 import ModalCreateUser from 'components/Create/ModalCreateUser';
 import ConfirmDeleteUser from 'components/Delete/ModalDeleteUser';
 import ModalResetPassword from 'components/ResetPassword/ModalResetPassword';
+
 import { columnTableUser } from 'constants/columns';
 import * as actions from 'store/actions/adminActions';
 import 'styles/manage.scss';
+
 const { Search } = Input;
+
 const ManageUser = () => {
   const dispath = useDispatch();
-
   const dataTable = useRef();
   const token = Cookies.get('token');
   let dataListUser = useSelector((state) => state.admin.dataListUser);
-  let resultDeleteUser = useSelector((state) => state.admin.resultDeleteUser);
 
   //hook
 
   const [inputSearch, setInputSearch] = useState('');
-
   const [data, setData] = useState([]);
   const [dataOrigin, setDataOrigin] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,17 +34,21 @@ const ManageUser = () => {
       pageSize: 10,
     },
   });
+
   useEffect(() => {
     dispath(actions.getDataListUser(token));
   }, []);
+
   useEffect(() => {
     setIsLoading(true);
     if (dataListUser.length > 0) {
       setIsLoading(false);
       let dtTable = dataListUser.map((item, index) => {
+        let parts = item.last_time.split('-');
         return {
           ...item,
           index: index + 1,
+          last_time: parts[2] + '-' + parts[1] + '-' + parts[0],
           operation: (
             <div
               key={item.id}
@@ -121,6 +127,7 @@ const ManageUser = () => {
   const handleClickAdd = () => {
     dispath(actions.showModalCreateUser(true));
   };
+
   return (
     <>
       <Row justify="space-between">
@@ -152,4 +159,5 @@ const ManageUser = () => {
     </>
   );
 };
+
 export default ManageUser;

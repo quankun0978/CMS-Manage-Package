@@ -1,8 +1,10 @@
+import * as constants from 'constants/consants';
+
 export const convertStatus = (status) => {
   switch (status) {
-    case 'ACTIVE':
+    case constants.STATUS.ACTIVE:
       return 'Kích hoạt';
-    case 'INACTIVE':
+    case constants.STATUS.INACTIVE:
       return 'Ngừng Kích hoạt';
     default:
       break;

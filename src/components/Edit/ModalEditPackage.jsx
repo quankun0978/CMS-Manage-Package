@@ -1,33 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+
 import Cookies from 'js-cookie';
 import { Col, Form, Input, Row, Select, Button, Modal } from 'antd';
+
+import * as constants from 'constants/consants';
 import * as actions from 'store/actions/userActions';
 import { validatePrice } from 'ultils/validate';
 import 'react-toastify/dist/ReactToastify.css';
+
 const ModalEditPackage = () => {
   let dispath = useDispatch();
   const [form] = Form.useForm();
-  let token = Cookies.get('token');
+  const token = Cookies.get('token');
   let isModalOpen = useSelector((state) => state.user.isModalEditPackage);
   let dataPackageByPackagecode = useSelector((state) => state.user.dataPackageByPackagecode);
   let resultUpdatePackage = useSelector((state) => state.user.resultUpdatePackage);
+
   //hook
   const [isShowToast, setIsShowToast] = useState(false);
+
   useEffect(() => {
     form.resetFields();
     setTimeout(() => {
       form.setFieldsValue(dataPackageByPackagecode);
     }, 1000);
   }, [dataPackageByPackagecode]);
-  useEffect(() => {}, [resultUpdatePackage]);
+
   useEffect(() => {
     if (isShowToast) {
-      if (resultUpdatePackage.error || resultUpdatePackage.result === 'FAIL') {
+      if (resultUpdatePackage.error || resultUpdatePackage.result === constants.STATUS.FAIL) {
         toast.error('Cập nhật không  thành công');
       }
-      if (resultUpdatePackage.result === 'SUCCESS') {
+      if (resultUpdatePackage.result === constants.STATUS.SUCCESS) {
         toast.success('Cập nhật  thành công');
         dispath(actions.showModalEditPackage(false));
         form.resetFields();
@@ -45,6 +51,7 @@ const ModalEditPackage = () => {
     dispath(actions.handleUpdatePackage(form.getFieldValue(), token));
     setIsShowToast(true);
   };
+
   return (
     <>
       <Modal
@@ -67,8 +74,8 @@ const ModalEditPackage = () => {
         <div style={{ marginTop: '15px' }}>
           <Form
             initialValues={{
-              provider: 'IT',
-              status: 'ACTIVE',
+              provider: constants.PROVIDER.IT,
+              status: constants.STATUS.ACTIVE,
             }}
             form={form}
             name="update"
@@ -160,4 +167,5 @@ const ModalEditPackage = () => {
     </>
   );
 };
+
 export default ModalEditPackage;

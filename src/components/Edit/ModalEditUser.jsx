@@ -1,22 +1,27 @@
 import React, { useEffect, memo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+
 import Cookies from 'js-cookie';
 import { Col, Form, Input, Row, Select, Button, Modal } from 'antd';
+
 import * as actions from 'store/actions/adminActions';
+import * as constants from 'constants/consants';
 import 'react-toastify/dist/ReactToastify.css';
 import 'styles/modalEdit.scss';
+
 const ModalEdit = () => {
   const dispath = useDispatch();
-  let token = Cookies.get('token');
+  const token = Cookies.get('token');
   const [form] = Form.useForm();
-
   let isModalOpen = useSelector((state) => state.admin.isModalEditUser);
   let dataUserByUsername = useSelector((state) => state.admin.dataUserByUsername);
   let resultUpdateRole = useSelector((state) => state.admin.resultUpdateRole);
   let resultUpdateStatus = useSelector((state) => state.admin.resultUpdateStatus);
+
   //hook
   const [isShowToast, setIsShowToast] = useState(false);
+
   useEffect(() => {
     form.resetFields();
     setTimeout(() => {
@@ -26,11 +31,11 @@ const ModalEdit = () => {
 
   useEffect(() => {
     if (isShowToast) {
-      if (resultUpdateRole.error || resultUpdateRole.result === 'FAIL' || resultUpdateStatus.error || resultUpdateStatus.result === 'FAIL') {
+      if (resultUpdateRole.error || resultUpdateRole.result === constants.STATUS.FAIL || resultUpdateStatus.error || resultUpdateStatus.result === constants.STATUS.FAIL) {
         toast.error('Cập nhật không  thành công');
         setIsShowToast(false);
       }
-      if (resultUpdateRole.result === 'SUCCESS' && resultUpdateStatus.result === 'SUCCESS') {
+      if (resultUpdateRole.result === constants.STATUS.SUCCESS && resultUpdateStatus.result === constants.STATUS.SUCCESS) {
         toast.success('Cập nhật  thành công');
         dispath(actions.showModalEditUser(false));
         form.resetFields();
@@ -39,6 +44,7 @@ const ModalEdit = () => {
       }
     }
   }, [dispath, form, isShowToast, resultUpdateRole.error, resultUpdateRole.result, resultUpdateStatus.error, resultUpdateStatus.result, token]);
+
   //handle
   const handleClose = () => {
     dispath(actions.showModalEditUser(false));
@@ -48,6 +54,7 @@ const ModalEdit = () => {
     dispath(actions.updateStatusUser({ username: form.getFieldValue().username, status: form.getFieldValue().status }, token));
     setIsShowToast(true);
   };
+
   return (
     <>
       <Modal
@@ -80,8 +87,8 @@ const ModalEdit = () => {
               <Col md={24}>
                 <Form.Item label="Trạng thái" name="status">
                   <Select size="large">
-                    <Select.Option value="ACTIVE">Kích hoạt</Select.Option>
-                    <Select.Option value="INACTIVE">Chưa kích hoạt</Select.Option>
+                    <Select.Option value={constants.STATUS.ACTIVE}>Kích hoạt</Select.Option>
+                    <Select.Option value={constants.STATUS.INACTIVE}>Chưa kích hoạt</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -91,9 +98,9 @@ const ModalEdit = () => {
               <Col md={24}>
                 <Form.Item label="Quyền" name="role">
                   <Select size="large">
-                    <Select.Option value="ADMIN">ADMIN</Select.Option>
-                    <Select.Option value="WRITE">WRITE</Select.Option>
-                    <Select.Option value="READ">READ</Select.Option>
+                    <Select.Option value={constants.ROLE.ADMIN}>{constants.ROLE.ADMIN}</Select.Option>
+                    <Select.Option value={constants.ROLE.WRITE}>{constants.ROLE.WRITE}</Select.Option>
+                    <Select.Option value={constants.ROLE.READ}>{constants.ROLE.READ}</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -104,4 +111,5 @@ const ModalEdit = () => {
     </>
   );
 };
+
 export default memo(ModalEdit);

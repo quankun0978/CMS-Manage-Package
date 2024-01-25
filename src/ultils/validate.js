@@ -1,3 +1,5 @@
+import * as constants from 'constants/consants';
+
 export const validateEmail = (_, value) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!value || emailRegex.test(value)) {
@@ -11,7 +13,7 @@ export const validatePassword = (_, value, result) => {
     return Promise.resolve();
   }
   if (result && Object.keys(result).length > 0) {
-    if (result.result === 'SUCCESS') {
+    if (result.result === constants.STATUS.SUCCESS) {
       return Promise.resolve();
     }
   }
@@ -25,12 +27,14 @@ export const validatePhone = (_, value) => {
   }
   return Promise.reject('Số điện thoại không hợp lệ');
 };
+
 export const validateAccount = (value) => {
   if (!value) {
     return Promise.resolve();
   }
   return Promise.reject('Tài khoản hoặc mật khẩu không chính xác');
 };
+
 export const validatePrice = (_, value) => {
   if (!value || value.length <= 10) {
     return Promise.resolve();

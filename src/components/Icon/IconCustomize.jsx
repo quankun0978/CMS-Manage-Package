@@ -1,7 +1,10 @@
 import React from 'react';
+
 import 'styles/iconCustomize.scss';
+
 const IconCustomize = (props) => {
   let { IconItem, color } = props;
+
   return (
     <>
       <div className="header-item-child">
@@ -13,4 +16,5 @@ const IconCustomize = (props) => {
     </>
   );
 };
+
 export default IconCustomize;

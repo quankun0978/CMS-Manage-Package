@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
+
 import Cookies from 'js-cookie';
 import { Button, Col, Form, Input, Row, Select, Modal } from 'antd';
+
 import * as actions from 'store/actions/userActions';
 import * as constants from 'constants/consants';
 import { validatePrice } from 'ultils/validate';
-function CreatePackage() {
+
+const CreatePackage = () => {
   const token = Cookies.get('token');
   const [form] = Form.useForm();
   const dispath = useDispatch();
@@ -19,10 +22,10 @@ function CreatePackage() {
   useEffect(() => {}, [resultCreate]);
   useEffect(() => {
     if (isShowToast) {
-      if (resultCreate.error || resultCreate.result === 'FAIL') {
+      if (resultCreate.error || resultCreate.result === constants.STATUS.FAIL) {
         toast.error('Thêm mới không  thành công');
       }
-      if (resultCreate.result === 'SUCCESS') {
+      if (resultCreate.result === constants.STATUS.SUCCESS) {
         toast.success('Thêm mới  thành công');
         dispath(actions.showModalCreatePackage(false));
         form.resetFields();
@@ -30,12 +33,12 @@ function CreatePackage() {
       }
     }
   }, [dispath, form, isShowToast, resultCreate.error, resultCreate.result, token]);
+
   // handle
   const onFinish = (values) => {
-    dispath(actions.createPackage({ ...values, price: +values.price, status: constants.status.ACTIVE }, token));
+    dispath(actions.createPackage({ ...values, price: +values.price, status: constants.STATUS.ACTIVE }, token));
     setIsShowToast(true);
   };
-  //handle
   const handleCreate = () => {
     form.submit();
   };
@@ -43,6 +46,7 @@ function CreatePackage() {
     dispath(actions.showModalCreatePackage(false));
     form.resetFields();
   };
+
   return (
     <>
       <Modal
@@ -65,9 +69,9 @@ function CreatePackage() {
         <div style={{ marginTop: '15px' }}>
           <Form
             initialValues={{
-              type: 'DATA',
-              provider: 'IT',
-              status: 'ACTIVE',
+              type: constants.PROVIDER.DATA,
+              provider: constants.PROVIDER.IT,
+              status: constants.STATUS.ACTIVE,
             }}
             form={form}
             name="register"
@@ -168,5 +172,5 @@ function CreatePackage() {
       <ToastContainer></ToastContainer>
     </>
   );
-}
+};
 export default CreatePackage;

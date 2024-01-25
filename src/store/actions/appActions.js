@@ -1,23 +1,27 @@
 import React from 'react';
+import { jwtDecode } from 'jwt-decode';
+
 import Admin from 'routes/admin';
 import UserWrite from 'routes/user-write';
 import UserRead from 'routes/user-read';
+
 import { MenuAdmin, MenuUserRead, MenuUserWrite } from 'ultils/menuNav';
-import { jwtDecode } from 'jwt-decode';
+import * as constants from 'constants/consants';
+
 export const menu = (token) => {
   let menu = null;
   if (token) {
     const decodedToken = jwtDecode(token);
     switch (decodedToken.autoflex_role) {
-      case 'ADMIN':
+      case constants.ROLE.ADMIN:
         menu = MenuAdmin;
         break;
 
-      case 'WRITE':
+      case constants.ROLE.WRITE:
         menu = MenuUserWrite;
         break;
 
-      case 'READ':
+      case constants.ROLE.READ:
         menu = MenuUserRead;
         break;
       default:
@@ -32,15 +36,15 @@ export const Component = (token) => {
   if (token) {
     const decodedToken = jwtDecode(token);
     switch (decodedToken.autoflex_role) {
-      case 'ADMIN':
+      case constants.ROLE.ADMIN:
         component = <Admin />;
         break;
 
-      case 'WRITE':
+      case constants.ROLE.WRITE:
         component = <UserWrite />;
         break;
 
-      case 'READ':
+      case constants.ROLE.READ:
         component = <UserRead />;
         break;
       default:
@@ -49,12 +53,13 @@ export const Component = (token) => {
   }
   return component;
 };
+
 export const hasOperationFull = (token) => {
   let isShowToast = true;
   if (token) {
     const decodedToken = jwtDecode(token);
     switch (decodedToken.autoflex_role) {
-      case 'READ':
+      case constants.ROLE.READ:
         isShowToast = false;
         break;
       default:

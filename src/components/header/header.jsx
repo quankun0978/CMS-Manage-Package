@@ -1,11 +1,15 @@
 import React from 'react';
+
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import { Layout, Row, Col } from 'antd';
 import { UserOutlined, CommentOutlined } from '@ant-design/icons';
+
 import IconCustomize from 'components/Icon/IconCustomize';
 import 'styles/header.scss';
+
 const { Header } = Layout;
+
 const HeaderDashBoard = () => {
   const dataInfoUser = jwtDecode(Cookies.get('token'));
 
@@ -66,4 +70,5 @@ const HeaderDashBoard = () => {
     </>
   );
 };
+
 export default HeaderDashBoard;

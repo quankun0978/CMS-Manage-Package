@@ -1,6 +1,4 @@
-
-
-export const path = {
+export const PATH = {
   QUAN_LY_NGUOI_DUNG: '/quan-ly-nguoi-dung',
   QUAN_LY_GOI_CUOC: '/quan-ly-goi-cuoc',
   LICH_SU_GIAO_DICH: '/thong-ke/lich-su-giao-dich',
@@ -12,17 +10,21 @@ export const path = {
   SAN_LUONG_TUNG_GOI: '/thong-ke/san-luong-tung-goi',
   BAO_CAO_CHUNG: '/thong-ke/bao-cao-chung',
 };
-export const status = {
+
+export const STATUS = {
   INACTIVE: 'INACTIVE',
   ACTIVE: 'ACTIVE',
+  SUCCESS: 'SUCCESS',
+  FAIL: 'FAIL',
 };
 
-export const provider = {
+export const PROVIDER = {
   IT: 'IT',
   MBG: 'MBG',
 };
-export const role = {
+
+export const ROLE = {
   ADMIN: 'ADMIN',
   WRITE: 'WRITE',
-  READ:'READ'
+  READ: 'READ',
 };
