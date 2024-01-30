@@ -10,9 +10,10 @@ import * as constants from 'constants/consants';
 import 'react-toastify/dist/ReactToastify.css';
 import 'styles/modalEdit.scss';
 
+const token = Cookies.get('token');
+
 const ModalEdit = () => {
   const dispath = useDispatch();
-  const token = Cookies.get('token');
   const [form] = Form.useForm();
   let isModalOpen = useSelector((state) => state.admin.isModalEditUser);
   let dataUserByUsername = useSelector((state) => state.admin.dataUserByUsername);
@@ -56,59 +57,59 @@ const ModalEdit = () => {
   };
 
   return (
-    <>
-      <Modal
-        open={isModalOpen}
-        onCancel={handleClose}
-        width={700}
-        title="Cập nhật thông tin người dùng"
-        footer={() => {
-          return (
-            <>
-              <Button variant="secondary" onClick={handleClose}>
-                Đóng
-              </Button>
-              <Button variant="primary" onClick={handleSave}>
-                Cập nhật
-              </Button>
-            </>
-          );
-        }}>
-        <div style={{ marginTop: '15px' }}>
-          <Form name="update" layout="vertical" form={form}>
-            <Row justify="space-between">
-              <Col md={24}>
-                <Form.Item label="Tên đăng nhập" name="username">
-                  <Input disabled size="large" />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row justify="space-between">
-              <Col md={24}>
-                <Form.Item label="Trạng thái" name="status">
-                  <Select size="large">
-                    <Select.Option value={constants.STATUS.ACTIVE}>Kích hoạt</Select.Option>
-                    <Select.Option value={constants.STATUS.INACTIVE}>Chưa kích hoạt</Select.Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
 
-            <Row justify="space-between">
-              <Col md={24}>
-                <Form.Item label="Quyền" name="role">
-                  <Select size="large">
-                    <Select.Option value={constants.ROLE.ADMIN}>{constants.ROLE.ADMIN}</Select.Option>
-                    <Select.Option value={constants.ROLE.WRITE}>{constants.ROLE.WRITE}</Select.Option>
-                    <Select.Option value={constants.ROLE.READ}>{constants.ROLE.READ}</Select.Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </div>
-      </Modal>
-    </>
+    <Modal
+      open={isModalOpen}
+      onCancel={handleClose}
+      width={700}
+      title="Cập nhật thông tin người dùng"
+      footer={() => {
+        return (
+          <>
+            <Button variant="secondary" onClick={handleClose}>
+              Đóng
+            </Button>
+            <Button variant="primary" onClick={handleSave}>
+              Cập nhật
+            </Button>
+          </>
+        );
+      }}>
+      <div style={{ marginTop: '15px' }}>
+        <Form name="update" layout="vertical" form={form}>
+          <Row justify="space-between">
+            <Col md={24}>
+              <Form.Item label="Tên đăng nhập" name="username">
+                <Input disabled size="large" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row justify="space-between">
+            <Col md={24}>
+              <Form.Item label="Trạng thái" name="status">
+                <Select size="large">
+                  <Select.Option value={constants.STATUS.ACTIVE}>Kích hoạt</Select.Option>
+                  <Select.Option value={constants.STATUS.INACTIVE}>Chưa kích hoạt</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row justify="space-between">
+            <Col md={24}>
+              <Form.Item label="Quyền" name="role">
+                <Select size="large">
+                  <Select.Option value={constants.ROLE.ADMIN}>{constants.ROLE.ADMIN}</Select.Option>
+                  <Select.Option value={constants.ROLE.WRITE}>{constants.ROLE.WRITE}</Select.Option>
+                  <Select.Option value={constants.ROLE.READ}>{constants.ROLE.READ}</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </div>
+    </Modal>
+
   );
 };
 

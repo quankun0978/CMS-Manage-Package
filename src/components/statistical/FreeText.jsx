@@ -166,6 +166,7 @@ const dataInit = [
 
 const FreeText = () => {
   const dataTable = useRef(dataInit);
+  
   // hook
   const [inputSearch, setInputSearch] = useState('');
 
@@ -201,6 +202,7 @@ const FreeText = () => {
       });
     }
   }, [dataInit, tableParams.pagination.pageSize, dataSelect]);
+
   // handle
   const onSearch = (value, _e, info) => {
     let dataCp = [...dataTable.current];
@@ -222,6 +224,7 @@ const FreeText = () => {
       setData([]);
     }
   };
+
   const handleChangeInput = (e) => {
     setInputSearch(e.target.value);
     let dataCp = [...data];

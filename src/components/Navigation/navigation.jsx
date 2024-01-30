@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { Button } from 'antd';
 
-import { menu } from 'store/actions/appActions';
+import { menu } from 'ultils/menu';
 import 'assets/icon/fontawesome-free-6.4.2-web/css/all.min.css';
 import 'styles/navigation.scss';
 
@@ -55,35 +55,33 @@ const MenuRole = () => {
   };
 
   return (
-    <>
-      <div className="menu">
-        <div className="container">
-          <div className="menu-main">
-            <ul className="menu-list">
-              {MenuRole.length > 0 &&
-                MenuRole.map((item) => {
-                  return (
-                    <div key={item.id}>
-                      <li onClick={() => handleClickTabMenu(item)} className={`menu-item `}>
-                        <div className={`menu-icon `}>
-                          <i className={item.icon}></i>
-                        </div>
-                        <span className="menu-info">{item.title}</span>
-                      </li>
-                    </div>
-                  );
-                })}
-            </ul>
-          </div>
-          <div className="menu-logout">
-            <Button size="large" onClick={handleClickLogout} className={` menu-logout`}>
-              <i className="fa-solid fa-arrow-right-from-bracket"></i>
-              <span>Đăng xuất</span>
-            </Button>
-          </div>
+    <div className="menu">
+      <div className="container">
+        <div className="menu-main">
+          <ul className="menu-list">
+            {MenuRole.length > 0 &&
+              MenuRole.map((item) => {
+                return (
+                  <div key={item.id}>
+                    <li onClick={() => handleClickTabMenu(item)} className={`menu-item `}>
+                      <div className={`menu-icon `}>
+                        <i className={item.icon}></i>
+                      </div>
+                      <span className="menu-info">{item.title}</span>
+                    </li>
+                  </div>
+                );
+              })}
+          </ul>
+        </div>
+        <div className="menu-logout">
+          <Button size="large" onClick={handleClickLogout} className={` menu-logout`}>
+            <i className="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>Đăng xuất</span>
+          </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

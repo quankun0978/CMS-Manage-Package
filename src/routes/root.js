@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 
 import Cookies from 'js-cookie';
@@ -10,38 +9,18 @@ import { PATH } from 'constants/consants';
 
 const RouteLogin = () => {
   return (
-    <>
-      <Routes>
-        <Route path={PATH.DANG_NHAP} element={<Login></Login>} />
-        <Route path="*" element={<Navigate to={PATH.DANG_NHAP}></Navigate>} />
-      </Routes>
-    </>
+    <Routes>
+      <Route path={PATH.DANG_NHAP} element={<Login />} />
+      <Route path="*" element={<Navigate to={PATH.DANG_NHAP} />} />
+    </Routes>
   );
 };
 
 const Root = () => {
-  const navigate = useNavigate();
   const token = Cookies.get('token');
-  let isLogin = useSelector((state) => state.user.isLogin);
+  const navigate = useNavigate();
 
-  // hook
-
-  useEffect(() => {
-    if (isLogin) {
-      setView(<Home></Home>);
-    }
-  }, [isLogin]);
-  const [view, setView] = useState(null);
-
-  useEffect(() => {
-    if (token) setView(<Home></Home>);
-    else {
-      setView(<RouteLogin></RouteLogin>);
-      navigate(PATH.DANG_NHAP);
-    }
-  }, [token]);
-
-  return <>{view}</>;
+  return <>{token ? <Home /> : <RouteLogin />}</>;
 };
 
 export default Root;

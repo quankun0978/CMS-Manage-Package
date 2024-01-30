@@ -43,9 +43,7 @@ const ModalResetPassword = () => {
     dispath(actions.showModalResetPasswword(false));
   };
   return (
-    <>
-      <Modal width={400} okType="danger" title={`Bạn muốn làm mới mật khẩu người dùng ${dataUserByUsername && dataUserByUsername.username} chứ ?`} open={isModalResetPassword} onOk={handleOk} onCancel={handleCancel}></Modal>
-    </>
+    <Modal width={400} okType="danger" title={`Bạn muốn làm mới mật khẩu người dùng ${dataUserByUsername && dataUserByUsername.username} chứ ?`} open={isModalResetPassword} onOk={handleOk} onCancel={handleCancel}></Modal>
   );
 };
 

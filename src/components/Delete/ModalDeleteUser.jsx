@@ -40,14 +40,14 @@ const ConfirmDeleteUser = () => {
     dispath(actions.showModalDeleteUser(false));
     dispath(actions.getDataListUser(token));
   };
+
   const handleCancel = () => {
     dispath(actions.showModalDeleteUser(false));
   };
-  
+
   return (
-    <>
-      <Modal icon={<ExclamationCircleFilled></ExclamationCircleFilled>} okType="danger" title={`Bạn muốn xóa người dùng ${dataUserByUsername && dataUserByUsername.username} chứ ?`} open={isModalDeleteUser} onOk={handleOk} onCancel={handleCancel}></Modal>
-    </>
+
+    <Modal icon={<ExclamationCircleFilled></ExclamationCircleFilled>} okType="danger" title={`Bạn muốn xóa người dùng ${dataUserByUsername && dataUserByUsername.username} chứ ?`} open={isModalDeleteUser} onOk={handleOk} onCancel={handleCancel}></Modal>
   );
 };
 export default ConfirmDeleteUser;

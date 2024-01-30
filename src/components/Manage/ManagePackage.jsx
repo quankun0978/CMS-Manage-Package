@@ -21,8 +21,9 @@ const { confirm } = Modal;
 const ManagePackage = () => {
   const dispath = useDispatch();
   const token = Cookies.get('token');
-  let dataDecode = useSelector((state) => state.user.dataDecode);
-  let resultChangeStatusPackage = useSelector((state) => state.user.resultChangeStatusPackage);
+  const dataDecode = useSelector((state) => state.user.dataDecode);
+  const resultChangeStatusPackage = useSelector((state) => state.user.resultChangeStatusPackage);
+  let column = dataDecode.autoflex_role === constants.ROLE.READ ? columnTablePackage.read : columnTablePackage.write;
   const dataListPackage = useSelector((state) => state.user.dataListPackage);
 
   //hook
@@ -31,7 +32,7 @@ const ManagePackage = () => {
   const [data, setData] = useState([]);
   const [dataOrigin, setDataOrigin] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  let column = dataDecode.autoflex_role === constants.ROLE.READ ? columnTablePackage.read : columnTablePackage.write;
+  
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
@@ -79,12 +80,12 @@ const ManagePackage = () => {
       });
       setData(dtTable);
       setDataOrigin(dtTable);
-      setTableParams({
-        ...tableParams,
+      setTableParams(prevSate => ({
+        ...prevSate,
         pagination: {
-          ...tableParams.pagination,
+          ...prevSate.pagination,
         },
-      });
+      }));
     }
   }, [dataListPackage, tableParams.pagination.pageSize]);
 
@@ -114,6 +115,7 @@ const ManagePackage = () => {
     dispath(actions.getPackageByPackageCode(packagecode));
     dispath(actions.showModalDeletePackage(true));
   };
+
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
@@ -123,6 +125,7 @@ const ManagePackage = () => {
     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
     }
   };
+
   const handleSelectChange = (value, packagecode) => {
     confirm({
       title: 'Xác nhận',
@@ -131,7 +134,7 @@ const ManagePackage = () => {
         dispath(actions.handleChangeStatusPackage(packagecode, token, value));
         setIsShowToast(true);
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 

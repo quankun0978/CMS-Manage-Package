@@ -240,6 +240,7 @@ const History = () => {
       setData([]);
     }
   };
+  
   return (
     <>
       <Search

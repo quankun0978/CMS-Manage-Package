@@ -17,6 +17,7 @@ const ModalDeletePackage = () => {
 
   //hook
   const [isShowToast, setIsShowToast] = useState(false);
+
   useEffect(() => {
     if (isShowToast) {
       if (resultDeletePackage.result === constants.STATUS.FAIL || resultDeletePackage.error) {
@@ -37,14 +38,15 @@ const ModalDeletePackage = () => {
     setIsShowToast(true);
     dispath(actions.showModalDeletePackage(false));
   };
+  
   const handleCancel = () => {
     dispath(actions.showModalDeletePackage(false));
   };
   
   return (
-    <>
+
       <Modal width={400} okType="danger" title={`Bạn muốn xóa gói cước ${dataPackageByPackagecode && dataPackageByPackagecode.code} chứ ?`} open={isModalDeletePackage} onOk={handleOk} onCancel={handleCancel}></Modal>
-    </>
+
   );
 };
 export default ModalDeletePackage;

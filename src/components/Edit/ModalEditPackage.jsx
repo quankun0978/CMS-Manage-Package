@@ -10,10 +10,11 @@ import * as actions from 'store/actions/userActions';
 import { validatePrice } from 'ultils/validate';
 import 'react-toastify/dist/ReactToastify.css';
 
+const token = Cookies.get('token');
+
 const ModalEditPackage = () => {
   let dispath = useDispatch();
   const [form] = Form.useForm();
-  const token = Cookies.get('token');
   let isModalOpen = useSelector((state) => state.user.isModalEditPackage);
   let dataPackageByPackagecode = useSelector((state) => state.user.dataPackageByPackagecode);
   let resultUpdatePackage = useSelector((state) => state.user.resultUpdatePackage);
@@ -47,124 +48,123 @@ const ModalEditPackage = () => {
   const handleClose = () => {
     dispath(actions.showModalEditPackage(false));
   };
+
   const handleSave = () => {
     dispath(actions.handleUpdatePackage(form.getFieldValue(), token));
     setIsShowToast(true);
   };
 
   return (
-    <>
-      <Modal
-        open={isModalOpen}
-        onCancel={handleClose}
-        width={1000}
-        title="Cập nhật thông tin gói cước"
-        footer={() => {
-          return (
-            <>
-              <Button variant="secondary" onClick={handleClose}>
-                Đóng
-              </Button>
-              <Button variant="primary" onClick={handleSave}>
-                Cập nhật
-              </Button>
-            </>
-          );
-        }}>
-        <div style={{ marginTop: '15px' }}>
-          <Form
-            initialValues={{
-              provider: constants.PROVIDER.IT,
-              status: constants.STATUS.ACTIVE,
-            }}
-            form={form}
-            name="update"
-            scrollToFirstError
-            layout="vertical">
-            <Row justify="space-between">
-              <Col md={24}>
-                <Form.Item
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng không bỏ trống',
-                    },
-                  ]}
-                  label="Mã gói cước"
-                  name="code">
-                  <Input disabled size="middle" placeholder="Mã gói cước" />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col md={12}>
-                <Form.Item style={{ marginRight: '10px' }} label="Nhà cung cấp" name="provider">
-                  <Select size="middle">
-                    <Select.Option value="IT">IT</Select.Option>
-                    <Select.Option value="MBG">MBG</Select.Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col md={12}>
-                <Form.Item
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng không bỏ trống',
-                    },
-                  ]}
-                  style={{ marginLeft: '10px' }}
-                  name="title"
-                  label="Tiêu đề">
-                  <Input placeholder="Tiêu đề " />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row justify="space-between">
-              <Col md={12}>
-                <Form.Item
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng không bỏ trống',
-                    },
-                    {
-                      validator: validatePrice,
-                    },
-                  ]}
-                  label="Giá gói cước"
-                  name="price"
-                  style={{ marginRight: '10px' }}>
-                  <Input size="middle" placeholder="Giá gói cước" />
-                </Form.Item>
-              </Col>
-              <Col md={12}>
-                <Form.Item
-                  label="Thời hạn"
-                  name="cycle"
-                  style={{ marginLeft: '10px' }}
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng không bỏ trống',
-                    },
-                  ]}>
-                  <Input size="middle" placeholder="eg :1D 2M , 3Y" />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row justify="space-between"></Row>
-            <Row justify="space-between">
-              <Col md={24}>
-                <Form.Item name="description" label="Mô tả">
-                  <Input.TextArea placeholder="Mô tả" rows={4} />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </div>
-      </Modal>
-    </>
+    <Modal
+      open={isModalOpen}
+      onCancel={handleClose}
+      width={1000}
+      title="Cập nhật thông tin gói cước"
+      footer={() => {
+        return (
+          <>
+            <Button variant="secondary" onClick={handleClose}>
+              Đóng
+            </Button>
+            <Button variant="primary" onClick={handleSave}>
+              Cập nhật
+            </Button>
+          </>
+        );
+      }}>
+      <div style={{ marginTop: '15px' }}>
+        <Form
+          initialValues={{
+            provider: constants.PROVIDER.IT,
+            status: constants.STATUS.ACTIVE,
+          }}
+          form={form}
+          name="update"
+          scrollToFirstError
+          layout="vertical">
+          <Row justify="space-between">
+            <Col md={24}>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng không bỏ trống',
+                  },
+                ]}
+                label="Mã gói cước"
+                name="code">
+                <Input disabled size="middle" placeholder="Mã gói cước" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12}>
+              <Form.Item style={{ marginRight: '10px' }} label="Nhà cung cấp" name="provider">
+                <Select size="middle">
+                  <Select.Option value="IT">IT</Select.Option>
+                  <Select.Option value="MBG">MBG</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col md={12}>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng không bỏ trống',
+                  },
+                ]}
+                style={{ marginLeft: '10px' }}
+                name="title"
+                label="Tiêu đề">
+                <Input placeholder="Tiêu đề " />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row justify="space-between">
+            <Col md={12}>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng không bỏ trống',
+                  },
+                  {
+                    validator: validatePrice,
+                  },
+                ]}
+                label="Giá gói cước"
+                name="price"
+                style={{ marginRight: '10px' }}>
+                <Input size="middle" placeholder="Giá gói cước" />
+              </Form.Item>
+            </Col>
+            <Col md={12}>
+              <Form.Item
+                label="Thời hạn"
+                name="cycle"
+                style={{ marginLeft: '10px' }}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng không bỏ trống',
+                  },
+                ]}>
+                <Input size="middle" placeholder="eg :1D 2M , 3Y" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row justify="space-between"></Row>
+          <Row justify="space-between">
+            <Col md={24}>
+              <Form.Item name="description" label="Mô tả">
+                <Input.TextArea placeholder="Mô tả" rows={4} />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </div>
+    </Modal>
   );
 };
 
