@@ -37,7 +37,7 @@ const Login = () => {
       } else {
         setTimeout(() => {
           setError('Tài khoản hoặc mật khẩu không chính xác');
-        }, 200);
+        }, 1000);
       }
     }
   }, [isShowToast, token]);
@@ -87,13 +87,13 @@ const Login = () => {
                 <Col sm={24} md={12}>
                   <Row style={{ alignItems: 'center', marginBottom: '1rem' }}>
                     <Col>
-                      <h4 className="title-bold   w-auto">Đăng nhập</h4>{' '}
+                      <h4 className="title-bold " style={{fontSize:"24px"}}>Đăng nhập</h4>{' '}
                     </Col>
                   </Row>
 
                   <Form className="login-content-form" form={form} name="login" onFinish={onFinish} scrollToFirstError layout="vertical">
                     <Form.Item
-                      label="Username"
+                      label="Email"
                       name="username"
                       validateTrigger="onSubmit"
                       rules={[
@@ -115,7 +115,8 @@ const Login = () => {
                       size="large"
                       placeholder="Enter the password"
                       validateTrigger="onSubmit"
-                      label="Password"
+                      label="Mật khẩu"
+                      style={{fontWeight:"700"}}
                       name="password">
                       <Input.Password size="large" placeholder="Enter the password" />
                     </Form.Item>
@@ -123,7 +124,7 @@ const Login = () => {
                       <div className="ant-form-item-explain-error">{error}</div>
                     </Form.Item>
                     <Form.Item>
-                      <Button onKeyDown={handleKeyDown} size="large" className="login-content-button" type="primary" htmlType="submit">
+                      <Button  onKeyDown={handleKeyDown} size="large" className="login-content-button" type="primary" htmlType="submit">
                         Đăng nhập
                       </Button>
                     </Form.Item>

@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { BeatLoader } from 'react-spinners';
 
 import Cookies from 'js-cookie';
-import { Table, Button, Row, Input, Tooltip } from 'antd';
+import { Table, Button, Row, Input,  Modal ,Tooltip } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import ModalEdit from 'components/Edit/ModalEditUser';
@@ -12,15 +14,19 @@ import ModalResetPassword from 'components/ResetPassword/ModalResetPassword';
 
 import { columnTableUser } from 'constants/columns';
 import * as actions from 'store/actions/adminActions';
+import * as constants from 'constants/consants';
 import 'styles/manage.scss';
 
 const { Search } = Input;
+const { confirm } = Modal;
 
 const ManageUser = () => {
   const dispath = useDispatch();
   const dataTable = useRef();
   const token = Cookies.get('token');
   let dataListUser = useSelector((state) => state.admin.dataListUser);
+  let resultDeleteUser = useSelector((state) => state.admin.resultDeleteUser);
+  let resultResetPassword = useSelector((state) => state.admin.resultResetPassword);
 
   //hook
 
@@ -28,6 +34,9 @@ const ManageUser = () => {
   const [data, setData] = useState([]);
   const [dataOrigin, setDataOrigin] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isShowToastDelete, setIsShowToastDelete] = useState(false);
+  const [isShowToastResetPassword, setIsShowToastResetPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
@@ -78,8 +87,39 @@ const ManageUser = () => {
           ...tableParams.pagination,
         },
       });
+      setLoading(true)
+    }
+    else{
+      setLoading(true)
     }
   }, [dataListUser, tableParams.pagination.pageSize]);
+
+  useEffect(() => {
+    if (isShowToastDelete) {
+      if (resultDeleteUser.result === constants.STATUS.SUCCESS) {
+        toast.success('Xóa thành công');
+        setIsShowToastDelete(false);
+        dispath(actions.getDataListUser(token));
+      }
+      if (resultDeleteUser.result === constants.STATUS.FAIL || resultDeleteUser.error) {
+        toast.error('Xóa thất bại');
+        setIsShowToastDelete(false);
+      }
+    }
+  }, [dispath, resultDeleteUser.error, token, resultDeleteUser.result, resultDeleteUser.message, isShowToastDelete]);
+  useEffect(() => {
+    if (isShowToastResetPassword) {
+      if (resultResetPassword.result === constants.STATUS.SUCCESS) {
+        toast.success('Làm mới thành công');
+        setIsShowToastResetPassword(false);
+        dispath(actions.getDataListUser(token));
+      }
+      if (resultResetPassword.result === constants.STATUS.FAIL || resultResetPassword.error) {
+        toast.error('Làm mới thất bại');
+        setIsShowToastResetPassword(false);
+      }
+    }
+  }, [dispath, resultResetPassword.error, token, resultResetPassword.result, resultResetPassword.message, isShowToastDelete, isShowToastResetPassword]);
 
   //handle
   const handleClickEdit = (username) => {
@@ -87,12 +127,30 @@ const ManageUser = () => {
     dispath(actions.getUserByUsername(username));
   };
   const handleClickDelete = (username) => {
-    dispath(actions.getUserByUsername(username));
-    dispath(actions.showModalDeleteUser(true));
+    // dispath(actions.getUserByUsername(username));
+    // dispath(actions.showModalDeleteUser(true));
+    confirm({
+      title: 'Xác nhận',
+      content: `Bạn có muốn xóa người dùng ${username}?`,
+      onOk() {
+        dispath(actions.handleDeleteUser(username, token));
+        setIsShowToastDelete(true);
+      },
+      onCancel() { },
+    });
   };
   const handleClickResetPassword = (username) => {
-    dispath(actions.getUserByUsername(username));
-    dispath(actions.showModalResetPasswword(true));
+    // dispath(actions.getUserByUsername(username));
+    // dispath(actions.showModalResetPasswword(true));
+    confirm({
+      title: 'Xác nhận',
+      content: `Bạn có muốn làm mới mật khẩu người dùng ${username}?`,
+      onOk() {
+        dispath(actions.handleResetPassword(username, token));
+        setIsShowToastResetPassword(true);
+      },
+      onCancel() { },
+    });
   };
   const onSearch = (value, _e, info) => {
     let dataCp = [...dataTable.current];
@@ -156,6 +214,7 @@ const ManageUser = () => {
       <ModalCreateUser />
       <ConfirmDeleteUser />
       <ModalResetPassword />
+      
     </>
   );
 };

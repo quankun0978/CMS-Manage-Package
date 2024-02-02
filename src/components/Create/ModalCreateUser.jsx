@@ -35,15 +35,19 @@ const ModalCreateUser = () => {
   }, [dispath, form, isShowToast, resultCreate.error, resultCreate.result, token]);
 
   // handle
-  const onFinish = (values) => {};
-  const handleCreate = useCallback(() => {
-    form.submit();
-    dispath(actions.createUser(form.getFieldValue(), token));
+  const onFinish = (values) => {
+    console.log(1)
+    dispath(actions.createUser(values, token));
     setIsShowToast(true);
-  }, [dispath, form, token]);
+  };
+
   const handleClose = () => {
     dispath(actions.showModalCreateUser(false));
     form.resetFields();
+  };
+  const handleCreate = () => {
+    
+    form.submit();
   };
 
   return (
@@ -59,7 +63,7 @@ const ModalCreateUser = () => {
               <Button variant="secondary" onClick={handleClose}>
                 Đóng
               </Button>
-              <Button htmlType="submit" variant="primary" onClick={handleCreate}>
+              <Button htmlType="submit" variant="primary" onClick={handleCreate} >
                 Thêm mới
               </Button>
             </>
@@ -79,7 +83,7 @@ const ModalCreateUser = () => {
             <Row justify="space-between">
               <Col md={24}>
                 <Form.Item
-                  label="Tên đăng nhập"
+                  label="Email"
                   name="username"
                   rules={[
                     {
@@ -90,7 +94,7 @@ const ModalCreateUser = () => {
                       validator: validateEmail,
                     },
                   ]}>
-                  <Input size="large" placeholder="Tên đăng nhập" />
+                  <Input size="large" placeholder="Email" />
                 </Form.Item>
               </Col>
             </Row>

@@ -12,6 +12,7 @@ import ModalEditPackage from 'components/Edit/ModalEditPackage';
 
 import * as actions from 'store/actions/userActions';
 import * as constants from 'constants/consants';
+import * as convert from 'ultils/convert';
 import { convertStatus } from 'ultils/convert';
 import { columnTablePackage } from 'constants/columns';
 
@@ -25,10 +26,13 @@ const ManagePackage = () => {
   const resultChangeStatusPackage = useSelector((state) => state.user.resultChangeStatusPackage);
   let column = dataDecode.autoflex_role === constants.ROLE.READ ? columnTablePackage.read : columnTablePackage.write;
   const dataListPackage = useSelector((state) => state.user.dataListPackage);
+  let resultDeletePackage = useSelector((state) => state.user.resultDeletePackage);
+ 
 
   //hook
   const [loading, setLoading] = useState(false);
-  const [isShowToast, setIsShowToast] = useState(false);
+  const [isShowToastChangeStatus, setIsShowToastChangeStatus] = useState(false);
+  const [isShowToastDelete, setIsShowToastDelete] = useState(false);
   const [data, setData] = useState([]);
   const [dataOrigin, setDataOrigin] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +45,6 @@ const ManagePackage = () => {
   });
 
   useEffect(() => {
-    dispath(actions.getDataListPackage(token));
     dispath(actions.getDataDecode());
     setLoading(true);
     setTimeout(() => {
@@ -57,6 +60,7 @@ const ManagePackage = () => {
         return {
           ...item,
           index: index + 1,
+          status: convert.convertStatus(item.status),
           operation: (
             <div
               key={item.id}
@@ -90,18 +94,33 @@ const ManagePackage = () => {
   }, [dataListPackage, tableParams.pagination.pageSize]);
 
   useEffect(() => {
-    if (isShowToast) {
+    if (isShowToastChangeStatus) {
       if (resultChangeStatusPackage.result === constants.STATUS.SUCCESS) {
         toast.success('Thành công');
-        setIsShowToast(false);
+        setIsShowToastChangeStatus(false);
         dispath(actions.getDataListPackage(token));
       }
       if (resultChangeStatusPackage.result === constants.STATUS.FAIL || resultChangeStatusPackage.error) {
         toast.error('Thất bại');
-        setIsShowToast(false);
+        setIsShowToastChangeStatus(false);
       }
     }
-  }, [dispath, isShowToast, resultChangeStatusPackage.error, token, resultChangeStatusPackage.result, resultChangeStatusPackage.message]);
+  }, [dispath, resultChangeStatusPackage.error, token, resultChangeStatusPackage.result, resultChangeStatusPackage.message, isShowToastChangeStatus]);
+
+  
+  useEffect(() => {
+    if (isShowToastDelete) {
+      if (resultDeletePackage.result === constants.STATUS.SUCCESS) {
+        toast.success('Xóa thành công');
+        setIsShowToastDelete(false);
+        dispath(actions.getDataListPackage(token));
+      }
+      if (resultDeletePackage.result === constants.STATUS.FAIL || resultDeletePackage.error) {
+        toast.error('Xóa thất bại');
+        setIsShowToastDelete(false);
+      }
+    }
+  }, [dispath, resultDeletePackage.error, token, resultDeletePackage.result, resultDeletePackage.message, isShowToastDelete]);
 
   //handle
   const handleClickCreate = () => {
@@ -112,8 +131,17 @@ const ManagePackage = () => {
     dispath(actions.getPackageByPackageCode(packagecode));
   };
   const handleClickDelete = (packagecode) => {
-    dispath(actions.getPackageByPackageCode(packagecode));
-    dispath(actions.showModalDeletePackage(true));
+    // dispath(actions.getPackageByPackageCode(packagecode));
+    // dispath(actions.showModalDeletePackage(true));
+    confirm({
+      title: 'Xác nhận',
+      content: `Bạn có muốn xóa gói cước ${packagecode}?`,
+      onOk() {
+        dispath(actions.handleDeletePackage(packagecode, token));
+        setIsShowToastDelete(true);
+      },
+      onCancel() { },
+    });
   };
 
   const handleTableChange = (pagination, filters, sorter) => {
@@ -132,7 +160,7 @@ const ManagePackage = () => {
       content: `Bạn có muốn "${convertStatus(value)}" gói cước này?`,
       onOk() {
         dispath(actions.handleChangeStatusPackage(packagecode, token, value));
-        setIsShowToast(true);
+        setIsShowToastChangeStatus(true);
       },
       onCancel() { },
     });

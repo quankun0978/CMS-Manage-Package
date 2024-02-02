@@ -69,7 +69,7 @@ const CreatePackage = () => {
         <div style={{ marginTop: '15px' }}>
           <Form
             initialValues={{
-              type: constants.PROVIDER.DATA,
+              type: constants.TYPE.DATA,
               provider: constants.PROVIDER.IT,
               status: constants.STATUS.ACTIVE,
             }}
@@ -161,7 +161,12 @@ const CreatePackage = () => {
             <Row justify="space-between"></Row>
             <Row justify="space-between">
               <Col md={24}>
-                <Form.Item name="description" label="Mô tả">
+                <Form.Item name="description" label="Mô tả"  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng không bỏ trống',
+                    },
+                  ]}>
                   <Input.TextArea placeholder="Mô tả" rows={4} />
                 </Form.Item>
               </Col>

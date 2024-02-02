@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
@@ -6,12 +7,27 @@ import { Layout, Row, Col } from 'antd';
 import { UserOutlined, CommentOutlined } from '@ant-design/icons';
 
 import IconCustomize from 'components/Icon/IconCustomize';
+
+import * as constants from 'constants/consants';
+import * as actions from 'store/actions/userActions';
 import 'styles/header.scss';
 
 const { Header } = Layout;
 
 const HeaderDashBoard = () => {
+  const dispath = useDispatch()
   const dataInfoUser = jwtDecode(Cookies.get('token'));
+  const dataListPackage = useSelector((state) => state.user.dataListPackage);
+  const dataListPackageEnable=dataListPackage.length>0&&dataListPackage.filter((item)=>{
+    return item.status===constants.STATUS.ACTIVE
+  })
+  const dataListPackageDisable=dataListPackage.length>0&&dataListPackage.filter((item)=>{
+    return item.status===constants.STATUS.INACTIVE
+  })
+
+  useEffect(()=>{
+    dispath(actions.getDataListPackage(Cookies.get('token')))
+  },[])
 
   return (
 
@@ -22,14 +38,14 @@ const HeaderDashBoard = () => {
             <div className="header-item header-item-hide">
               <h3 className="header-info">
                 Gói cước cho phép
-                <p className=" title-bold ">15</p>
+                <p className=" title-bold ">{dataListPackageEnable&&dataListPackageEnable.length}</p>
               </h3>
               <IconCustomize color="#5fc792" IconItem={<i className="fa-regular fa-circle-check"></i>} />
             </div>
             <div className="header-item header-item-hide">
               <h3 className="header-info">
                 Gói cước đã dừng
-                <p className=" title-bold ">5</p>
+                <p className=" title-bold ">{dataListPackageDisable&&dataListPackageDisable.length}</p>
               </h3>
               <IconCustomize color="#ff375f" IconItem={<i className="fa-solid fa-ban"></i>} />
             </div>
@@ -40,18 +56,12 @@ const HeaderDashBoard = () => {
               </h3>
               <IconCustomize color="rgb(243, 170, 205)" IconItem={<i className="fa-solid fa-money-bill"></i>} />
             </div>
-            <div className="header-item header-item-hide">
-              <h3 className="header-info">
-                Số người dùng
-                <p className=" title-bold ">100M+</p>
-              </h3>
-              <IconCustomize color="gray" IconItem={<i className="fa-solid fa-users "></i>} />
-            </div>
+           
 
             <div className="header-item header-item-hide">
               <h3 className="header-info">
                 Số gói cước
-                <p className=" title-bold ">20</p>
+                <p className=" title-bold ">{dataListPackage&&dataListPackage.length}</p>
               </h3>
               <IconCustomize color="rgb(255, 202, 44)" IconItem={<CommentOutlined />} />
             </div>

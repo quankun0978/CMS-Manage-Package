@@ -22,7 +22,7 @@ export const validatePassword = (_, value, result) => {
 
 export const validatePhone = (_, value) => {
   const phoneRegex = /^0\d{9}$/;
-  if (!value || phoneRegex.test(value)) {
+  if (!value && phoneRegex.test(value)) {
     return Promise.resolve();
   }
   return Promise.reject('Số điện thoại không hợp lệ');
@@ -36,8 +36,9 @@ export const validateAccount = (value) => {
 };
 
 export const validatePrice = (_, value) => {
-  if (!value || value.length <= 10) {
+  const priceRegex = /^\d{0,9}$/;
+  if (!value && priceRegex.test(value)) {
     return Promise.resolve();
   }
-  return Promise.reject('Giá tiền đã bị vượt quá');
+  return Promise.reject('Vui lòng nhập ký tự là số và không vượt quá 10 ký tự ');
 };

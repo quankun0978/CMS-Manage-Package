@@ -74,7 +74,7 @@ export const getDataListPackage = (token) => {
       let dt = data.data.result.map((item) => {
         return {
           ...item,
-          status: convert.convertStatus(item.status),
+          
           cycle: convert.convertCycle(item.cycle),
         };
       });
