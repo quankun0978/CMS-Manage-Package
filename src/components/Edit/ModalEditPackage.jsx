@@ -7,7 +7,7 @@ import { Col, Form, Input, Row, Select, Button, Modal } from 'antd';
 
 import * as constants from 'constants/consants';
 import * as actions from 'store/actions/userActions';
-import { validatePrice } from 'ultils/validate';
+import { validatePrice, validateCycle } from 'ultils/validate';
 import 'react-toastify/dist/ReactToastify.css';
 
 const token = Cookies.get('token');
@@ -41,16 +41,19 @@ const ModalEditPackage = () => {
         dispath(actions.getDataListPackage(token));
       }
     }
-  }, [dispath, form, isShowToast, resultUpdatePackage.error, resultUpdatePackage.result, token]);
+  }, [dispath, form, isShowToast, resultUpdatePackage.error, resultUpdatePackage.result]);
 
   //handle
+  const onFinish = (values) => {
+    dispath(actions.handleUpdatePackage(values, token));
+  };
 
   const handleClose = () => {
     dispath(actions.showModalEditPackage(false));
   };
 
   const handleSave = () => {
-    dispath(actions.handleUpdatePackage(form.getFieldValue(), token));
+    form.submit();
     setIsShowToast(true);
   };
 
@@ -74,6 +77,7 @@ const ModalEditPackage = () => {
       }}>
       <div style={{ marginTop: '15px' }}>
         <Form
+          onFinish={onFinish}
           initialValues={{
             provider: constants.PROVIDER.IT,
             status: constants.STATUS.ACTIVE,
@@ -148,6 +152,9 @@ const ModalEditPackage = () => {
                   {
                     required: true,
                     message: 'Vui lòng không bỏ trống',
+                  },
+                  {
+                    validator: validateCycle,
                   },
                 ]}>
                 <Input size="middle" placeholder="eg :1D 2M , 3Y" />

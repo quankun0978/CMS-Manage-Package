@@ -8,7 +8,7 @@ import { Button, Col, Form, Input, Row, Select, Modal } from 'antd';
 
 import * as actions from 'store/actions/userActions';
 import * as constants from 'constants/consants';
-import { validatePrice } from 'ultils/validate';
+import { validateCycle, validatePrice } from 'ultils/validate';
 
 const CreatePackage = () => {
   const token = Cookies.get('token');
@@ -153,6 +153,9 @@ const CreatePackage = () => {
                       required: true,
                       message: 'Vui lòng không bỏ trống',
                     },
+                    {
+                      validator:validateCycle
+                    }
                   ]}>
                   <Input size="middle" placeholder="eg :1D 2M , 3Y" />
                 </Form.Item>

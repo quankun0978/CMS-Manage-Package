@@ -36,7 +36,6 @@ const ModalCreateUser = () => {
 
   // handle
   const onFinish = (values) => {
-    console.log(1)
     dispath(actions.createUser(values, token));
     setIsShowToast(true);
   };
@@ -46,7 +45,6 @@ const ModalCreateUser = () => {
     form.resetFields();
   };
   const handleCreate = () => {
-    
     form.submit();
   };
 
@@ -63,7 +61,7 @@ const ModalCreateUser = () => {
               <Button variant="secondary" onClick={handleClose}>
                 Đóng
               </Button>
-              <Button htmlType="submit" variant="primary" onClick={handleCreate} >
+              <Button htmlType="submit" variant="primary" onClick={handleCreate}>
                 Thêm mới
               </Button>
             </>

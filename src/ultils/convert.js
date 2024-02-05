@@ -11,7 +11,7 @@ export const convertStatus = (status) => {
   }
 };
 
-export const convertCycle = (cycle) => {
+export const convertCycleToDate = (cycle) => {
   let str = '';
   if (cycle.includes('D')) {
     str = cycle.replace('D', ' ngày');
@@ -21,6 +21,20 @@ export const convertCycle = (cycle) => {
   }
   if (cycle.includes('Y')) {
     str = cycle.replace('Y', ' năm');
+  }
+  return str;
+};
+
+export const convertDateToCycle = (cycle) => {
+  let str = '';
+  if (cycle.trim().includes('ngày')) {
+    str = cycle.replace('ngày','D'.trim());
+  }
+  if (cycle.trim().includes('tháng')) {
+    str = cycle.replace('tháng','M'.trim());
+  }
+  if (cycle.trim().includes('năm')) {
+    str = cycle.replace('năm','Y'.trim());
   }
   return str;
 };

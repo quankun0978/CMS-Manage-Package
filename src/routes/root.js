@@ -44,12 +44,11 @@ const Root = () => {
   const token = Cookies.get('token');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!token) {
-      navigate(PATH.DANG_NHAP, { replace: true });
-      window.location.reload()
-    }
-  }, [token, navigate]);
+  // useEffect(() => {
+  //   if (!token) {
+  //     navigate(PATH.DANG_NHAP);
+  //   }
+  // }, [token, navigate]);
 
   return <>{token ? <Home /> : <RouteLogin />}</>;
 };

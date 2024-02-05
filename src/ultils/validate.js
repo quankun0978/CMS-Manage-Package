@@ -37,8 +37,15 @@ export const validateAccount = (value) => {
 
 export const validatePrice = (_, value) => {
   const priceRegex = /^\d{0,9}$/;
-  if (!value && priceRegex.test(value)) {
+  if (!value || priceRegex.test(value)) {
     return Promise.resolve();
   }
   return Promise.reject('Vui lòng nhập ký tự là số và không vượt quá 10 ký tự ');
+};
+export const validateCycle = (_, value) => {
+  const cycleRegex = /^\d+[DMY]$/;
+  if (!value || cycleRegex.test(value)) {
+    return Promise.resolve();
+  }
+  return Promise.reject('Vui lòng nhập đúng định dạng ');
 };

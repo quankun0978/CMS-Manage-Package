@@ -75,7 +75,7 @@ export const getDataListPackage = (token) => {
         return {
           ...item,
           
-          cycle: convert.convertCycle(item.cycle),
+          cycle: convert.convertCycleToDate(item.cycle),
         };
       });
       if (dt && dt.length > 0) dispath(getListPackageSuccess(dt));
