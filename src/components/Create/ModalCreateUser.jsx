@@ -21,7 +21,7 @@ const ModalCreateUser = () => {
   useEffect(() => {
     if (isShowToast) {
       if (resultCreate.error || resultCreate.result === constants.STATUS.FAIL) {
-        toast.error('Thêm mới không  thành công');
+        toast.error('Tên đăng nhập đã tồn tại');
         setIsShowToast(false);
       }
       if (resultCreate.result === constants.STATUS.SUCCESS) {

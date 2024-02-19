@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 
 import Cookies from 'js-cookie';
 import { Button } from 'antd';
 
 import { menu } from 'ultils/menu';
+import * as actions from 'store/actions/userActions';
+import * as constanst from 'constants/consants';
 import 'assets/icon/fontawesome-free-6.4.2-web/css/all.min.css';
 import 'styles/navigation.scss';
 
 const MenuRole = () => {
   const navigate = useNavigate();
+  const dispath = useDispatch();
   const token = Cookies.get('token');
 
   // hook
@@ -49,9 +53,8 @@ const MenuRole = () => {
   const handleClickLogout = () => {
     Cookies.remove('token');
     toast.success('Đăng xuất thành công');
-    setTimeout(() => {
-      window.location.reload();
-    }, 1500);
+    dispath(actions.logoutSuccess());
+    navigate(constanst.PATH.DANG_NHAP);
   };
 
   return (

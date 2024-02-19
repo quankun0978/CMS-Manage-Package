@@ -67,6 +67,18 @@ export const loginFail = () => {
   };
 };
 
+export const logoutSuccess = () => {
+  return {
+    type: actionType.LOGOUT_SUCCESS,
+  };
+};
+
+export const logoutFail = () => {
+  return {
+    type: actionType.LOGOUT_FAIL,
+  };
+};
+
 export const getDataListPackage = (token) => {
   return async (dispath, getstate) => {
     try {
@@ -74,7 +86,7 @@ export const getDataListPackage = (token) => {
       let dt = data.data.result.map((item) => {
         return {
           ...item,
-          
+
           cycle: convert.convertCycleToDate(item.cycle),
         };
       });
@@ -324,4 +336,3 @@ const changePaswordFail = (results) => {
     results,
   };
 };
-

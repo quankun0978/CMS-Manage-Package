@@ -11,6 +11,7 @@ const initUser = {
   isModalDeletePackage: false,
   isModalChangeStatus: false,
   isLogin: false,
+  isLogout: false,
   dataListPackage: [],
   dataPackageByPackagecode: {},
   dataDecode: {},
@@ -69,6 +70,17 @@ export const userReducer = (state = initUser, actions) => {
       return {
         ...state,
         isLogin: false,
+      };
+    case actionType.LOGOUT_SUCCESS:
+      return {
+        ...state,
+        isLogout: true,
+      };
+
+    case actionType.LOGOUT_FAIL:
+      return {
+        ...state,
+        isLogout: false,
       };
 
     case actionType.GET_LIST_PACKAGE_SUCCESS:
