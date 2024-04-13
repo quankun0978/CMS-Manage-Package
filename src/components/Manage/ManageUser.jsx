@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { BeatLoader } from 'react-spinners';
 
 import Cookies from 'js-cookie';
-import { Table, Button, Row, Input,  Modal ,Tooltip } from 'antd';
+import { Table, Button, Row, Input, Modal, Tooltip } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import ModalEdit from 'components/Edit/ModalEditUser';
@@ -12,18 +11,26 @@ import ModalCreateUser from 'components/Create/ModalCreateUser';
 import ConfirmDeleteUser from 'components/Delete/ModalDeleteUser';
 import ModalResetPassword from 'components/ResetPassword/ModalResetPassword';
 
-import { columnTableUser } from 'constants/columns';
+import { columnTablePackage, columnTableUser } from 'constants/columns';
 import * as actions from 'store/actions/adminActions';
 import * as constants from 'constants/consants';
 import 'styles/manage.scss';
+import { useNavigate } from 'react-router-dom';
+
+import { convertTimeString } from 'ultils/convert';
+import { jwtDecode } from 'jwt-decode';
 
 const { Search } = Input;
 const { confirm } = Modal;
 
 const ManageUser = () => {
   const dispath = useDispatch();
+  const navigate = useNavigate();
+
   const dataTable = useRef();
   const token = Cookies.get('token');
+  const dataDecode = token ? jwtDecode(token) : {};
+  let column = dataDecode.autoflex_role === constants.ROLE.ADMIN ? columnTableUser.admin : columnTableUser.user;
   let dataListUser = useSelector((state) => state.admin.dataListUser);
   let resultDeleteUser = useSelector((state) => state.admin.resultDeleteUser);
   let resultResetPassword = useSelector((state) => state.admin.resultResetPassword);
@@ -33,7 +40,7 @@ const ManageUser = () => {
   const [inputSearch, setInputSearch] = useState('');
   const [data, setData] = useState([]);
   const [dataOrigin, setDataOrigin] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isShowToastDelete, setIsShowToastDelete] = useState(false);
   const [isShowToastResetPassword, setIsShowToastResetPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,15 +56,16 @@ const ManageUser = () => {
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
     if (dataListUser.length > 0) {
       setIsLoading(false);
       let dtTable = dataListUser.map((item, index) => {
-        let parts = item.last_time.split('-');
+        // let parts = item.last_time.split('-');
         return {
           ...item,
           index: index + 1,
-          last_time: parts[2] + '-' + parts[1] + '-' + parts[0],
+          last_time: convertTimeString(item.last_time),
+          key: index,
+          // last_time: parts[2] + '-' + parts[1] + '-' + parts[0],
           operation: (
             <div
               key={item.id}
@@ -66,7 +74,7 @@ const ManageUser = () => {
                 gap: '10px',
               }}>
               <Tooltip placement="topLeft" title="Làm mới mật khẩu" color="">
-                <Button type="primary" icon={<i class="fa-solid fa-rotate"></i>} size="default" onClick={() => handleClickResetPassword(item.username)} />
+                <Button type="primary" icon={<i className="fa-solid fa-rotate"></i>} size="default" onClick={() => handleClickResetPassword(item.username)} />
               </Tooltip>
               <Tooltip placement="topLeft" title="chỉnh sửa">
                 <Button type="primary" style={{ backgroundColor: '#ffca2c' }} icon={<EditOutlined />} size="default" onClick={() => handleClickEdit(item.username)} />
@@ -87,10 +95,9 @@ const ManageUser = () => {
           ...tableParams.pagination,
         },
       });
-      setLoading(true)
-    }
-    else{
-      setLoading(true)
+      setLoading(true);
+    } else {
+      setLoading(true);
     }
   }, [dataListUser, tableParams.pagination.pageSize]);
 
@@ -127,8 +134,6 @@ const ManageUser = () => {
     dispath(actions.getUserByUsername(username));
   };
   const handleClickDelete = (username) => {
-    // dispath(actions.getUserByUsername(username));
-    // dispath(actions.showModalDeleteUser(true));
     confirm({
       title: 'Xác nhận',
       content: `Bạn có muốn xóa người dùng ${username}?`,
@@ -136,7 +141,7 @@ const ManageUser = () => {
         dispath(actions.handleDeleteUser(username, token));
         setIsShowToastDelete(true);
       },
-      onCancel() { },
+      onCancel() {},
     });
   };
   const handleClickResetPassword = (username) => {
@@ -149,7 +154,7 @@ const ManageUser = () => {
         dispath(actions.handleResetPassword(username, token));
         setIsShowToastResetPassword(true);
       },
-      onCancel() { },
+      onCancel() {},
     });
   };
   const onSearch = (value, _e, info) => {
@@ -197,12 +202,15 @@ const ManageUser = () => {
             width: 300,
           }}
         />
-        <Button style={{ marginTop: '10px' }} type="primary" size="large" onClick={handleClickAdd}>
-          Thêm mới
-        </Button>
+        {dataDecode && dataDecode.autoflex_role === constants.ROLE.ADMIN && (
+          <Button style={{ marginTop: '10px' }} type="primary" size="large" onClick={handleClickAdd}>
+            Thêm mới
+          </Button>
+        )}
       </Row>
       <Table
-        columns={columnTableUser.admin}
+        loading={isLoading}
+        columns={column}
         dataSource={data.length > 0 ? data : []}
         pagination={tableParams.pagination}
         onChange={handleTableChange}
@@ -214,7 +222,6 @@ const ManageUser = () => {
       <ModalCreateUser />
       <ConfirmDeleteUser />
       <ModalResetPassword />
-      
     </>
   );
 };

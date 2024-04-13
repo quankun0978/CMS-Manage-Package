@@ -23,10 +23,12 @@ const ModalEditPackage = () => {
   const [isShowToast, setIsShowToast] = useState(false);
 
   useEffect(() => {
-    form.resetFields();
-    setTimeout(() => {
-      form.setFieldsValue(dataPackageByPackagecode);
-    }, 1000);
+    if (form.__INTERNAL__.name) {
+      form.resetFields();
+      setTimeout(() => {
+        form.setFieldsValue(dataPackageByPackagecode);
+      }, 1000);
+    }
   }, [dataPackageByPackagecode]);
 
   useEffect(() => {

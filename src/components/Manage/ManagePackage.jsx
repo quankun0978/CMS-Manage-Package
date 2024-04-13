@@ -27,7 +27,6 @@ const ManagePackage = () => {
   let column = dataDecode.autoflex_role === constants.ROLE.READ ? columnTablePackage.read : columnTablePackage.write;
   const dataListPackage = useSelector((state) => state.user.dataListPackage);
   let resultDeletePackage = useSelector((state) => state.user.resultDeletePackage);
- 
 
   //hook
   const [loading, setLoading] = useState(false);
@@ -35,8 +34,8 @@ const ManagePackage = () => {
   const [isShowToastDelete, setIsShowToastDelete] = useState(false);
   const [data, setData] = useState([]);
   const [dataOrigin, setDataOrigin] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(true);
+
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
@@ -53,13 +52,14 @@ const ManagePackage = () => {
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
+    
     if (dataListPackage.length > 0) {
       setIsLoading(false);
       let dtTable = dataListPackage.map((item, index) => {
         return {
           ...item,
           index: index + 1,
+          key: index,
           status: convert.convertStatus(item.status),
           operation: (
             <div
@@ -84,7 +84,7 @@ const ManagePackage = () => {
       });
       setData(dtTable);
       setDataOrigin(dtTable);
-      setTableParams(prevSate => ({
+      setTableParams((prevSate) => ({
         ...prevSate,
         pagination: {
           ...prevSate.pagination,
@@ -107,7 +107,6 @@ const ManagePackage = () => {
     }
   }, [dispath, resultChangeStatusPackage.error, token, resultChangeStatusPackage.result, resultChangeStatusPackage.message, isShowToastChangeStatus]);
 
-  
   useEffect(() => {
     if (isShowToastDelete) {
       if (resultDeletePackage.result === constants.STATUS.SUCCESS) {
@@ -140,7 +139,7 @@ const ManagePackage = () => {
         dispath(actions.handleDeletePackage(packagecode, token));
         setIsShowToastDelete(true);
       },
-      onCancel() { },
+      onCancel() {},
     });
   };
 
@@ -162,7 +161,7 @@ const ManagePackage = () => {
         dispath(actions.handleChangeStatusPackage(packagecode, token, value));
         setIsShowToastChangeStatus(true);
       },
-      onCancel() { },
+      onCancel() {},
     });
   };
 
@@ -180,10 +179,9 @@ const ManagePackage = () => {
       <Table
         style={{ transform: 'translateY(15px)' }}
         columns={column}
-        rowKey={(record) => record.id}
         dataSource={data}
         pagination={tableParams.pagination}
-        loading={loading}
+        loading={isLoading}
         onChange={handleTableChange}
         scroll={{
           y: Math.floor(window.innerHeight - 350),

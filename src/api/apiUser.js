@@ -1,10 +1,5 @@
 import axios from 'api/axios';
-export const getDataAllUser = () => {
-  return axios.get('https://jsonplaceholder.typicode.com/users');
-};
-export const getDataUserById = (id) => {
-  return axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
-};
+
 export const checkLogin = (data) => {
   return axios.post('/dashboard/user/login', data);
 };
@@ -58,4 +53,8 @@ export const changePasswordUser = (data, token) => {
       Authorization: token,
     },
   });
+};
+
+export const refreshToken = (data) => {
+  return axios.post('/dashboard/user/refresh_token', data);
 };

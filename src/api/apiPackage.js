@@ -43,3 +43,19 @@ export const disablePackage = (data, token) => {
     },
   });
 };
+
+export const reportPackage = (data, token) => {
+  return axios.post('/dashboard/report/package', data, {
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const historyRegistration = (data, token) => {
+  return axios.post('/dashboard/history/registration', data, {
+    headers: {
+      Authorization: token,
+    },
+  });
+};

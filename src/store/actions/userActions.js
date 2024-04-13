@@ -6,6 +6,7 @@ import { createNewPackage, deletePackageByCode, disablePackage, enablePackage, g
 import actionType from './actionstype';
 import * as convert from 'ultils/convert';
 import * as constants from 'constants/consants';
+import { getInfoReport } from 'api/apiReport';
 
 export const showModalEditPackage = (check) => {
   return {
@@ -333,6 +334,38 @@ const changePasswordSuccess = (results) => {
 const changePaswordFail = (results) => {
   return {
     type: actionType.CHANGE_PASSWORD_FAIL,
+    results,
+  };
+};
+
+export const handleGetInfoReport = (data, token) => {
+  return async (dispath, getstate) => {
+    try {
+      // let dt = {
+      //   username: data.username,
+      //   old_password: md5(data.passwordold),
+      //   new_password: md5(data.passwordnew),
+      //   confirm_new_password: md5(data.confirmPassword),
+      // };
+      let res = await getInfoReport(data, token);
+
+      if (res && res.data && Object.keys(res.data).length > 0) dispath(getInfoReportSuccess(res.data));
+    } catch (e) {
+      dispath(getInfoReportdFail({ result: constants.STATUS.FAIL }));
+    }
+  };
+};
+
+const getInfoReportSuccess = (results) => {
+  return {
+    type: actionType.GET_INFO_REPORT_SUCCESS,
+    results,
+  };
+};
+
+const getInfoReportdFail = (results) => {
+  return {
+    type: actionType.GET_INFO_REPORT_FAIL,
     results,
   };
 };

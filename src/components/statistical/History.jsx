@@ -1,56 +1,65 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Table, Input } from 'antd';
-const { Search } = Input;
+import { Table, Input, Space, Button, DatePicker, theme } from 'antd';
+
+import * as ultils from 'ultils/convert';
+import Cookies from 'js-cookie';
+import { historyRegistration } from 'api/apiPackage';
+
+import * as convert from 'ultils/convert';
 const columns = [
   {
     title: 'STT',
     dataIndex: 'index',
-    render: (index) => `${index}`,
-    width: '5%',
   },
   {
     title: 'Số thuê bao ',
-    dataIndex: 'phone',
+    dataIndex: 'msisdn',
     render: (name) => `${name}`,
     width: '10%',
   },
   {
     title: 'Thời gian',
-    dataIndex: 'time',
-    key: 'time',
-
+    dataIndex: 'updateTime',
+    key: 'updateTime',
+    render: (updateTime) => `${convert.convertTimeString(updateTime)}`,
     width: '15%',
   },
-  {
-    title: 'Đăng ký/hủy ',
-    dataIndex: 'register',
-    key: 'register',
-    filters: [
-      {
-        text: 'Đăng ký',
-        value: 'Đăng ký',
-      },
+  // {
+  //   title: 'Đăng ký/hủy ',
+  //   dataIndex: 'register',
+  //   key: 'register',
+  //   filters: [
+  //     {
+  //       text: 'Đăng ký',
+  //       value: 'Đăng ký',
+  //     },
 
-      {
-        text: 'Hủy đăng ký',
-        value: 'Hủy đăng ký',
-      },
-    ],
+  //     {
+  //       text: 'Hủy đăng ký',
+  //       value: 'Hủy đăng ký',
+  //     },
+  //   ],
 
-    onFilter: (value, record) => record.register.includes(value),
-  },
+  //   onFilter: (value, record) => record.register.includes(value),
+  // },
 
   {
     title: 'Gói cước',
-    dataIndex: 'name',
+    dataIndex: 'code',
   },
+  // {
+  //   title: 'Dịch vụ',
+  //   dataIndex: 'service',
+  // },
   {
-    title: 'Dịch vụ',
-    dataIndex: 'service',
+    title: 'Giá cước',
+    dataIndex: 'price',
   },
   {
     title: 'Chu kỳ',
     dataIndex: 'cycle',
+    render: (cycle) => `${convert.convertCycleToDate(cycle)}`,
+
     filters: [
       {
         text: 'Ngày',
@@ -67,128 +76,35 @@ const columns = [
       },
     ],
 
-    onFilter: (value, record) => record.cycle.includes(value),
+    onFilter: (value, record) => convert.convertCycleToDate(record.cycle).includes(value),
   },
   {
     title: 'Trạng thái',
     dataIndex: 'status',
+    // width: '10%',
   },
   {
     title: 'Hiệu lực',
-    dataIndex: 'effect',
+    dataIndex: 'expireTime',
+    render: (expireTime) => `${convert.convertTimeString(expireTime)}`,
   },
   {
     title: 'Kênh',
     dataIndex: 'channel',
   },
 ];
-const dataInit = [
-  {
-    id: 1,
-    index: 1,
-    name: 'FB1',
-    price: '3000',
-    time: '26/06/2017 11:19:16',
-    phone: '0923131313',
-    register: 'Đăng ký',
-    service: 'data',
-    cycle: '1 ngày',
-    status: 'Thành công',
-    effect: '30/01/2022',
-    channel: 'Facebook',
-  },
-  {
-    id: 2,
-    index: 2,
-    name: 'FB7',
-    price: '10000',
-    time: '26/06/2017 11:19:16',
-    phone: '0923131313',
-    register: 'Đăng ký',
-    service: 'data',
-    cycle: '1 ngày',
-    status: 'Thành công',
-    effect: '30/01/2022',
-    channel: 'Facebook',
-  },
-  {
-    id: 3,
-    index: 3,
-    name: 'FB30N',
-    price: '30000',
-    time: '26/06/2017 11:19:16',
-    phone: '0923131313',
-    register: 'Đăng ký',
-    service: 'data',
-    cycle: '1 ngày',
-    status: 'Thành công',
-    effect: '30/01/2022',
-    channel: 'Facebook',
-  },
-  {
-    id: 4,
-    index: 4,
-    name: 'META45',
-    price: '45000',
-    time: '26/06/2017 11:19:16',
-    phone: '0923131313',
-    register: 'Đăng ký',
-    service: 'data',
-    cycle: '1 ngày',
-    status: 'Thành công',
-    effect: '30/01/2022',
-    channel: 'Facebook',
-  },
-  {
-    id: 5,
-    index: 5,
-    name: 'BIG90',
-    price: '90000',
-    time: '26/06/2017 11:19:16',
-    phone: '0943087282',
-    register: 'Đăng ký',
-    service: 'data',
-    cycle: '1 ngày',
-    status: 'Thành công',
-    effect: '30/01/2022',
-    channel: 'Facebook',
-  },
-  {
-    id: 6,
-    index: 6,
-    name: 'BIG120',
-    price: '120000',
-    time: '26/06/2017 11:19:16',
-    phone: '0923131313',
-    register: 'Đăng ký',
-    service: 'data',
-    cycle: '1 ngày',
-    status: 'Thành công',
-    effect: '30/01/2022',
-    channel: 'Facebook',
-  },
-  {
-    id: 7,
-    index: 7,
-    name: 'D7',
-    price: '7000',
-    time: '26/06/2017 11:19:16',
-    phone: '0923131313',
-    register: 'Đăng ký',
-    service: 'data',
-    cycle: '1 ngày',
-    status: 'Thành công',
-    effect: '30/01/2022',
-    channel: 'Facebook',
-  },
-];
 
 const History = () => {
-  const dataTable = useRef(dataInit);
-  const [inputSearch, setInputSearch] = useState('');
+  const { token } = theme.useToken();
+  const style = {
+    border: `1px solid ${token.colorPrimary}`,
+    borderRadius: '50%',
+  };
+  const tokenLogin = Cookies.get('token');
+  const dataTable = useRef([]);
+  const [value, setValue] = useState();
+  const [dataHistory, setDataDate] = useState();
   const [data, setData] = useState([]);
-  const [dataSelect, setDataSelect] = useState('Active');
-  const [dataOrigin, setDataOrigin] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [tableParams, setTableParams] = useState({
     pagination: {
@@ -197,38 +113,35 @@ const History = () => {
     },
   });
 
-  const onSearch = (value, _e, info) => {
-    let dataCp = [...dataTable.current];
+  useEffect(() => {}, []);
 
-    let dataFilter = dataCp.filter((item) => {
-      return item.phone.includes(value);
-    });
-    if (dataFilter.length > 0) setData(dataFilter);
-    if (dataFilter.length === 0) setData([]);
-    if (!value) setData(dataOrigin);
+  const cellRender = React.useCallback((current, info) => {
+    if (info.type !== 'date') {
+      return info.originNode;
+    }
+    if (typeof current === 'number') {
+      return <div className="ant-picker-cell-inner">{current}</div>;
+    }
+    return (
+      <div className="ant-picker-cell-inner" style={current.date() === 1 ? style : {}}>
+        {current.date()}
+      </div>
+    );
+  }, []);
+
+  const onChange = (e) => {
+    setValue(e.target.value);
   };
 
-  useEffect(() => {}, []);
-  useEffect(() => {
-    setIsLoading(true);
-    if (dataInit.length > 0) {
-      setIsLoading(false);
-      let dtTable = dataInit.map((item) => {
-        return {
-          ...item,
-        };
-      });
-      dataTable.current = dtTable;
-      setData(dtTable);
-      setDataOrigin(dtTable);
-      setTableParams({
-        ...tableParams,
-        pagination: {
-          ...tableParams.pagination,
-        },
-      });
-    }
-  }, [dataInit, tableParams.pagination.pageSize, dataSelect]);
+  const handleRangePickerChange = (dates, dateStrings) => {
+    const dataHistory = dateStrings.map((item) => ultils.convertToYYYYMMDD(item));
+    const data = {
+      from: dataHistory[0],
+      to: dataHistory[1],
+      msisdn: '',
+    };
+    setDataDate(data);
+  };
 
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
@@ -240,19 +153,40 @@ const History = () => {
       setData([]);
     }
   };
-  
+  const handleGetData = async () => {
+    if (value && dataHistory) {
+      const data = { ...dataHistory, msisdn: ultils.convertPhone(value) };
+      const res = await historyRegistration(data, tokenLogin);
+      if (res && res.data && res.data.result) {
+        const dt = res.data.result.map((item, index) => {
+          return {
+            ...item,
+            index: index + 1,
+          };
+        });
+        setData(dt);
+      }
+    }
+  };
+
   return (
     <>
-      <Search
-        placeholder="Nhập vào số thuê bao muốn tìm kiếm"
-        
-        size="large"
-        onSearch={onSearch}
-        style={{
-          width: 350,
-        }}
-      />
-      <Table columns={columns} dataSource={data} pagination={tableParams.pagination} onChange={handleTableChange} scroll={{ y: 350 ,x: 'max-content' }} style={{ transform: 'translateY(15px)' }} isLoading={isLoading} />
+      <Space direction="horizontal">
+        <Input
+          onChange={onChange}
+          placeholder="Nhập vào số thuê bao muốn tìm kiếm"
+          size="large"
+          style={{
+            width: 350,
+          }}
+        />
+        <DatePicker.RangePicker size="large" format={'DD-MM-YYYY'} placeholder={['Từ ngày', 'đến ngày']} onChange={handleRangePickerChange} cellRender={cellRender} />
+
+        <Button size="large" onClick={handleGetData}>
+          Tìm kiếm
+        </Button>
+      </Space>
+      <Table columns={columns} dataSource={data} pagination={tableParams.pagination} onChange={handleTableChange} scroll={{ y: 350, x: 'max-content' }} style={{ transform: 'translateY(15px)' }} isLoading={isLoading} />
     </>
   );
 };

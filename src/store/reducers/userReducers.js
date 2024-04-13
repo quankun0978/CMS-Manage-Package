@@ -25,6 +25,7 @@ const initUser = {
   token: '',
   totalPackage: 0,
   actionUser: '',
+  dataInfoReport: [],
 };
 
 export const userReducer = (state = initUser, actions) => {
@@ -103,7 +104,7 @@ export const userReducer = (state = initUser, actions) => {
       };
 
     case actionType.GET_DATA_DECODE:
-      let dataDecode = jwtDecode(Cookies.get('token'));
+      let dataDecode = Cookies.get('token') ? jwtDecode(Cookies.get('token')) : {};
       return {
         ...state,
         dataDecode,
@@ -197,6 +198,17 @@ export const userReducer = (state = initUser, actions) => {
       return {
         ...state,
         actionUser: actions.action,
+      };
+
+    case actionType.GET_INFO_REPORT_SUCCESS:
+      return {
+        ...state,
+        dataInfoReport: actions.results,
+      };
+
+    case actionType.GET_INFO_REPORT_FAIL:
+      return {
+        ...state,
       };
 
     default:

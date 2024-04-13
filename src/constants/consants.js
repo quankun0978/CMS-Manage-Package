@@ -9,7 +9,7 @@ export const PATH = {
   FREE_TEXT: '/thong-ke/free-text',
   SAN_LUONG_TUNG_GOI: '/thong-ke/san-luong-tung-goi',
   BAO_CAO_CHUNG: '/thong-ke/bao-cao-chung',
-  TRANG_CHU: '/trang-chu',
+  THONG_KE_THEO_GOI_CUOC: '/thong-ke-theo-goi-cuoc',
 };
 
 export const STATUS = {

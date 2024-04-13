@@ -24,10 +24,12 @@ const ModalEdit = () => {
   const [isShowToast, setIsShowToast] = useState(false);
 
   useEffect(() => {
-    form.resetFields();
-    setTimeout(() => {
-      form.setFieldsValue(dataUserByUsername);
-    }, 1000);
+    if (form.__INTERNAL__.name) {
+      form.resetFields();
+      setTimeout(() => {
+        form.setFieldsValue(dataUserByUsername);
+      }, 1000);
+    }
   }, [dataUserByUsername]);
 
   useEffect(() => {
@@ -57,7 +59,6 @@ const ModalEdit = () => {
   };
 
   return (
-
     <Modal
       open={isModalOpen}
       onCancel={handleClose}
@@ -109,7 +110,6 @@ const ModalEdit = () => {
         </Form>
       </div>
     </Modal>
-
   );
 };
 

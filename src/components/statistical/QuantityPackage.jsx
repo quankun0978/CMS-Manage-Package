@@ -36,7 +36,7 @@ const QuantityPackage = () => {
     <>
       <div className="detail__back  pb-3">
         <p>
-          <i class="fa-solid fa-angle-left pe-1"></i>
+          <i className="fa-solid fa-angle-left pe-1"></i>
           Quay lại
         </p>
       </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { Layout, theme } from 'antd';
@@ -14,16 +14,19 @@ import UserWrite from 'routes/user-write';
 import logo from 'assets/img/logo_home.png';
 import Menu from 'components/Navigation/Navigation';
 import * as constants from 'constants/consants';
+import * as actions from 'store/actions/adminActions';
+
 import 'styles/home.scss';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 const { Content, Sider } = Layout;
 
 const Home = () => {
   let isLogin = useSelector((state) => state.user.isLogin);
-  const navigate = useNavigate();
+
   // hook
   const count = useRef(0);
+  const dispath = useDispatch();
   const token = Cookies.get('token');
   const [role, setRole] = useState();
 
@@ -35,18 +38,19 @@ const Home = () => {
   useEffect(() => {
     if (isLogin) count.current++;
     if (count.current === 1) toast.success('Đăng nhập thành công');
-  
   }, []);
-
   useEffect(() => {
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      if (decodedToken.autoflex_role) {
-        setRole(decodedToken.autoflex_role);
-      }
-    }
-   
-  }, [token]);
+    dispath(actions.getDataListUser(token));
+  }, [dispath, token]);
+
+  // useEffect(() => {
+  //   if (token) {
+  //     const decodedToken = jwtDecode(token);
+  //     if (decodedToken.autoflex_role) {
+  //       setRole(decodedToken.autoflex_role);
+  //     }
+  //   }
+  // }, [token]);
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -75,9 +79,10 @@ const Home = () => {
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}>
-            {role && role === constants.ROLE.ADMIN && <Admin />}
+            <Outlet />
+            {/* {role && role === constants.ROLE.ADMIN && <Admin />}
             {role && role === constants.ROLE.WRITE && <UserWrite />}
-            {role && role === constants.ROLE.READ && <UserRead />}
+            {role && role === constants.ROLE.READ && <UserRead />} */}
           </div>
         </Content>
       </Layout>

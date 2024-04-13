@@ -30,6 +30,7 @@ const MenuRole = () => {
     const ListItem = document.querySelectorAll('.menu-item');
     if (Array.from(ListItem).length > 0) {
       const index = MenuRole.findIndex((item) => window.location.pathname.includes(item.path));
+
       if (index > 0) {
         Array.from(ListItem)[index].classList.add('active');
       } else Array.from(ListItem)[0].classList.add('active');
@@ -40,7 +41,8 @@ const MenuRole = () => {
 
   const handleClickTabMenu = (item) => {
     const ListItem = document.querySelectorAll('.menu-item');
-    Array.from(ListItem).forEach((i, index) => {
+
+    Array.from(ListItem).forEach((i) => {
       if (i.className.includes('active')) {
         i.classList.remove('active');
         i.classList.add('start');
@@ -52,6 +54,8 @@ const MenuRole = () => {
 
   const handleClickLogout = () => {
     Cookies.remove('token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('username');
     toast.success('Đăng xuất thành công');
     dispath(actions.logoutSuccess());
     navigate(constanst.PATH.DANG_NHAP);
@@ -70,7 +74,7 @@ const MenuRole = () => {
                       <div className={`menu-icon `}>
                         <i className={item.icon}></i>
                       </div>
-                      <span className="menu-info">{item.title}</span>
+                      <span className="menu-info">{item.title && item.title}</span>
                     </li>
                   </div>
                 );

@@ -28,13 +28,49 @@ export const convertCycleToDate = (cycle) => {
 export const convertDateToCycle = (cycle) => {
   let str = '';
   if (cycle.trim().includes('ngày')) {
-    str = cycle.replace('ngày','D'.trim());
+    str = cycle.replace('ngày', 'D'.trim());
   }
   if (cycle.trim().includes('tháng')) {
-    str = cycle.replace('tháng','M'.trim());
+    str = cycle.replace('tháng', 'M'.trim());
   }
   if (cycle.trim().includes('năm')) {
-    str = cycle.replace('năm','Y'.trim());
+    str = cycle.replace('năm', 'Y'.trim());
   }
   return str;
+};
+
+export const convertToYYYYMMDD = (dateString) => {
+  const dateParts = dateString.split('-');
+  const formattedDate = `${dateParts[2]}${dateParts[1]}${dateParts[0]}`;
+  return formattedDate;
+};
+
+export const convertPhone = (phone) => {
+  return '84' + phone.substring(1);
+};
+
+export const convertTimeString = (timeString) => {
+  // Tách các thành phần của thời gian
+  const convertedDate = new Date(timeString);
+
+  const hours = convertedDate.getHours();
+  const minutes = convertedDate.getMinutes();
+  const seconds = convertedDate.getSeconds();
+
+  const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  return formattedTime + ' ' + convertedDate.getDay() + '/' + convertedDate.getMonth() + '/' + convertedDate.getFullYear();
+};
+export const convertDataDateCurrent = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${day}/${month}/${year}`;
+};
+export const convertDataDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}${month}${day}`;
 };

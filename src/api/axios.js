@@ -1,18 +1,25 @@
 import axios from 'axios';
+import { refreshToken } from './apiUser';
+import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
+import { PATH } from 'constants/consants';
+
 const instance = axios.create({
   baseURL: process.env.REACT_APP_URL_BACKEND,
-  // withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
     'Control-Allow-Origin': '*',
   },
-  // timeout: 1000,
-  // headers: {'X-Custom-Header': 'foobar'}
 });
-// instance.defaults.withCredentials = true;
+
 instance.defaults.headers['Content-Type'] = 'application/json';
-axios.interceptors.request.use(
+
+instance.interceptors.request.use(
   function (config) {
+    const token = Cookies.get('token');
+    if (token) {
+      config.headers.Authorization = `${token}`;
+    }
     // Do something before request is sent
     return config;
   },
@@ -23,16 +30,39 @@ axios.interceptors.request.use(
 );
 
 // Add a response interceptor
-axios.interceptors.response.use(
+instance.interceptors.response.use(
   function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
-    return response.data;
+    return response;
   },
-  function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
+  async function (error) {
+    const originalRequest = error.config;
+    if (error.response && error.response.status === 401) {
+      try {
+        const refresh_Token = localStorage.getItem('refresh_token');
+        const username = localStorage.getItem('username');
+        // const response = await refreshToken({ username: username, refresh_token: refresh_Token });
+        if (refreshToken && username) {
+          const response = await axios.post(`${process.env.REACT_APP_URL_BACKEND}/dashboard/user/refresh_token`, { username: username, refresh_token: refresh_Token });
+          const { result } = response.data;
+          let decodeToken = jwtDecode(result.access_token);
+          let time = new Date(decodeToken.exp * 1000);
+
+          Cookies.set('token', result.access_token, { expires: time });
+          localStorage.setItem('refresh_token', result.refresh_token);
+          // Retry the original request with the new token
+          originalRequest.headers.Authorization = `${result.access_token}`;
+          window.location.reload();
+        }
+        return instance(originalRequest);
+      } catch (error) {
+        if (error.response && error.response.staatus === 400) {
+          window.location.reload();
+        }
+        return Promise.reject(error);
+      }
+    }
     return Promise.reject(error);
   }
 );
+
 export default instance;

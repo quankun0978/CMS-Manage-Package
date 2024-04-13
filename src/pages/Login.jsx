@@ -11,6 +11,8 @@ import image from 'assets/img/background_login.png';
 import logo from 'assets/img/logo_home.png';
 import { PATH } from 'constants/consants';
 import * as actions from 'store/actions/userActions';
+// import * as actions1 from 'store/actions/adminActions';
+
 import 'styles/login.scss';
 
 const Login = () => {
@@ -31,6 +33,8 @@ const Login = () => {
         let decodeToken = jwtDecode(token.access_token);
         let time = new Date(decodeToken.exp * 1000);
         Cookies.set('token', token.access_token, { expires: time });
+        localStorage.setItem('refresh_token', token.refresh_token);
+        localStorage.setItem('username', decodeToken['autoflex-username']);
         setError('');
         navigate(PATH.QUAN_LY_NGUOI_DUNG);
         // window.location.reload()
@@ -50,7 +54,7 @@ const Login = () => {
     }
   }, [isLogin, loading]);
 
-  //handle
+  //handlep
   const handleKeyDown = (event) => {
     if (event.keyCode === 13) {
       onFinish();
@@ -87,7 +91,9 @@ const Login = () => {
                 <Col sm={24} md={12}>
                   <Row style={{ alignItems: 'center', marginBottom: '1rem' }}>
                     <Col>
-                      <h4 className="title-bold " style={{fontSize:"24px"}}>Đăng nhập</h4>{' '}
+                      <h4 className="title-bold " style={{ fontSize: '24px' }}>
+                        Đăng nhập
+                      </h4>{' '}
                     </Col>
                   </Row>
 
@@ -116,7 +122,7 @@ const Login = () => {
                       placeholder="Enter the password"
                       validateTrigger="onSubmit"
                       label="Mật khẩu"
-                      style={{fontWeight:"700"}}
+                      style={{ fontWeight: '700' }}
                       name="password">
                       <Input.Password size="large" placeholder="Enter the password" />
                     </Form.Item>
@@ -124,7 +130,7 @@ const Login = () => {
                       <div className="ant-form-item-explain-error">{error}</div>
                     </Form.Item>
                     <Form.Item>
-                      <Button  onKeyDown={handleKeyDown} size="large" className="login-content-button" type="primary" htmlType="submit">
+                      <Button onKeyDown={handleKeyDown} size="large" className="login-content-button" type="primary" htmlType="submit">
                         Đăng nhập
                       </Button>
                     </Form.Item>

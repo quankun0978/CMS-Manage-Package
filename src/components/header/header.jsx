@@ -10,27 +10,37 @@ import IconCustomize from 'components/Icon/IconCustomize';
 
 import * as constants from 'constants/consants';
 import * as actions from 'store/actions/userActions';
+import * as actions1 from 'store/actions/userActions';
+
 import 'styles/header.scss';
 
 const { Header } = Layout;
 
 const HeaderDashBoard = () => {
-  const dispath = useDispatch()
-  const dataInfoUser = jwtDecode(Cookies.get('token'));
-  const dataListPackage = useSelector((state) => state.user.dataListPackage);
-  const dataListPackageEnable=dataListPackage.length>0&&dataListPackage.filter((item)=>{
-    return item.status===constants.STATUS.ACTIVE
-  })
-  const dataListPackageDisable=dataListPackage.length>0&&dataListPackage.filter((item)=>{
-    return item.status===constants.STATUS.INACTIVE
-  })
+  // let dataListUser = useSelector((state) => state.admin.dataListUser);
 
-  useEffect(()=>{
-    dispath(actions.getDataListPackage(Cookies.get('token')))
-  },[])
+  let dataInfoUser = {};
+  const dispath = useDispatch();
+  if (Cookies.get('token')) {
+    dataInfoUser = jwtDecode(Cookies.get('token'));
+  }
+  const dataListPackage = useSelector((state) => state.user.dataListPackage);
+  const dataListPackageEnable =
+    dataListPackage.length > 0 &&
+    dataListPackage.filter((item) => {
+      return item.status === constants.STATUS.ACTIVE;
+    });
+  const dataListPackageDisable =
+    dataListPackage.length > 0 &&
+    dataListPackage.filter((item) => {
+      return item.status === constants.STATUS.INACTIVE;
+    });
+
+  useEffect(() => {
+    dispath(actions.getDataListPackage(Cookies.get('token')));
+  }, []);
 
   return (
-
     <Header className="header-dashboard">
       <Row style={{ width: '100%' }} justify="space-between">
         <Col md={24}>
@@ -38,14 +48,14 @@ const HeaderDashBoard = () => {
             <div className="header-item header-item-hide">
               <h3 className="header-info">
                 Gói cước cho phép
-                <p className=" title-bold ">{dataListPackageEnable&&dataListPackageEnable.length}</p>
+                <p className=" title-bold ">{dataListPackageEnable && dataListPackageEnable.length}</p>
               </h3>
               <IconCustomize color="#5fc792" IconItem={<i className="fa-regular fa-circle-check"></i>} />
             </div>
             <div className="header-item header-item-hide">
               <h3 className="header-info">
                 Gói cước đã dừng
-                <p className=" title-bold ">{dataListPackageDisable&&dataListPackageDisable.length}</p>
+                <p className=" title-bold ">{dataListPackageDisable && dataListPackageDisable.length}</p>
               </h3>
               <IconCustomize color="#ff375f" IconItem={<i className="fa-solid fa-ban"></i>} />
             </div>
@@ -56,12 +66,11 @@ const HeaderDashBoard = () => {
               </h3>
               <IconCustomize color="rgb(243, 170, 205)" IconItem={<i className="fa-solid fa-money-bill"></i>} />
             </div>
-           
 
             <div className="header-item header-item-hide">
               <h3 className="header-info">
                 Số gói cước
-                <p className=" title-bold ">{dataListPackage&&dataListPackage.length}</p>
+                <p className=" title-bold ">{dataListPackage && dataListPackage.length}</p>
               </h3>
               <IconCustomize color="rgb(255, 202, 44)" IconItem={<CommentOutlined />} />
             </div>
