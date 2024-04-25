@@ -55,7 +55,7 @@ instance.interceptors.response.use(
         }
         return instance(originalRequest);
       } catch (error) {
-        if (error.response && error.response.staatus === 400) {
+        if (error.response && error.response.status === 400) {
           window.location.reload();
         }
         return Promise.reject(error);

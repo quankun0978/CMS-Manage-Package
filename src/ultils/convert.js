@@ -28,15 +28,15 @@ export const convertCycleToDate = (cycle) => {
 export const convertDateToCycle = (cycle) => {
   let str = '';
   if (cycle.trim().includes('ngày')) {
-    str = cycle.replace('ngày', 'D'.trim());
+    str = cycle.replace('ngày', 'D'.trim()).trim();
   }
   if (cycle.trim().includes('tháng')) {
-    str = cycle.replace('tháng', 'M'.trim());
+    str = cycle.replace('tháng', 'M'.trim()).trim();
   }
   if (cycle.trim().includes('năm')) {
-    str = cycle.replace('năm', 'Y'.trim());
+    str = cycle.replace('năm', 'Y'.trim()).trim();
   }
-  return str;
+  return str.replace(' ', '');
 };
 
 export const convertToYYYYMMDD = (dateString) => {

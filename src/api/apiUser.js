@@ -58,3 +58,6 @@ export const changePasswordUser = (data, token) => {
 export const refreshToken = (data) => {
   return axios.post('/dashboard/user/refresh_token', data);
 };
+export const updatePassword = (data) => {
+  return axios.post('/dashboard/user/update_password_first_time', data);
+};

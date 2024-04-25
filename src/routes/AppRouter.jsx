@@ -4,6 +4,7 @@ import Statistical from 'components/statistical/Statistical';
 import History from 'components/statistical/History';
 import ReportByPackage from 'components/statistical/ReportByPackage';
 import InfoUser from 'components/Detail/InfoUser';
+import UpdatePassword from 'components/ResetPassword/UpdatePassword';
 const { default: ManageUser } = require('components/Manage/ManageUser');
 const { PATH } = require('constants/consants');
 const { default: Home } = require('pages/Home');
@@ -89,6 +90,10 @@ const AppRouter = () => {
     {
       path: PATH.DANG_NHAP,
       element: <PrivateRoute1 component={<Login />} />,
+    },
+    {
+      path: PATH.CAP_NHAT_MAT_KHAU,
+      element: <PrivateRoute1 component={<UpdatePassword />} />,
     },
 
     // {

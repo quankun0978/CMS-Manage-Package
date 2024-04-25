@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, Input, Space, Button, DatePicker, theme } from 'antd';
 
 import * as ultils from 'ultils/convert';
@@ -24,33 +24,12 @@ const columns = [
     render: (updateTime) => `${convert.convertTimeString(updateTime)}`,
     width: '15%',
   },
-  // {
-  //   title: 'Đăng ký/hủy ',
-  //   dataIndex: 'register',
-  //   key: 'register',
-  //   filters: [
-  //     {
-  //       text: 'Đăng ký',
-  //       value: 'Đăng ký',
-  //     },
-
-  //     {
-  //       text: 'Hủy đăng ký',
-  //       value: 'Hủy đăng ký',
-  //     },
-  //   ],
-
-  //   onFilter: (value, record) => record.register.includes(value),
-  // },
 
   {
     title: 'Gói cước',
     dataIndex: 'code',
   },
-  // {
-  //   title: 'Dịch vụ',
-  //   dataIndex: 'service',
-  // },
+
   {
     title: 'Giá cước',
     dataIndex: 'price',
@@ -81,7 +60,6 @@ const columns = [
   {
     title: 'Trạng thái',
     dataIndex: 'status',
-    // width: '10%',
   },
   {
     title: 'Hiệu lực',
@@ -101,7 +79,6 @@ const History = () => {
     borderRadius: '50%',
   };
   const tokenLogin = Cookies.get('token');
-  const dataTable = useRef([]);
   const [value, setValue] = useState();
   const [dataHistory, setDataDate] = useState();
   const [data, setData] = useState([]);

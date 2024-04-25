@@ -11,40 +11,19 @@ import image from 'assets/img/background_login.png';
 import logo from 'assets/img/logo_home.png';
 import { PATH } from 'constants/consants';
 import * as actions from 'store/actions/userActions';
+import * as apiUser from 'api/apiUser';
 // import * as actions1 from 'store/actions/adminActions';
 
 import 'styles/login.scss';
 
 const Login = () => {
-  const dispath = useDispatch();
   const navigate = useNavigate();
   let isLogin = useSelector((state) => state.user.isLogin);
   const [form] = Form.useForm();
-  const token = useSelector((state) => state.user.token);
 
   // hook
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
-  const [isShowToast, setIsShowToast] = useState(false);
-
-  useEffect(() => {
-    if (isShowToast) {
-      if (token && token.access_token) {
-        let decodeToken = jwtDecode(token.access_token);
-        let time = new Date(decodeToken.exp * 1000);
-        Cookies.set('token', token.access_token, { expires: time });
-        localStorage.setItem('refresh_token', token.refresh_token);
-        localStorage.setItem('username', decodeToken['autoflex-username']);
-        setError('');
-        navigate(PATH.QUAN_LY_NGUOI_DUNG);
-        // window.location.reload()
-      } else {
-        setTimeout(() => {
-          setError('Tài khoản hoặc mật khẩu không chính xác');
-        }, 1000);
-      }
-    }
-  }, [isShowToast, token]);
 
   useEffect(() => {
     if (loading) {
@@ -61,13 +40,41 @@ const Login = () => {
     }
   };
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
+    setError('');
     setLoading(true);
 
-    setTimeout(() => {
-      dispath(actions.checkLoginUser(values));
-      setIsShowToast(true);
-    }, 2000);
+    try {
+      const data = await apiUser.checkLogin({ ...values, password: values.password });
+      const token = data.data.result;
+      console.log(token)
+      if (token && token.access_token) {
+        let decodeToken = jwtDecode(token.access_token);
+        let time = new Date(decodeToken.exp * 1000);
+        Cookies.set('token', token.access_token, { expires: time });
+        localStorage.setItem('refresh_token', token.refresh_token);
+        localStorage.setItem('username', decodeToken['autoflex-username']);
+        sessionStorage.removeItem('username');
+        setTimeout(() => {
+          navigate(PATH.QUAN_LY_NGUOI_DUNG);
+        }, 2000);
+      }
+    } catch (e) {
+      if (e.response.data) {
+        if (e.response.data === 'User is inactive') {
+          sessionStorage.removeItem('username');
+          setTimeout(() => {
+            setError('Tài khoản hoặc mật khẩu không chính xác');
+          }, 2000);
+        }
+        if (e.response.data === 'Request changing password') {
+          sessionStorage.setItem('username', values.username);
+          setTimeout(() => {
+            navigate(PATH.CAP_NHAT_MAT_KHAU);
+          }, 2000);
+        }
+      }
+    }
   };
 
   return (

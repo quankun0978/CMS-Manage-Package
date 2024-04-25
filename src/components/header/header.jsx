@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Cookies from 'js-cookie';
-import { jwtDecode } from 'jwt-decode';
 import { Layout, Row, Col } from 'antd';
 import { UserOutlined, CommentOutlined } from '@ant-design/icons';
 
@@ -10,7 +9,6 @@ import IconCustomize from 'components/Icon/IconCustomize';
 
 import * as constants from 'constants/consants';
 import * as actions from 'store/actions/userActions';
-import * as actions1 from 'store/actions/userActions';
 
 import 'styles/header.scss';
 
@@ -19,11 +17,9 @@ const { Header } = Layout;
 const HeaderDashBoard = () => {
   // let dataListUser = useSelector((state) => state.admin.dataListUser);
 
-  let dataInfoUser = {};
+  let dataInfoUser = useSelector((state) => state.user.dataDecode);
   const dispath = useDispatch();
-  if (Cookies.get('token')) {
-    dataInfoUser = jwtDecode(Cookies.get('token'));
-  }
+
   const dataListPackage = useSelector((state) => state.user.dataListPackage);
   const dataListPackageEnable =
     dataListPackage.length > 0 &&
@@ -38,6 +34,7 @@ const HeaderDashBoard = () => {
 
   useEffect(() => {
     dispath(actions.getDataListPackage(Cookies.get('token')));
+    dispath(actions.getDataDecode());
   }, []);
 
   return (

@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { memo } from 'react';
+import { useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 
 import Cookies from 'js-cookie';
@@ -8,40 +8,35 @@ import { Button, Col, Form, Input, Row, Select, Modal } from 'antd';
 import { validateEmail } from 'ultils/validate';
 import * as actions from 'store/actions/adminActions';
 import * as constants from 'constants/consants';
+import * as apiUser from 'api/apiUser';
 
-const ModalCreateUser = () => {
+const ModalCreateUser = ({ isModalOpen, setIsShowModal }) => {
   const dispath = useDispatch();
   const token = Cookies.get('token');
   const [form] = Form.useForm();
-  const [isShowToast, setIsShowToast] = useState(false);
-  let isModalOpen = useSelector((state) => state.admin.isModalCreateUser);
-  let resultCreate = useSelector((state) => state.admin.resultCreate);
-
-  //hook
-  useEffect(() => {
-    if (isShowToast) {
-      if (resultCreate.error || resultCreate.result === constants.STATUS.FAIL) {
-        toast.error('Tên đăng nhập đã tồn tại');
-        setIsShowToast(false);
-      }
-      if (resultCreate.result === constants.STATUS.SUCCESS) {
-        toast.success('Thêm mới  thành công');
-        dispath(actions.showModalCreateUser(false));
-        form.resetFields();
-        dispath(actions.getDataListUser(token));
-        setIsShowToast(false);
-      }
-    }
-  }, [dispath, form, isShowToast, resultCreate.error, resultCreate.result, token]);
 
   // handle
-  const onFinish = (values) => {
-    dispath(actions.createUser(values, token));
-    setIsShowToast(true);
+  const onFinish = async (values) => {
+    try {
+      const data = await apiUser.createNewUser(values, token);
+
+      if (data && data.data && data.data.result) {
+        if (data.data.result === constants.STATUS.SUCCESS) {
+          toast.success('Thêm mới thành công');
+          setIsShowModal(false);
+          form.resetFields();
+          dispath(actions.getDataListUser(token));
+        } else {
+          toast.error('Người dùng đã tồn tại');
+        }
+      }
+    } catch (e) {
+      toast.error('Người dùng đã tồn tại');
+    }
   };
 
   const handleClose = () => {
-    dispath(actions.showModalCreateUser(false));
+    setIsShowModal(false);
     form.resetFields();
   };
   const handleCreate = () => {
@@ -115,4 +110,4 @@ const ModalCreateUser = () => {
     </>
   );
 };
-export default ModalCreateUser;
+export default memo(ModalCreateUser);

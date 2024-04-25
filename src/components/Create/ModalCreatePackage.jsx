@@ -1,49 +1,47 @@
-import { useEffect, useState } from 'react';
+import { memo } from 'react';
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import Cookies from 'js-cookie';
 import { Button, Col, Form, Input, Row, Select, Modal } from 'antd';
 
 import * as actions from 'store/actions/userActions';
 import * as constants from 'constants/consants';
+import * as apiPackage from 'api/apiPackage';
 import { validateCycle, validatePrice } from 'ultils/validate';
 
-const CreatePackage = () => {
+const CreatePackage = ({ isModalOpen, setIsShowModal }) => {
   const token = Cookies.get('token');
   const [form] = Form.useForm();
   const dispath = useDispatch();
-  let isModalOpen = useSelector((state) => state.user.isModalCreatePackage);
-  let resultCreate = useSelector((state) => state.user.resultCreate);
 
   //hook
-  const [isShowToast, setIsShowToast] = useState(false);
-  useEffect(() => {}, [resultCreate]);
-  useEffect(() => {
-    if (isShowToast) {
-      if (resultCreate.error || resultCreate.result === constants.STATUS.FAIL) {
-        toast.error('Thêm mới không  thành công');
-      }
-      if (resultCreate.result === constants.STATUS.SUCCESS) {
-        toast.success('Thêm mới  thành công');
-        dispath(actions.showModalCreatePackage(false));
-        form.resetFields();
-        dispath(actions.getDataListPackage(token));
-      }
-    }
-  }, [dispath, form, isShowToast, resultCreate.error, resultCreate.result, token]);
 
   // handle
-  const onFinish = (values) => {
-    dispath(actions.createPackage({ ...values, price: +values.price, status: constants.STATUS.ACTIVE }, token));
-    setIsShowToast(true);
+  const onFinish = async (values) => {
+    try {
+      const data = await apiPackage.createNewPackage({ ...values, price: +values.price, status: constants.STATUS.ACTIVE }, token);
+
+      if (data && data.data && data.data.result) {
+        if (data.data.result === constants.STATUS.SUCCESS) {
+          toast.success('Thêm mới thành công');
+          setIsShowModal(false);
+          form.resetFields();
+          dispath(actions.getDataListPackage(token));
+        } else {
+          toast.success('Thêm mới không thành công');
+        }
+      }
+    } catch (e) {
+      toast.error('Gói cước đã tồn tại');
+    }
   };
   const handleCreate = () => {
     form.submit();
   };
   const handleClose = () => {
-    dispath(actions.showModalCreatePackage(false));
+    setIsShowModal(false);
     form.resetFields();
   };
 
@@ -154,8 +152,8 @@ const CreatePackage = () => {
                       message: 'Vui lòng không bỏ trống',
                     },
                     {
-                      validator:validateCycle
-                    }
+                      validator: validateCycle,
+                    },
                   ]}>
                   <Input size="middle" placeholder="eg :1D 2M , 3Y" />
                 </Form.Item>
@@ -164,7 +162,10 @@ const CreatePackage = () => {
             <Row justify="space-between"></Row>
             <Row justify="space-between">
               <Col md={24}>
-                <Form.Item name="description" label="Mô tả"  rules={[
+                <Form.Item
+                  name="description"
+                  label="Mô tả"
+                  rules={[
                     {
                       required: true,
                       message: 'Vui lòng không bỏ trống',
@@ -181,4 +182,4 @@ const CreatePackage = () => {
     </>
   );
 };
-export default CreatePackage;
+export default memo(CreatePackage);

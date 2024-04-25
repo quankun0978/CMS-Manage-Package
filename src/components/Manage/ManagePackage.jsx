@@ -13,6 +13,7 @@ import ModalEditPackage from 'components/Edit/ModalEditPackage';
 import * as actions from 'store/actions/userActions';
 import * as constants from 'constants/consants';
 import * as convert from 'ultils/convert';
+import * as apiPackage from 'api/apiPackage';
 import { convertStatus } from 'ultils/convert';
 import { columnTablePackage } from 'constants/columns';
 
@@ -23,18 +24,17 @@ const ManagePackage = () => {
   const dispath = useDispatch();
   const token = Cookies.get('token');
   const dataDecode = useSelector((state) => state.user.dataDecode);
-  const resultChangeStatusPackage = useSelector((state) => state.user.resultChangeStatusPackage);
   let column = dataDecode.autoflex_role === constants.ROLE.READ ? columnTablePackage.read : columnTablePackage.write;
   const dataListPackage = useSelector((state) => state.user.dataListPackage);
-  let resultDeletePackage = useSelector((state) => state.user.resultDeletePackage);
 
   //hook
   const [loading, setLoading] = useState(false);
-  const [isShowToastChangeStatus, setIsShowToastChangeStatus] = useState(false);
-  const [isShowToastDelete, setIsShowToastDelete] = useState(false);
+  const [isShowModalCreate, setIsShowModalCreate] = useState(false);
+  const [isShowModalUpdate, setIsShowModalUpdate] = useState(false);
   const [data, setData] = useState([]);
   const [dataOrigin, setDataOrigin] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [packageCurrent, setPackageCurrent] = useState();
 
   const [tableParams, setTableParams] = useState({
     pagination: {
@@ -52,7 +52,6 @@ const ManagePackage = () => {
   }, []);
 
   useEffect(() => {
-    
     if (dataListPackage.length > 0) {
       setIsLoading(false);
       let dtTable = dataListPackage.map((item, index) => {
@@ -69,10 +68,10 @@ const ManagePackage = () => {
                 gap: '10px',
               }}>
               <Tooltip placement="topLeft" title="chỉnh sửa">
-                <Button type="primary" style={{ backgroundColor: '#ffca2c' }} icon={<EditOutlined />} size="default" onClick={() => handleClickEdit(item.code)} />
+                <Button type="primary" style={{ backgroundColor: '#ffca2c' }} icon={<EditOutlined />} size="default" onClick={() => handleClickEdit(item)} />
               </Tooltip>
               <Tooltip placement="topLeft" title="Xóa">
-                <Button style={{ backgroundColor: 'red', color: '#fff' }} icon={<DeleteOutlined />} size="default" onClick={() => handleClickDelete(item.code)} />
+                <Button style={{ backgroundColor: 'red', color: '#fff' }} icon={<DeleteOutlined />} size="default" onClick={() => onClickDelete(item.code)} />
               </Tooltip>
               <Select onChange={(value) => handleSelectChange(value, item.code)} value={item.status && item.status} style={{ width: '100px' }}>
                 <Option value="ACTIVE">Kích hoạt</Option>
@@ -93,51 +92,36 @@ const ManagePackage = () => {
     }
   }, [dataListPackage, tableParams.pagination.pageSize]);
 
-  useEffect(() => {
-    if (isShowToastChangeStatus) {
-      if (resultChangeStatusPackage.result === constants.STATUS.SUCCESS) {
-        toast.success('Thành công');
-        setIsShowToastChangeStatus(false);
-        dispath(actions.getDataListPackage(token));
-      }
-      if (resultChangeStatusPackage.result === constants.STATUS.FAIL || resultChangeStatusPackage.error) {
-        toast.error('Thất bại');
-        setIsShowToastChangeStatus(false);
-      }
-    }
-  }, [dispath, resultChangeStatusPackage.error, token, resultChangeStatusPackage.result, resultChangeStatusPackage.message, isShowToastChangeStatus]);
-
-  useEffect(() => {
-    if (isShowToastDelete) {
-      if (resultDeletePackage.result === constants.STATUS.SUCCESS) {
-        toast.success('Xóa thành công');
-        setIsShowToastDelete(false);
-        dispath(actions.getDataListPackage(token));
-      }
-      if (resultDeletePackage.result === constants.STATUS.FAIL || resultDeletePackage.error) {
-        toast.error('Xóa thất bại');
-        setIsShowToastDelete(false);
-      }
-    }
-  }, [dispath, resultDeletePackage.error, token, resultDeletePackage.result, resultDeletePackage.message, isShowToastDelete]);
-
   //handle
   const handleClickCreate = () => {
-    dispath(actions.showModalCreatePackage(true));
+    setIsShowModalCreate(true);
   };
-  const handleClickEdit = (packagecode) => {
-    dispath(actions.showModalEditPackage(true));
-    dispath(actions.getPackageByPackageCode(packagecode));
+  const handleClickEdit = (packageCurrent) => {
+    setPackageCurrent({ ...packageCurrent, cycle: convert.convertDateToCycle(packageCurrent.cycle) });
+    setIsShowModalUpdate(true);
   };
-  const handleClickDelete = (packagecode) => {
-    // dispath(actions.getPackageByPackageCode(packagecode));
-    // dispath(actions.showModalDeletePackage(true));
+  const handleDelete = async (packagecode) => {
+    try {
+      const data = await apiPackage.deletePackageByCode({ package_code: packagecode }, token);
+
+      if (data && data.data && data.data.result) {
+        if (data.data.result === constants.STATUS.SUCCESS) {
+          toast.success('Xóa thành công');
+          dispath(actions.getDataListPackage(token));
+        } else {
+          toast.success('Xóa không thành công');
+        }
+      }
+    } catch (e) {
+      toast.error('Xóa không thành công');
+    }
+  };
+  const onClickDelete = (packagecode) => {
     confirm({
       title: 'Xác nhận',
       content: `Bạn có muốn xóa gói cước ${packagecode}?`,
       onOk() {
-        dispath(actions.handleDeletePackage(packagecode, token));
-        setIsShowToastDelete(true);
+        handleDelete(packagecode);
       },
       onCancel() {},
     });
@@ -152,14 +136,41 @@ const ManagePackage = () => {
     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
     }
   };
+  const handleChangeStatus = async (packagecode, value) => {
+    console.log(value);
+    try {
+      if (value === 'ACTIVE') {
+        const data = await apiPackage.enablePackage({ package_code: packagecode }, token);
+        if (data && data.data && data.data.result) {
+          if (data.data.result === constants.STATUS.SUCCESS) {
+            toast.success('Kích hoạt gói cước thành công');
+            dispath(actions.getDataListPackage(token));
+          } else {
+            toast.success('Kích hoạt gói cước thành công');
+          }
+        }
+      } else {
+        const data = await apiPackage.disablePackage({ package_code: packagecode }, token);
+        if (data && data.data && data.data.result) {
+          if (data.data.result === constants.STATUS.SUCCESS) {
+            toast.success('Ngừng kích hoạt gói cước thành công');
+            dispath(actions.getDataListPackage(token));
+          } else {
+            toast.success('Ngừng kích hoạt gói cước thất bại');
+          }
+        }
+      }
+    } catch (e) {
+      toast.error('Thất bại');
+    }
+  };
 
   const handleSelectChange = (value, packagecode) => {
     confirm({
       title: 'Xác nhận',
       content: `Bạn có muốn "${convertStatus(value)}" gói cước này?`,
       onOk() {
-        dispath(actions.handleChangeStatusPackage(packagecode, token, value));
-        setIsShowToastChangeStatus(true);
+        handleChangeStatus(packagecode, value);
       },
       onCancel() {},
     });
@@ -188,8 +199,8 @@ const ManagePackage = () => {
           x: 'max-content',
         }}
       />
-      <CreatePackage />
-      <ModalEditPackage />
+      <CreatePackage isModalOpen={isShowModalCreate} setIsShowModal={setIsShowModalCreate} />
+      <ModalEditPackage isModalOpen={isShowModalUpdate} setIsShowModal={setIsShowModalUpdate} dataPackageByPackagecode={packageCurrent} />
       <ModalDeletePackage />
     </>
   );

@@ -1,23 +1,18 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { Layout, theme } from 'antd';
 import Cookies from 'js-cookie';
-import { jwtDecode } from 'jwt-decode';
 
 import HeaderDashBoard from 'components/header/Header';
-import Admin from 'routes/admin';
-import UserRead from 'routes/user-read';
-import UserWrite from 'routes/user-write';
 
 import logo from 'assets/img/logo_home.png';
 import Menu from 'components/Navigation/Navigation';
-import * as constants from 'constants/consants';
 import * as actions from 'store/actions/adminActions';
 
 import 'styles/home.scss';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 const { Content, Sider } = Layout;
 
@@ -28,7 +23,6 @@ const Home = () => {
   const count = useRef(0);
   const dispath = useDispatch();
   const token = Cookies.get('token');
-  const [role, setRole] = useState();
 
   // const [component, setComponent] = useState();
   const {
@@ -42,15 +36,6 @@ const Home = () => {
   useEffect(() => {
     dispath(actions.getDataListUser(token));
   }, [dispath, token]);
-
-  // useEffect(() => {
-  //   if (token) {
-  //     const decodedToken = jwtDecode(token);
-  //     if (decodedToken.autoflex_role) {
-  //       setRole(decodedToken.autoflex_role);
-  //     }
-  //   }
-  // }, [token]);
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -80,9 +65,6 @@ const Home = () => {
               borderRadius: borderRadiusLG,
             }}>
             <Outlet />
-            {/* {role && role === constants.ROLE.ADMIN && <Admin />}
-            {role && role === constants.ROLE.WRITE && <UserWrite />}
-            {role && role === constants.ROLE.READ && <UserRead />} */}
           </div>
         </Content>
       </Layout>

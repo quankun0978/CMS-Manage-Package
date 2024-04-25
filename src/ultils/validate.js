@@ -9,15 +9,11 @@ export const validateEmail = (_, value) => {
 };
 
 export const validatePassword = (_, value, result) => {
-  if (!value) {
+  const passwordRegex = /^(?=.*[!@#$%^&*(),.?\":{}|<>])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}$/;
+  if (!value || passwordRegex.test(value)) {
     return Promise.resolve();
   }
-  if (result && Object.keys(result).length > 0) {
-    if (result.result === constants.STATUS.SUCCESS) {
-      return Promise.resolve();
-    }
-  }
-  return Promise.reject('Mật khẩu không chính xác');
+  return Promise.reject('Mật khẩu gồm có ký tự đặc biệt, ký tự hoa, ký tự thường và số');
 };
 
 export const validatePhone = (_, value) => {

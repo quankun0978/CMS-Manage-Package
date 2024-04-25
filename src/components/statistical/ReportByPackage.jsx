@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Table, DatePicker, theme, Space, Button, Select, Form } from 'antd';
 
@@ -8,8 +8,6 @@ import Cookies from 'js-cookie';
 import * as ultils from 'ultils/convert';
 import * as columns from 'constants/columns';
 import { reportPackage } from 'api/apiPackage';
-import moment from 'moment';
-import dayjs from 'dayjs';
 
 const ReportByPackage = () => {
   const { token } = theme.useToken();
@@ -19,9 +17,6 @@ const ReportByPackage = () => {
     border: `1px solid ${token.colorPrimary}`,
     borderRadius: '50%',
   };
-  const dateFormat = 'DD-MM-YYYY';
-
-  const defaultValue = [moment('01-01-2024', dateFormat), moment('31-01-2024', dateFormat)];
 
   // hook
   const [data, setData] = useState([]);
@@ -50,14 +45,8 @@ const ReportByPackage = () => {
           value: item.code,
         };
       });
-      dt.push({
-        label: 'BUM6M',
-        value: 'BUM6M',
-      });
-      setOptions(dt);
 
-      // handleGetData();
-      // handleGetDataDefault();
+      setOptions(dt);
     }
   }, [dataListPackage]);
 
@@ -75,10 +64,6 @@ const ReportByPackage = () => {
     );
   }, []);
 
-  const handleGetDataDefault = async () => {
-    const res = await reportPackage({ from: '20240101', to: ultils.convertDataDate(), code: 'BUM6M' }, tokenLogin);
-    if (res && res.data && res.data.result.length > 0) setData(res.data.result);
-  };
   // handle
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
@@ -116,18 +101,7 @@ const ReportByPackage = () => {
       <Form>
         <Space direction="horizontal">
           <DatePicker.RangePicker size="large" format={'DD-MM-YYYY'} placeholder={['Từ ngày', 'đến ngày']} onChange={handleRangePickerChange} cellRender={cellRender} />
-          <Select
-            size="large"
-            placeholder="Mã gói"
-            // options={[
-            //   {
-            //     label: 'BUM6M',
-            //     values: 'BUM6M',
-            //   },
-            // ]}
-            options={options && options.length > 0 && options}
-            onChange={handleChange}
-          />
+          <Select size="large" placeholder="Mã gói" options={options && options.length > 0 && options} onChange={handleChange} />
           <Button size="large" onClick={handleGetData}>
             Tìm kiếm
           </Button>

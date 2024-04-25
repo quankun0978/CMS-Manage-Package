@@ -1,44 +1,33 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import Cookies from 'js-cookie';
 import { Button, Col, Form, Input, Row } from 'antd';
-
-import * as constants from 'constants/consants';
-import * as apiUser from 'api/apiUser';
-import 'styles/info.scss';
-import { useSelector } from 'react-redux';
 import { validatePassword } from 'ultils/validate';
+import * as apiUser from 'api/apiUser';
+import * as constants from 'constants/consants';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from 'constants/consants';
 
-const token = Cookies.get('token');
-
-const DetailUser = () => {
+const UpdatePassword = () => {
   const [form] = Form.useForm();
-  let dataDecode = useSelector((state) => state.user.dataDecode);
-  // hook
+  const navigate = useNavigate();
+  const username = sessionStorage.getItem('username');
   const [error, setError] = useState('');
-  // const [dataDecode, setDataDecode] = useState({});
-
   useEffect(() => {
-    if (Object.keys(dataDecode).length > 0) {
-      let data = {
-        username: dataDecode['autoflex-username'],
-        role: dataDecode.autoflex_role,
-      };
-      form.setFieldsValue(data);
+    if (!username) {
+      navigate(PATH.DANG_NHAP);
     }
-  }, [dataDecode]);
+  }, [username]);
 
-  //handle
   const onFinish = async (values) => {
     try {
-      const data = await apiUser.changePasswordUser({ username: values.username, old_password: values.passwordold, new_password: values.passwordnew, confirm_new_password: values.confirmPassword }, token);
-
+      const data = await apiUser.updatePassword({ username: sessionStorage.getItem('username'), old_password: values.passwordold, new_password: values.passwordnew, confirm_new_password: values.confirmPassword });
       if (data && data.data && data.data.result) {
         if (data.data.result === constants.STATUS.SUCCESS) {
-          toast.success('Đổi mật khẩu thành công');
+          toast.success('Cập nhật mật khẩu thành công');
           setError('');
           form.setFieldsValue({ passwordnew: '', passwordold: '', confirmPassword: '' });
+          navigate(PATH.DANG_NHAP);
         } else {
           setError('Mật khẩu không chính xác');
           // toast.error('Mật khẩu không chính xác');
@@ -48,37 +37,20 @@ const DetailUser = () => {
       setError('Mật khẩu không chính xác');
     }
   };
-
+  const handleRedirect = () => {
+    navigate(PATH.DANG_NHAP);
+    sessionStorage.removeItem('username');
+  };
   return (
-    <div className="modal-detail-content h-100 ">
-      <Row justify="space-between">
+    <div className="modal-detail-content  " style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Row justify="space-between " style={{ width: '600px' }}>
         <Col md={24}>
           <div className="modal-detail-info ">
             <Form onFinish={onFinish} name="register" layout="vertical" form={form}>
-              <Row>
-                <Col md={24}>
-                  <div>
-                    <Row justify="space-between">
-                      <Col md={12}>
-                        <Form.Item style={{ marginRight: '10px' }} label="Tên đăng nhập" name="username">
-                          <Input disabled size="middle" />
-                        </Form.Item>
-                      </Col>
-                      <Col md={12}>
-                        <Form.Item style={{ marginLeft: '10px' }} label="Quyền" name="role">
-                          <Input disabled size="middle"></Input>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </div>
-                </Col>
-              </Row>
+              <h2 style={{ textAlign: 'center', padding: '12px 0', fontWeight: 'bold' }}>Vui lòng cập nhật mật khẩu</h2>
               <Row>
                 <Col md={24}>
                   <div className="change-password boder">
-                    <h3 style={{ paddingBottom: '10px' }} className="title-bold">
-                      Đổi mật khẩu
-                    </h3>
                     <Form.Item
                       rules={[
                         {
@@ -123,14 +95,16 @@ const DetailUser = () => {
                       name="confirmPassword">
                       <Input.Password size="middle" />
                     </Form.Item>
-                    <Form.Item style={{ margin: '0', transform: 'translateY(-15px)' }}>
+                    <Form.Item style={{ margin: '0', transform: 'translateY(-10px)' }}>
                       <div className="ant-form-item-explain-error">{error}</div>
                     </Form.Item>
                     <Row justify="end" style={{ gap: '10px' }}>
                       <Button htmlType="submit" type="primary">
                         Xác nhận
                       </Button>
-                      <Button type="default">Hủy</Button>
+                      <Button type="default" onClick={handleRedirect}>
+                        Hủy
+                      </Button>
                     </Row>
                   </div>
                 </Col>
@@ -143,4 +117,4 @@ const DetailUser = () => {
   );
 };
 
-export default memo(DetailUser);
+export default UpdatePassword;

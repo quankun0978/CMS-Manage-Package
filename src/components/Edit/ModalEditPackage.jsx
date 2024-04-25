@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -7,56 +7,51 @@ import { Col, Form, Input, Row, Select, Button, Modal } from 'antd';
 
 import * as constants from 'constants/consants';
 import * as actions from 'store/actions/userActions';
+import * as apiPackage from 'api/apiPackage';
 import { validatePrice, validateCycle } from 'ultils/validate';
 import 'react-toastify/dist/ReactToastify.css';
 
 const token = Cookies.get('token');
 
-const ModalEditPackage = () => {
+const ModalEditPackage = ({ dataPackageByPackagecode, isModalOpen, setIsShowModal }) => {
   let dispath = useDispatch();
   const [form] = Form.useForm();
-  let isModalOpen = useSelector((state) => state.user.isModalEditPackage);
-  let dataPackageByPackagecode = useSelector((state) => state.user.dataPackageByPackagecode);
-  let resultUpdatePackage = useSelector((state) => state.user.resultUpdatePackage);
 
   //hook
-  const [isShowToast, setIsShowToast] = useState(false);
 
   useEffect(() => {
     if (form.__INTERNAL__.name) {
       form.resetFields();
-      setTimeout(() => {
-        form.setFieldsValue(dataPackageByPackagecode);
-      }, 1000);
+      form.setFieldsValue(dataPackageByPackagecode);
     }
   }, [dataPackageByPackagecode]);
 
-  useEffect(() => {
-    if (isShowToast) {
-      if (resultUpdatePackage.error || resultUpdatePackage.result === constants.STATUS.FAIL) {
-        toast.error('Cập nhật không  thành công');
-      }
-      if (resultUpdatePackage.result === constants.STATUS.SUCCESS) {
-        toast.success('Cập nhật  thành công');
-        dispath(actions.showModalEditPackage(false));
-        form.resetFields();
-        dispath(actions.getDataListPackage(token));
-      }
-    }
-  }, [dispath, form, isShowToast, resultUpdatePackage.error, resultUpdatePackage.result]);
-
   //handle
-  const onFinish = (values) => {
-    dispath(actions.handleUpdatePackage(values, token));
+  const onFinish = async (values) => {
+    try {
+      const data = await apiPackage.updatePackage({ ...values, price: +values.price, status: constants.STATUS.ACTIVE }, token);
+
+      if (data && data.data && data.data.result) {
+        if (data.data.result === constants.STATUS.SUCCESS) {
+          toast.success('Cập nhật thành công');
+          setIsShowModal(false);
+          form.resetFields();
+          dispath(actions.getDataListPackage(token));
+        } else {
+          toast.success('Cập nhật không thành công');
+        }
+      }
+    } catch (e) {
+      toast.error('Cập nhật không thành công');
+    }
   };
 
   const handleClose = () => {
-    dispath(actions.showModalEditPackage(false));
+    setIsShowModal(false);
   };
 
   const handleSave = () => {
     form.submit();
-    setIsShowToast(true);
   };
 
   return (
@@ -177,4 +172,4 @@ const ModalEditPackage = () => {
   );
 };
 
-export default ModalEditPackage;
+export default memo(ModalEditPackage);

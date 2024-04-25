@@ -1,13 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 
-import { Table, DatePicker, theme, Space, Button, Form } from 'antd';
+import { Table, DatePicker, theme, Space } from 'antd';
 
 import Cookies from 'js-cookie';
-import lodash, { sum } from 'lodash';
+import lodash from 'lodash';
 
 import * as ultils from 'ultils/convert';
-import * as actions from 'store/actions/userActions';
+import * as api from 'api/apiReport';
 
 const columns = [
   {
@@ -89,41 +88,8 @@ const columns = [
   },
 ];
 
-const columnsChild = [
-  {
-    title: 'Tổng',
-    dataIndex: 'date',
-    width: '20%',
-  },
-
-  {
-    title: '60,808,000',
-    width: '13.3%',
-  },
-  {
-    title: '3,829',
-  },
-  {
-    title: '  2,649',
-    width: '13.3%',
-  },
-  {
-    title: '0.53%   ',
-    width: '13.3%',
-  },
-  {
-    title: '1180   ',
-    width: '13.3%',
-  },
-  {
-    title: '69.18%   ',
-    width: '13.3%',
-  },
-];
-
 const Statistical = () => {
   const { token } = theme.useToken();
-  const dispath = useDispatch();
   const tokenLogin = Cookies.get('token');
   const style = {
     border: `1px solid ${token.colorPrimary}`,
@@ -131,7 +97,8 @@ const Statistical = () => {
   };
 
   // hook
-  let dataInfoReport = useSelector((state) => state.user.dataInfoReport);
+  // let dataInfoReport = useSelector((state) => state.user.dataInfoReport);
+  const [dataInfoReport, setDataInfoReport] = useState([]);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [columnSum, setColumnSum] = useState();
@@ -143,19 +110,13 @@ const Statistical = () => {
   });
   useEffect(() => {
     setIsLoading(true);
-
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
-    dispath(
-      actions.handleGetInfoReport(
-        {
-          from: '20230101',
-          to: ultils.convertDataDate,
-        },
-        tokenLogin
-      )
-    );
+    handleGetData({
+      from: '20230101',
+      to: ultils.convertDataDate,
+    });
   }, []);
 
   useEffect(() => {
@@ -200,15 +161,13 @@ const Statistical = () => {
         },
         {
           title: `${lodash.sum(sumRevenue3)}`,
+          width: '13.3%',
         },
         {
           title: `${lodash.sum(sumRevenue1)}`,
           width: '13.3%',
         },
-        {
-          title: `${(lodash.sum(sumRevenue4) / sumRevenue4.length).toFixed(3) * 100 + '%'}`,
-          width: '13.3%',
-        },
+
         {
           title: `${lodash.sum(sumRevenue2)}`,
           width: '13.3%',
@@ -221,7 +180,10 @@ const Statistical = () => {
       setColumnSum(columnsSum);
     } else setData([]);
   }, [dataInfoReport]);
-
+  const handleGetData = async (payload) => {
+    const data = await api.getInfoReport(payload, tokenLogin);
+    setDataInfoReport(data.data);
+  };
   const cellRender = React.useCallback((current, info) => {
     if (info.type !== 'date') {
       return info.originNode;
@@ -253,7 +215,7 @@ const Statistical = () => {
       from: dataDate[0],
       to: dataDate[1],
     };
-    dispath(actions.handleGetInfoReport(data, tokenLogin));
+    handleGetData(data);
   };
   return (
     <>

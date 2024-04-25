@@ -8,14 +8,13 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import ModalEdit from 'components/Edit/ModalEditUser';
 import ModalCreateUser from 'components/Create/ModalCreateUser';
-import ConfirmDeleteUser from 'components/Delete/ModalDeleteUser';
-import ModalResetPassword from 'components/ResetPassword/ModalResetPassword';
 
-import { columnTablePackage, columnTableUser } from 'constants/columns';
+import { columnTableUser } from 'constants/columns';
 import * as actions from 'store/actions/adminActions';
 import * as constants from 'constants/consants';
+import * as apiUser from 'api/apiUser';
+
 import 'styles/manage.scss';
-import { useNavigate } from 'react-router-dom';
 
 import { convertTimeString } from 'ultils/convert';
 import { jwtDecode } from 'jwt-decode';
@@ -25,24 +24,20 @@ const { confirm } = Modal;
 
 const ManageUser = () => {
   const dispath = useDispatch();
-  const navigate = useNavigate();
 
   const dataTable = useRef();
   const token = Cookies.get('token');
   const dataDecode = token ? jwtDecode(token) : {};
   let column = dataDecode.autoflex_role === constants.ROLE.ADMIN ? columnTableUser.admin : columnTableUser.user;
   let dataListUser = useSelector((state) => state.admin.dataListUser);
-  let resultDeleteUser = useSelector((state) => state.admin.resultDeleteUser);
-  let resultResetPassword = useSelector((state) => state.admin.resultResetPassword);
 
   //hook
-
-  const [inputSearch, setInputSearch] = useState('');
+  const [isShowModalCreate, setIsShowModalCreate] = useState(false);
+  const [isShowModalUpdate, setIsShowModalUpdate] = useState(false);
+  const [userCurrent, setUserCurrent] = useState();
   const [data, setData] = useState([]);
   const [dataOrigin, setDataOrigin] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isShowToastDelete, setIsShowToastDelete] = useState(false);
-  const [isShowToastResetPassword, setIsShowToastResetPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [tableParams, setTableParams] = useState({
     pagination: {
@@ -50,10 +45,6 @@ const ManageUser = () => {
       pageSize: 10,
     },
   });
-
-  useEffect(() => {
-    dispath(actions.getDataListUser(token));
-  }, []);
 
   useEffect(() => {
     if (dataListUser.length > 0) {
@@ -74,13 +65,13 @@ const ManageUser = () => {
                 gap: '10px',
               }}>
               <Tooltip placement="topLeft" title="Làm mới mật khẩu" color="">
-                <Button type="primary" icon={<i className="fa-solid fa-rotate"></i>} size="default" onClick={() => handleClickResetPassword(item.username)} />
+                <Button type="primary" icon={<i className="fa-solid fa-rotate"></i>} size="default" onClick={() => onClickResetPassword(item.username)} />
               </Tooltip>
               <Tooltip placement="topLeft" title="chỉnh sửa">
-                <Button type="primary" style={{ backgroundColor: '#ffca2c' }} icon={<EditOutlined />} size="default" onClick={() => handleClickEdit(item.username)} />
+                <Button type="primary" style={{ backgroundColor: '#ffca2c' }} icon={<EditOutlined />} size="default" onClick={() => onClickEdit(item)} />
               </Tooltip>
               <Tooltip placement="topLeft" title="Xóa">
-                <Button style={{ backgroundColor: 'red', color: '#fff' }} icon={<DeleteOutlined />} size="default" onClick={() => handleClickDelete(item.username)} />
+                <Button style={{ backgroundColor: 'red', color: '#fff' }} icon={<DeleteOutlined />} size="default" onClick={() => onClickDelete(item.username)} />
               </Tooltip>
             </div>
           ),
@@ -101,58 +92,59 @@ const ManageUser = () => {
     }
   }, [dataListUser, tableParams.pagination.pageSize]);
 
-  useEffect(() => {
-    if (isShowToastDelete) {
-      if (resultDeleteUser.result === constants.STATUS.SUCCESS) {
-        toast.success('Xóa thành công');
-        setIsShowToastDelete(false);
-        dispath(actions.getDataListUser(token));
-      }
-      if (resultDeleteUser.result === constants.STATUS.FAIL || resultDeleteUser.error) {
-        toast.error('Xóa thất bại');
-        setIsShowToastDelete(false);
-      }
-    }
-  }, [dispath, resultDeleteUser.error, token, resultDeleteUser.result, resultDeleteUser.message, isShowToastDelete]);
-  useEffect(() => {
-    if (isShowToastResetPassword) {
-      if (resultResetPassword.result === constants.STATUS.SUCCESS) {
-        toast.success('Làm mới thành công');
-        setIsShowToastResetPassword(false);
-        dispath(actions.getDataListUser(token));
-      }
-      if (resultResetPassword.result === constants.STATUS.FAIL || resultResetPassword.error) {
-        toast.error('Làm mới thất bại');
-        setIsShowToastResetPassword(false);
-      }
-    }
-  }, [dispath, resultResetPassword.error, token, resultResetPassword.result, resultResetPassword.message, isShowToastDelete, isShowToastResetPassword]);
-
   //handle
-  const handleClickEdit = (username) => {
-    dispath(actions.showModalEditUser(true));
-    dispath(actions.getUserByUsername(username));
+  const onClickEdit = (userCurrent) => {
+    setIsShowModalUpdate(true);
+    setUserCurrent(userCurrent);
   };
-  const handleClickDelete = (username) => {
+  const handleDelete = async (username) => {
+    try {
+      const data = await apiUser.deleteUser({ username: username }, token);
+
+      if (data && data.data && data.data.result) {
+        if (data.data.result === constants.STATUS.SUCCESS) {
+          toast.success('Xóa thành công');
+          dispath(actions.getDataListUser(token));
+        } else {
+          toast.success('Xóa không thành công');
+        }
+      }
+    } catch (e) {
+      toast.error('Xóa không thành công');
+    }
+  };
+  const onClickDelete = (username) => {
     confirm({
       title: 'Xác nhận',
       content: `Bạn có muốn xóa người dùng ${username}?`,
       onOk() {
-        dispath(actions.handleDeleteUser(username, token));
-        setIsShowToastDelete(true);
+        handleDelete(username);
       },
       onCancel() {},
     });
   };
-  const handleClickResetPassword = (username) => {
-    // dispath(actions.getUserByUsername(username));
-    // dispath(actions.showModalResetPasswword(true));
+  const handleResetPassword = async (username) => {
+    try {
+      const data = await apiUser.resetPasswordUser({ username: username }, token);
+
+      if (data && data.data && data.data.result) {
+        if (data.data.result === constants.STATUS.SUCCESS) {
+          toast.success('Làm mới thành công');
+          dispath(actions.getDataListUser(token));
+        } else {
+          toast.success('Làm mới không thành công');
+        }
+      }
+    } catch (e) {
+      toast.error('Làm mới không thành công');
+    }
+  };
+  const onClickResetPassword = (username) => {
     confirm({
       title: 'Xác nhận',
       content: `Bạn có muốn làm mới mật khẩu người dùng ${username}?`,
       onOk() {
-        dispath(actions.handleResetPassword(username, token));
-        setIsShowToastResetPassword(true);
+        handleResetPassword(username);
       },
       onCancel() {},
     });
@@ -177,18 +169,9 @@ const ManageUser = () => {
       setData([]);
     }
   };
-  const handleChangeInput = (e) => {
-    setInputSearch(e.target.value);
-    let dataCp = [...data];
-    let dataFilter = dataCp.filter((item) => {
-      return item.name.includes(e.target.value);
-    });
-    if (dataFilter.length > 0) setData(dataFilter);
-    if (dataFilter.length === 0) setData([]);
-    if (!e.target.value) setData(dataOrigin);
-  };
+
   const handleClickAdd = () => {
-    dispath(actions.showModalCreateUser(true));
+    setIsShowModalCreate(true);
   };
 
   return (
@@ -218,10 +201,8 @@ const ManageUser = () => {
         style={{ transform: 'translateY(15px)' }}
         isLoading={isLoading}
       />
-      <ModalEdit />
-      <ModalCreateUser />
-      <ConfirmDeleteUser />
-      <ModalResetPassword />
+      <ModalEdit isModalOpen={isShowModalUpdate} setIsShowModal={setIsShowModalUpdate} dataUserByUsername={userCurrent} />
+      <ModalCreateUser isModalOpen={isShowModalCreate} setIsShowModal={setIsShowModalCreate} />
     </>
   );
 };
