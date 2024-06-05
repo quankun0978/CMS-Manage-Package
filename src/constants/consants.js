@@ -10,12 +10,13 @@ export const PATH = {
   SAN_LUONG_TUNG_GOI: '/thong-ke/san-luong-tung-goi',
   BAO_CAO_CHUNG: '/thong-ke/bao-cao-chung',
   THONG_KE_THEO_GOI_CUOC: '/thong-ke-theo-goi-cuoc',
-  CAP_NHAT_MAT_KHAU:'/cap-nhat-mat-khau'
+  CAP_NHAT_MAT_KHAU: '/cap-nhat-mat-khau',
 };
 
 export const STATUS = {
   INACTIVE: 'INACTIVE',
   ACTIVE: 'ACTIVE',
+  INVITED: 'INVITED',
   SUCCESS: 'SUCCESS',
   FAIL: 'FAIL',
 };

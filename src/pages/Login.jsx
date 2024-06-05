@@ -47,7 +47,6 @@ const Login = () => {
     try {
       const data = await apiUser.checkLogin({ ...values, password: values.password });
       const token = data.data.result;
-      console.log(token)
       if (token && token.access_token) {
         let decodeToken = jwtDecode(token.access_token);
         let time = new Date(decodeToken.exp * 1000);

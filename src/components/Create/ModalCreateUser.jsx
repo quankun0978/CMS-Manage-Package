@@ -9,6 +9,8 @@ import { validateEmail } from 'ultils/validate';
 import * as actions from 'store/actions/adminActions';
 import * as constants from 'constants/consants';
 import * as apiUser from 'api/apiUser';
+import { CheckCircleOutlined } from '@ant-design/icons';
+import confirm from 'antd/es/modal/confirm';
 
 const ModalCreateUser = ({ isModalOpen, setIsShowModal }) => {
   const dispath = useDispatch();
@@ -20,9 +22,9 @@ const ModalCreateUser = ({ isModalOpen, setIsShowModal }) => {
     try {
       const data = await apiUser.createNewUser(values, token);
 
-      if (data && data.data && data.data.result) {
-        if (data.data.result === constants.STATUS.SUCCESS) {
-          toast.success('Thêm mới thành công');
+      if (data && data.data && data.data.result && data.data.result.result) {
+        if (data.data.result.result === constants.STATUS.SUCCESS) {
+          showPassword(values.username, data.data.result.password);
           setIsShowModal(false);
           form.resetFields();
           dispath(actions.getDataListUser(token));
@@ -41,6 +43,28 @@ const ModalCreateUser = ({ isModalOpen, setIsShowModal }) => {
   };
   const handleCreate = () => {
     form.submit();
+  };
+
+  const showPassword = (username, password) => {
+    const confirmRef = confirm({
+      width: 500,
+      icon: <CheckCircleOutlined size={20} style={{ color: 'rgb(95, 199, 146)' }} />,
+      title: 'Mật khẩu',
+      content: (
+        <div>
+          <h6 style={{ fontWeight: 500 }}>
+            Mật khẩu của tài khoản <span>{username}</span> là
+          </h6>
+          <h6 style={{ fontWeight: 600 }}>{password}</h6>
+        </div>
+      ),
+
+      footer: () => (
+        <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
+          <Button onClick={() => confirmRef.destroy()}>Xác nhận</Button>
+        </div>
+      ),
+    });
   };
 
   return (

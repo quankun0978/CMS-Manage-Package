@@ -21,39 +21,6 @@ const RouteLogin = () => {
 
 const Root = () => {
   const token = Cookies.get('token');
-  const [token1, setToken1] = useState();
-  const [loading, setLoading] = useState(false);
-
-  const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (!token) {
-  //     handldeAwait();
-  //     handleRefreshToken();1
-  //   }
-  // }, [token]);
-  // const handldeAwait = async () => {
-  //   setLoading(true);
-  // };
-  // const handleRefreshToken = async () => {
-  //   const refresh_Token = localStorage.getItem('refresh_token');
-  //   const username = localStorage.getItem('username');
-  //   if (refresh_Token && username) {
-  //     try {
-  //       setLoading(false);
-  //       const response = await refreshToken({ username: username, refresh_token: refresh_Token });
-  //       console.log(response);
-  //       const { result } = response.data;
-  //       let expirationTime = Math.floor(Date.now() / 1000) + 60; // Set expiration to 1 minute from now
-  //       let time = new Date(expirationTime * 1000);
-  //       Cookies.set('token', result.access_token, { expires: time });
-  //       localStorage.setItem('refresh_token', result.refresh_token);
-  //       // Đợi 1 giây trước khi tái tải trang
-  //       window.location.reload();
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  // };
 
   return <>{token ? <AppRouter /> : <RouteLogin />}</>;
 };

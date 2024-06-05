@@ -3,7 +3,7 @@
     "baseUrl": "./src",
     "paths": {
       "*": ["*"],
-      "@store" :["store/"]
+      "@store": ["store/"]
     }
   },
   "include": ["src"]

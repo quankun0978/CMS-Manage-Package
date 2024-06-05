@@ -21,7 +21,6 @@ const columns = [
     title: 'Thời gian',
     dataIndex: 'updateTime',
     key: 'updateTime',
-    render: (updateTime) => `${convert.convertTimeString(updateTime)}`,
     width: '15%',
   },
 
@@ -64,7 +63,6 @@ const columns = [
   {
     title: 'Hiệu lực',
     dataIndex: 'expireTime',
-    render: (expireTime) => `${convert.convertTimeString(expireTime)}`,
   },
   {
     title: 'Kênh',

@@ -61,6 +61,17 @@ instance.interceptors.response.use(
         return Promise.reject(error);
       }
     }
+    if (error.response && error.response.status === 403) {
+      try {
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('username');
+        Cookies.remove('token');
+        window.location.reload();
+        // const response = await refreshToken({ username: username, refresh_token: refresh_Token });
+
+        return instance(originalRequest);
+      } catch (error) {}
+    }
     return Promise.reject(error);
   }
 );

@@ -33,9 +33,12 @@ const Home = () => {
     if (isLogin) count.current++;
     if (count.current === 1) toast.success('Đăng nhập thành công');
   }, []);
+
   useEffect(() => {
     dispath(actions.getDataListUser(token));
   }, [dispath, token]);
+
+  
 
   return (
     <Layout style={{ minHeight: '100vh' }}>

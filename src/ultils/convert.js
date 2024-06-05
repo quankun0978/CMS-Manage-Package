@@ -6,6 +6,8 @@ export const convertStatus = (status) => {
       return 'Kích hoạt';
     case constants.STATUS.INACTIVE:
       return 'Ngừng Kích hoạt';
+    case constants.STATUS.INVITED:
+      return 'Chưa kích hoạt';
     default:
       break;
   }

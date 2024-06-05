@@ -137,7 +137,6 @@ const ManagePackage = () => {
     }
   };
   const handleChangeStatus = async (packagecode, value) => {
-    console.log(value);
     try {
       if (value === 'ACTIVE') {
         const data = await apiPackage.enablePackage({ package_code: packagecode }, token);

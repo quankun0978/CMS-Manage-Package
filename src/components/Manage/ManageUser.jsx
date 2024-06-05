@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import Cookies from 'js-cookie';
 import { Table, Button, Row, Input, Modal, Tooltip } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
 import ModalEdit from 'components/Edit/ModalEditUser';
 import ModalCreateUser from 'components/Create/ModalCreateUser';
@@ -126,13 +126,12 @@ const ManageUser = () => {
   const handleResetPassword = async (username) => {
     try {
       const data = await apiUser.resetPasswordUser({ username: username }, token);
-
       if (data && data.data && data.data.result) {
-        if (data.data.result === constants.STATUS.SUCCESS) {
-          toast.success('Làm mới thành công');
+        if (data.data.result.result === constants.STATUS.SUCCESS) {
+          showNewPasswordReset(username, data.data.result.password);
           dispath(actions.getDataListUser(token));
         } else {
-          toast.success('Làm mới không thành công');
+          toast.error('Làm mới không thành công');
         }
       }
     } catch (e) {
@@ -172,6 +171,28 @@ const ManageUser = () => {
 
   const handleClickAdd = () => {
     setIsShowModalCreate(true);
+  };
+
+  const showNewPasswordReset = (username, password) => {
+    const confirmRef = confirm({
+      width: 500,
+      icon: <CheckCircleOutlined size={20} style={{ color: 'rgb(95, 199, 146)' }} />,
+      title: 'Mật khẩu mới',
+      content: (
+        <div>
+          <h6 style={{ fontWeight: 500 }}>
+            Mật khẩu mới của tài khoản <span>{username}</span> là
+          </h6>
+          <h6 style={{ fontWeight: 600 }}>{password}</h6>
+        </div>
+      ),
+
+      footer: () => (
+        <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
+          <Button onClick={() => confirmRef.destroy()}>Xác nhận</Button>
+        </div>
+      ),
+    });
   };
 
   return (

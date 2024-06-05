@@ -23,7 +23,9 @@ const ModalEdit = ({ dataUserByUsername, setIsShowModal, isModalOpen }) => {
   useEffect(() => {
     if (form.__INTERNAL__.name) {
       form.resetFields();
-      form.setFieldsValue(dataUserByUsername);
+      form.setFieldValue('username', dataUserByUsername.username);
+      form.setFieldValue('role', dataUserByUsername.role);
+      form.setFieldValue('status', constants.STATUS.ACTIVE);
     }
   }, [dataUserByUsername]);
 
@@ -83,7 +85,7 @@ const ModalEdit = ({ dataUserByUsername, setIsShowModal, isModalOpen }) => {
               <Form.Item label="Trạng thái" name="status">
                 <Select size="large">
                   <Select.Option value={constants.STATUS.ACTIVE}>Kích hoạt</Select.Option>
-                  <Select.Option value={constants.STATUS.INACTIVE}>Chưa kích hoạt</Select.Option>
+                  <Select.Option value={constants.STATUS.INACTIVE}>Ngừng kích hoạt</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
