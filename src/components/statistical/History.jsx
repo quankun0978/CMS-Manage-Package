@@ -15,15 +15,21 @@ const columns = [
     title: 'Số thuê bao ',
     dataIndex: 'msisdn',
     render: (name) => `${name}`,
-    width: '10%',
+    // width: '10%',
   },
   {
     title: 'Thời gian',
     dataIndex: 'updateTime',
-    key: 'updateTime',
-    width: '15%',
+    render: (updateTime) => {
+      let [date, time] = ultils.convertTimeString(updateTime) ? ultils.convertTimeString(updateTime).split(' ') : '';
+      return (
+        <div>
+          <p style={{ margin: 0 }}>{date}</p>
+          <p style={{ margin: 0 }}>{time}</p>
+        </div>
+      );
+    },
   },
-
   {
     title: 'Gói cước',
     dataIndex: 'code',
@@ -61,8 +67,17 @@ const columns = [
     dataIndex: 'status',
   },
   {
-    title: 'Hiệu lực',
-    dataIndex: 'expireTime',
+    title: 'Thời gian hiệu lực',
+    dataIndex: 'expire',
+    render: (expire) => {
+      let [date, time] = expire ? expire.split(' ') : '';
+      return (
+        <div>
+          <p style={{ margin: 0 }}>{date}</p>
+          <p style={{ margin: 0 }}>{time}</p>
+        </div>
+      );
+    },
   },
   {
     title: 'Kênh',
@@ -161,7 +176,7 @@ const History = () => {
           Tìm kiếm
         </Button>
       </Space>
-      <Table columns={columns} dataSource={data} pagination={tableParams.pagination} onChange={handleTableChange} scroll={{ y: 350, x: 'max-content' }} style={{ transform: 'translateY(15px)' }} isLoading={isLoading} />
+      <Table columns={columns} dataSource={data} pagination={tableParams.pagination} onChange={handleTableChange} scroll={{ y: 350 }} style={{ transform: 'translateY(15px)' }} isLoading={isLoading} />
     </>
   );
 };

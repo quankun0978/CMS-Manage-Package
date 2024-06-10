@@ -3,6 +3,7 @@ import { refreshToken } from './apiUser';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import { PATH } from 'constants/consants';
+import { toast } from 'react-toastify';
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_URL_BACKEND,
@@ -56,7 +57,12 @@ instance.interceptors.response.use(
         return instance(originalRequest);
       } catch (error) {
         if (error.response && error.response.status === 400) {
-          window.location.reload();
+          localStorage.removeItem('refresh_token');
+          localStorage.removeItem('username');
+          Cookies.remove('token');
+          window.location.href="/dang-nhap";
+          toast.error("Có lỗi xảy ra Vui lòng đăng nhập lại")
+
         }
         return Promise.reject(error);
       }
@@ -66,7 +72,8 @@ instance.interceptors.response.use(
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('username');
         Cookies.remove('token');
-        window.location.reload();
+        window.location.href="/dang-nhap";
+        toast.error("Có lỗi xảy ra Vui lòng đăng nhập lại")
         // const response = await refreshToken({ username: username, refresh_token: refresh_Token });
 
         return instance(originalRequest);

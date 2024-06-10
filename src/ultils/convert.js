@@ -51,16 +51,17 @@ export const convertPhone = (phone) => {
   return '84' + phone.substring(1);
 };
 
-export const convertTimeString = (timeString) => {
-  // Tách các thành phần của thời gian
-  const convertedDate = new Date(timeString);
+export const convertTimeString = (dateString) => {
+  const date = new Date(dateString);
 
-  const hours = convertedDate.getHours();
-  const minutes = convertedDate.getMinutes();
-  const seconds = convertedDate.getSeconds();
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+  const year = date.getUTCFullYear();
+  const hours = String(date.getUTCHours()).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
 
-  const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  return formattedTime + ' ' + convertedDate.getDay() + '/' + convertedDate.getMonth() + '/' + convertedDate.getFullYear();
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 };
 export const convertDataDateCurrent = () => {
   const today = new Date();

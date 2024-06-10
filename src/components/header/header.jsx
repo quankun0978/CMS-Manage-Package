@@ -56,13 +56,7 @@ const HeaderDashBoard = () => {
               </h3>
               <IconCustomize color="#ff375f" IconItem={<i className="fa-solid fa-ban"></i>} />
             </div>
-            <div className="header-item header-item-hide">
-              <h3 className="header-info">
-                Doanh thu theo tháng
-                <p className=" title-bold ">100M</p>
-              </h3>
-              <IconCustomize color="rgb(243, 170, 205)" IconItem={<i className="fa-solid fa-money-bill"></i>} />
-            </div>
+        
 
             <div className="header-item header-item-hide">
               <h3 className="header-info">

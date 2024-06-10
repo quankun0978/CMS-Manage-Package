@@ -142,12 +142,7 @@ const Statistical = () => {
       const sumRevenue3 = dataMap.map((item) => {
         return item['register'];
       });
-      const sumRevenue4 = dataMap.map((item) => {
-        return item['contact'];
-      });
-      const sumRevenue5 = dataMap.map((item) => {
-        return item['success'];
-      });
+
       const columnsSum = [
         {
           title: 'Tổng',
@@ -173,7 +168,7 @@ const Statistical = () => {
           width: '13.3%',
         },
         {
-          title: `${(lodash.sum(sumRevenue5) / sumRevenue5.length).toFixed(2) * 100 + '%'}`,
+          title: `${(lodash.sum(sumRevenue1) / lodash.sum(sumRevenue3)).toFixed(2) * 100 + '%'}`,
           width: '13.3%',
         },
       ];
