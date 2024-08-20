@@ -4,14 +4,20 @@ import { useSelector } from 'react-redux';
 import { Table, DatePicker, theme, Space, Button, Select, Form } from 'antd';
 
 import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
+
+import { exportByPackage, reportPackage } from 'api/apiPackage';
+import { toast, ToastContainer } from 'react-toastify';
 
 import * as ultils from 'ultils/convert';
 import * as columns from 'constants/columns';
-import { reportPackage } from 'api/apiPackage';
+import * as constants from 'constants/consants';
 
 const ReportByPackage = () => {
   const { token } = theme.useToken();
   const tokenLogin = Cookies.get('token');
+  const dataDecode = tokenLogin ? jwtDecode(tokenLogin) : {};
+  let isAdmin = dataDecode.autoflex_role && dataDecode.autoflex_role === constants.ROLE.ADMIN;
   const dataListPackage = useSelector((state) => state.user.dataListPackage);
   const style = {
     border: `1px solid ${token.colorPrimary}`,
@@ -92,13 +98,26 @@ const ReportByPackage = () => {
   const handleGetData = async () => {
     if (value && dataDate) {
       const data = { ...dataDate, code: value };
-      const res = await reportPackage(data, tokenLogin);
+      const res = await reportPackage(data);
       if (res && res.data && res.data.result) setData(res.data.result);
     }
   };
+
+  const handleExportData = async () => {
+    try {
+      if (dataDate && dataDate.from && dataDate.to && value) {
+        await exportByPackage({ from: dataDate.from, to: dataDate.to, code: value });
+      } else {
+        toast.error('Vui lòng chọn ngày và mã gói');
+      }
+    } catch (error) {
+      toast.error('Export không thành công vui lòng thử lại');
+    }
+  };
+
   return (
     <>
-      <Form>
+      <Form style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Space direction="horizontal">
           <DatePicker.RangePicker size="large" format={'DD-MM-YYYY'} placeholder={['Từ ngày', 'đến ngày']} onChange={handleRangePickerChange} cellRender={cellRender} />
           <Select size="large" placeholder="Mã gói" options={options && options.length > 0 && options} onChange={handleChange} />
@@ -106,6 +125,13 @@ const ReportByPackage = () => {
             Tìm kiếm
           </Button>
         </Space>
+        {isAdmin && (
+          <Space direction="horizontal">
+            <Button size="large" onClick={handleExportData}>
+              Export
+            </Button>
+          </Space>
+        )}
       </Form>
 
       <Table

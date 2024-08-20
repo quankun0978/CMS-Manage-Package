@@ -20,7 +20,7 @@ const ModalCreateUser = ({ isModalOpen, setIsShowModal }) => {
   // handle
   const onFinish = async (values) => {
     try {
-      const data = await apiUser.createNewUser(values, token);
+      const data = await apiUser.createNewUser(values);
 
       if (data && data.data && data.data.result && data.data.result.result) {
         if (data.data.result.result === constants.STATUS.SUCCESS) {

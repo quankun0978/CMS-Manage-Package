@@ -35,8 +35,8 @@ const ModalEdit = ({ dataUserByUsername, setIsShowModal, isModalOpen }) => {
   };
   const handleSave = async () => {
     try {
-      const dataRole = await apiUser.updateRole({ username: form.getFieldValue().username, role: form.getFieldValue().role }, token);
-      const dataStatus = await apiUser.updateStatus({ username: form.getFieldValue().username, status: form.getFieldValue().status }, token);
+      const dataRole = await apiUser.updateRole({ username: form.getFieldValue().username, role: form.getFieldValue().role });
+      const dataStatus = await apiUser.updateStatus({ username: form.getFieldValue().username, status: form.getFieldValue().status });
 
       if (dataRole && dataStatus && dataRole.data && dataStatus.data && dataRole.data.result && dataStatus.data.result) {
         if (dataRole.data.result === constants.STATUS.SUCCESS && dataStatus.data.result === constants.STATUS.SUCCESS) {

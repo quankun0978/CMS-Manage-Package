@@ -146,7 +146,7 @@ const History = () => {
   const handleGetData = async () => {
     if (value && dataHistory) {
       const data = { ...dataHistory, msisdn: ultils.convertPhone(value) };
-      const res = await historyRegistration(data, tokenLogin);
+      const res = await historyRegistration(data);
       if (res && res.data && res.data.result) {
         const dt = res.data.result.map((item, index) => {
           return {

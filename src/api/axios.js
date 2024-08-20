@@ -2,11 +2,10 @@ import axios from 'axios';
 import { refreshToken } from './apiUser';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
-import { PATH } from 'constants/consants';
 import { toast } from 'react-toastify';
-
+import { env } from 'env';
 const instance = axios.create({
-  baseURL: process.env.REACT_APP_URL_BACKEND,
+  baseURL: env.REACT_APP_URL_BACKEND,
   headers: {
     'Content-Type': 'application/json',
     'Control-Allow-Origin': '*',
@@ -43,7 +42,7 @@ instance.interceptors.response.use(
         const username = localStorage.getItem('username');
         // const response = await refreshToken({ username: username, refresh_token: refresh_Token });
         if (refreshToken && username) {
-          const response = await axios.post(`${process.env.REACT_APP_URL_BACKEND}/dashboard/user/refresh_token`, { username: username, refresh_token: refresh_Token });
+          const response = await axios.post(`${env.REACT_APP_URL_BACKEND}/dashboard/user/refresh_token`, { username: username, refresh_token: refresh_Token });
           const { result } = response.data;
           let decodeToken = jwtDecode(result.access_token);
           let time = new Date(decodeToken.exp * 1000);
@@ -60,9 +59,8 @@ instance.interceptors.response.use(
           localStorage.removeItem('refresh_token');
           localStorage.removeItem('username');
           Cookies.remove('token');
-          window.location.href="/dang-nhap";
-          toast.error("Có lỗi xảy ra Vui lòng đăng nhập lại")
-
+          window.location.href = '/dang-nhap';
+          toast.error('Có lỗi xảy ra Vui lòng đăng nhập lại');
         }
         return Promise.reject(error);
       }
@@ -72,13 +70,16 @@ instance.interceptors.response.use(
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('username');
         Cookies.remove('token');
-        window.location.href="/dang-nhap";
-        toast.error("Có lỗi xảy ra Vui lòng đăng nhập lại")
+        window.location.href = '/dang-nhap';
+        toast.error('Có lỗi xảy ra Vui lòng đăng nhập lại');
         // const response = await refreshToken({ username: username, refresh_token: refresh_Token });
 
         return instance(originalRequest);
       } catch (error) {}
     }
+    // if (error.response && error.response.status === 500) {
+
+    // }
     return Promise.reject(error);
   }
 );

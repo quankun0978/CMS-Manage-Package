@@ -102,7 +102,7 @@ const ManagePackage = () => {
   };
   const handleDelete = async (packagecode) => {
     try {
-      const data = await apiPackage.deletePackageByCode({ package_code: packagecode }, token);
+      const data = await apiPackage.deletePackageByCode({ package_code: packagecode });
 
       if (data && data.data && data.data.result) {
         if (data.data.result === constants.STATUS.SUCCESS) {
@@ -139,7 +139,7 @@ const ManagePackage = () => {
   const handleChangeStatus = async (packagecode, value) => {
     try {
       if (value === 'ACTIVE') {
-        const data = await apiPackage.enablePackage({ package_code: packagecode }, token);
+        const data = await apiPackage.enablePackage({ package_code: packagecode });
         if (data && data.data && data.data.result) {
           if (data.data.result === constants.STATUS.SUCCESS) {
             toast.success('Kích hoạt gói cước thành công');
@@ -149,7 +149,7 @@ const ManagePackage = () => {
           }
         }
       } else {
-        const data = await apiPackage.disablePackage({ package_code: packagecode }, token);
+        const data = await apiPackage.disablePackage({ package_code: packagecode });
         if (data && data.data && data.data.result) {
           if (data.data.result === constants.STATUS.SUCCESS) {
             toast.success('Ngừng kích hoạt gói cước thành công');

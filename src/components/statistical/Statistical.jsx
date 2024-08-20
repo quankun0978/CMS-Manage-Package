@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
-import { Table, DatePicker, theme, Space } from 'antd';
+import { Table, DatePicker, theme, Space, Button } from 'antd';
 
 import Cookies from 'js-cookie';
 import lodash from 'lodash';
 
+import { toast, ToastContainer } from 'react-toastify';
+import { jwtDecode } from 'jwt-decode';
+
 import * as ultils from 'ultils/convert';
 import * as api from 'api/apiReport';
+import * as constants from 'constants/consants';
 
 const columns = [
   {
@@ -91,6 +95,8 @@ const columns = [
 const Statistical = () => {
   const { token } = theme.useToken();
   const tokenLogin = Cookies.get('token');
+  const dataDecode = tokenLogin ? jwtDecode(tokenLogin) : {};
+  let isAdmin = dataDecode.autoflex_role && dataDecode.autoflex_role === constants.ROLE.ADMIN;
   const style = {
     border: `1px solid ${token.colorPrimary}`,
     borderRadius: '50%',
@@ -100,6 +106,7 @@ const Statistical = () => {
   // let dataInfoReport = useSelector((state) => state.user.dataInfoReport);
   const [dataInfoReport, setDataInfoReport] = useState([]);
   const [data, setData] = useState([]);
+  const [dataDate, setDataDate] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [columnSum, setColumnSum] = useState();
   const [tableParams, setTableParams] = useState({
@@ -176,7 +183,7 @@ const Statistical = () => {
     } else setData([]);
   }, [dataInfoReport]);
   const handleGetData = async (payload) => {
-    const data = await api.getInfoReport(payload, tokenLogin);
+    const data = await api.getInfoReport(payload);
     setDataInfoReport(data.data);
   };
   const cellRender = React.useCallback((current, info) => {
@@ -210,13 +217,36 @@ const Statistical = () => {
       from: dataDate[0],
       to: dataDate[1],
     };
+    setDataDate(data);
     handleGetData(data);
   };
+
+  const handleExportData = async () => {
+    try {
+      if (dataDate && dataDate.from && dataDate.to) {
+        await api.exportOverview(dataDate);
+      } else {
+        toast.error('Vui lòng chọn ngày');
+      }
+    } catch (error) {
+      toast.error('Export không thành công vui lòng thử lại');
+    }
+  };
+
   return (
     <>
-      <Space direction="horizontal">
-        <DatePicker.RangePicker size="large" format={'DD-MM-YYYY'} placeholder={['Từ ngày', 'đến ngày']} onChange={handleRangePickerChange} cellRender={cellRender} />
-      </Space>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Space direction="horizontal">
+          <DatePicker.RangePicker size="large" format={'DD-MM-YYYY'} placeholder={['Từ ngày', 'đến ngày']} onChange={handleRangePickerChange} cellRender={cellRender} />
+        </Space>
+        {isAdmin && (
+          <Space direction="horizontal">
+            <Button size="large" onClick={handleExportData}>
+              Export
+            </Button>
+          </Space>
+        )}
+      </div>
 
       <Table
         style={{ transform: 'translateY(15px)' }}

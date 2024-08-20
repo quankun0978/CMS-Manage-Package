@@ -80,7 +80,7 @@ export const getUserByUsername = (username) => {
 export const createUser = (data, token) => {
   return async (dispath, getstate) => {
     try {
-      let res = await createNewUser(data, token);
+      let res = await createNewUser(data);
       if (res && res.data && Object.keys(res.data).length > 0) dispath(createUserSuccess(res.data));
       else dispath(createUserFail(res.data));
     } catch (e) {
@@ -106,7 +106,7 @@ const createUserFail = (result) => {
 export const updateRoleUser = (data, token) => {
   return async (dispath, getstate) => {
     try {
-      let res = await updateRole(data, token);
+      let res = await updateRole(data);
       if (res && res.data && Object.keys(res.data).length > 0) dispath(updateRoleUserSuccess(res.data));
       else dispath(updateRoleUserFail(res.data));
     } catch (e) {
@@ -132,7 +132,7 @@ const updateRoleUserFail = (result) => {
 export const updateStatusUser = (data, token) => {
   return async (dispath, getstate) => {
     try {
-      let res = await updateStatus(data, token);
+      let res = await updateStatus(data);
       if (res && res.data && Object.keys(res.data).length > 0) dispath(updateStatusUserSuccess(res.data));
       else dispath(updateStatusUserFail(res.data));
     } catch (e) {
@@ -182,7 +182,7 @@ const editUserByIdFail = () => {
 export const handleDeleteUser = (username, token) => {
   return async (dispath, getstate) => {
     try {
-      let res = await deleteUser({ username }, token);
+      let res = await deleteUser({ username });
 
       if (res && res.data && Object.keys(res.data).length > 0) dispath(deleteSuccess(res.data));
       dispath(deleteFail(res.data));
@@ -209,7 +209,7 @@ const deleteFail = (results) => {
 export const handleResetPassword = (username, token) => {
   return async (dispath, getstate) => {
     try {
-      let res = await resetPasswordUser({ username }, token);
+      let res = await resetPasswordUser({ username });
 
       if (res && res.data && Object.keys(res.data).length > 0) dispath(reserPasswordSuccess(res.data));
       dispath(resetPaswordFail(res.data));

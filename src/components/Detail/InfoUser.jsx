@@ -32,7 +32,7 @@ const DetailUser = () => {
   //handle
   const onFinish = async (values) => {
     try {
-      const data = await apiUser.changePasswordUser({ username: values.username, old_password: values.passwordold, new_password: values.passwordnew, confirm_new_password: values.confirmPassword }, token);
+      const data = await apiUser.changePasswordUser({ username: values.username, old_password: values.passwordold, new_password: values.passwordnew, confirm_new_password: values.confirmPassword });
 
       if (data && data.data && data.data.result) {
         if (data.data.result === constants.STATUS.SUCCESS) {

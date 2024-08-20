@@ -99,7 +99,7 @@ const ManageUser = () => {
   };
   const handleDelete = async (username) => {
     try {
-      const data = await apiUser.deleteUser({ username: username }, token);
+      const data = await apiUser.deleteUser({ username: username });
 
       if (data && data.data && data.data.result) {
         if (data.data.result === constants.STATUS.SUCCESS) {
@@ -125,7 +125,7 @@ const ManageUser = () => {
   };
   const handleResetPassword = async (username) => {
     try {
-      const data = await apiUser.resetPasswordUser({ username: username }, token);
+      const data = await apiUser.resetPasswordUser({ username: username });
       if (data && data.data && data.data.result) {
         if (data.data.result.result === constants.STATUS.SUCCESS) {
           showNewPasswordReset(username, data.data.result.password);

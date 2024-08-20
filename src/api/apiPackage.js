@@ -1,61 +1,33 @@
 import axios from './axios';
-export const getListPackage = (token) => {
-  return axios.post('/dashboard/package/list', null, {
-    headers: {
-      Authorization: token,
-    },
-  });
+export const getListPackage = () => {
+  return axios.post('/dashboard/package/list');
 };
-export const createNewPackage = (data, token) => {
-  return axios.post('/dashboard/package/add', data, {
-    headers: {
-      Authorization: token,
-    },
-  });
+export const createNewPackage = (data) => {
+  return axios.post('/dashboard/package/add', data);
 };
-export const updatePackage = (data, token) => {
-  return axios.post('/dashboard/package/update', data, {
-    headers: {
-      Authorization: token,
-    },
-  });
+export const updatePackage = (data) => {
+  return axios.post('/dashboard/package/update', data);
 };
-export const deletePackageByCode = (data, token) => {
-  return axios.post('/dashboard/package/remove', data, {
-    headers: {
-      Authorization: token,
-    },
-  });
+export const deletePackageByCode = (data) => {
+  return axios.post('/dashboard/package/remove', data);
 };
 
-export const enablePackage = (data, token) => {
-  return axios.post('/dashboard/package/activate', data, {
-    headers: {
-      Authorization: token,
-    },
-  });
+export const enablePackage = (data) => {
+  return axios.post('/dashboard/package/activate', data);
 };
 
-export const disablePackage = (data, token) => {
-  return axios.post('/dashboard/package/deactivate', data, {
-    headers: {
-      Authorization: token,
-    },
-  });
+export const disablePackage = (data) => {
+  return axios.post('/dashboard/package/deactivate', data);
 };
 
-export const reportPackage = (data, token) => {
-  return axios.post('/dashboard/report/package', data, {
-    headers: {
-      Authorization: token,
-    },
-  });
+export const reportPackage = (data) => {
+  return axios.post('/dashboard/report/package', data);
 };
 
-export const historyRegistration = (data, token) => {
-  return axios.post('/dashboard/history/registration', data, {
-    headers: {
-      Authorization: token,
-    },
-  });
+export const exportByPackage = (data) => {
+  return axios.get(`/dashboard/report/export/package?from=${data.from}&to=${data.to}&code=${data.code}`);
+};
+
+export const historyRegistration = (data) => {
+  return axios.post('/dashboard/history/registration', data);
 };

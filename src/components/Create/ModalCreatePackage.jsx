@@ -21,14 +21,14 @@ const CreatePackage = ({ isModalOpen, setIsShowModal }) => {
   // handle
   const onFinish = async (values) => {
     try {
-      const data = await apiPackage.createNewPackage({ ...values, price: +values.price, status: constants.STATUS.ACTIVE }, token);
+      const data = await apiPackage.createNewPackage({ ...values, price: +values.price, status: constants.STATUS.ACTIVE });
 
       if (data && data.data && data.data.result) {
         if (data.data.result === constants.STATUS.SUCCESS) {
           toast.success('Thêm mới thành công');
           setIsShowModal(false);
           form.resetFields();
-          dispath(actions.getDataListPackage(token));
+          dispath(actions.getDataListPackage());
         } else {
           toast.success('Thêm mới không thành công');
         }

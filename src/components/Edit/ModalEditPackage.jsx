@@ -29,7 +29,7 @@ const ModalEditPackage = ({ dataPackageByPackagecode, isModalOpen, setIsShowModa
   //handle
   const onFinish = async (values) => {
     try {
-      const data = await apiPackage.updatePackage({ ...values, price: +values.price, status: constants.STATUS.ACTIVE }, token);
+      const data = await apiPackage.updatePackage({ ...values, price: +values.price, status: constants.STATUS.ACTIVE });
 
       if (data && data.data && data.data.result) {
         if (data.data.result === constants.STATUS.SUCCESS) {

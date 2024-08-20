@@ -35,3 +35,6 @@ export const ROLE = {
   WRITE: 'WRITE',
   READ: 'READ',
 };
+export const config={
+REACT_APP_URL_BACKEND:"http://10.144.91.146:8804"
+} 

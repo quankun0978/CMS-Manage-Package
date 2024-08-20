@@ -27,7 +27,7 @@ const ModalDeletePackage = () => {
       if (resultDeletePackage.result === constants.STATUS.SUCCESS) {
         toast.success('Xóa thành công');
         setIsShowToast(false);
-        dispath(actions.getDataListPackage(token));
+        dispath(actions.getDataListPackage());
       }
     }
   }, [dispath, isShowToast, resultDeletePackage.error, resultDeletePackage.result, token]);

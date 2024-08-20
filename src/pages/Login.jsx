@@ -59,7 +59,7 @@ const Login = () => {
         }, 2000);
       }
     } catch (e) {
-      if (e.response.data) {
+      if (e && e.response && e.response.data) {
         if (e.response.data === 'User is inactive') {
           sessionStorage.removeItem('username');
           setTimeout(() => {

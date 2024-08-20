@@ -80,10 +80,10 @@ export const logoutFail = () => {
   };
 };
 
-export const getDataListPackage = (token) => {
+export const getDataListPackage = () => {
   return async (dispath, getstate) => {
     try {
-      let data = await getListPackage(token);
+      let data = await getListPackage();
       let dt = data.data.result.map((item) => {
         return {
           ...item,
@@ -141,7 +141,7 @@ export const getActionUser = (action) => {
 export const createPackage = (data, token) => {
   return async (dispath, getstate) => {
     try {
-      let res = await createNewPackage(data, token);
+      let res = await createNewPackage(data);
       if (res && res.data && Object.keys(res.data).length > 0) dispath(createPackageSuccess(res.data));
       else dispath(createPackageFail(res.data));
     } catch (e) {
@@ -167,7 +167,7 @@ const createPackageFail = (result) => {
 export const handleUpdatePackage = (data, token) => {
   return async (dispath, getstate) => {
     try {
-      let res = await updatePackage(data, token);
+      let res = await updatePackage(data);
       if (res && res.data && Object.keys(res.data).length > 0) dispath(updatePackageSuccess(res.data));
       else dispath(updatePackageFail(res.data));
     } catch (e) {
@@ -193,7 +193,7 @@ const updatePackageFail = (result) => {
 export const handleDeletePackage = (packagecode, token) => {
   return async (dispath, getstate) => {
     try {
-      let res = await deletePackageByCode({ package_code: packagecode }, token);
+      let res = await deletePackageByCode({ package_code: packagecode });
 
       if (res && res.data && Object.keys(res.data).length > 0) dispath(deletePackageSuccess(res.data));
       dispath(deletePackageFail(res.data));
@@ -220,7 +220,7 @@ const deletePackageFail = (results) => {
 export const handleEnablePackage = (packagecode, token) => {
   return async (dispath, getstate) => {
     try {
-      let res = await enablePackage({ package_code: packagecode }, token);
+      let res = await enablePackage({ package_code: packagecode });
 
       if (res && res.data && Object.keys(res.data).length > 0) dispath(enablePackageSuccess(res.data));
       dispath(enablePackageFail(res.data));
@@ -247,7 +247,7 @@ const enablePackageFail = (results) => {
 export const handleDisablePackage = (packagecode, token) => {
   return async (dispath, getstate) => {
     try {
-      let res = await disablePackage({ package_code: packagecode }, token);
+      let res = await disablePackage({ package_code: packagecode });
 
       if (res && res.data && Object.keys(res.data).length > 0) dispath(disablePackageSuccess(res.data));
       dispath(disablePackageFail(res.data));
@@ -275,10 +275,10 @@ export const handleChangeStatusPackage = (packagecode, token, statusPackage) => 
     try {
       let res;
       if (statusPackage === constants.STATUS.ACTIVE) {
-        res = await enablePackage({ package_code: packagecode }, token);
+        res = await enablePackage({ package_code: packagecode });
       }
       if (statusPackage === constants.STATUS.INACTIVE) {
-        res = await disablePackage({ package_code: packagecode }, token);
+        res = await disablePackage({ package_code: packagecode });
       }
 
       if (res && res.data && Object.keys(res.data).length > 0) {
@@ -314,7 +314,7 @@ export const handleChangePassword = (data, token) => {
         new_password: md5(data.passwordnew),
         confirm_new_password: md5(data.confirmPassword),
       };
-      let res = await changePasswordUser(dt, token);
+      let res = await changePasswordUser(dt);
 
       if (res && res.data && Object.keys(res.data).length > 0) dispath(changePasswordSuccess(res.data));
       dispath(changePaswordFail(res.data));
@@ -347,7 +347,7 @@ export const handleGetInfoReport = (data, token) => {
       //   new_password: md5(data.passwordnew),
       //   confirm_new_password: md5(data.confirmPassword),
       // };
-      let res = await getInfoReport(data, token);
+      let res = await getInfoReport(data);
 
       if (res && res.data && Object.keys(res.data).length > 0) dispath(getInfoReportSuccess(res.data));
     } catch (e) {
